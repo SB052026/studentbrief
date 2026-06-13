@@ -53,7 +53,7 @@ export default function DashboardPage() {
     }).eq('id', user.id)
     setSaving(false)
     setEditing(false)
-    window.location.reload()
+    router.refresh()
   }
 
   if (loading) return <Loader />
