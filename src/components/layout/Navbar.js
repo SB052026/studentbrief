@@ -18,71 +18,117 @@ export default function Navbar() {
   }
 
   return (
-    <nav style={{ backgroundColor: '#1a3c8f' }} className="text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold tracking-wide">
-          Student<span style={{ color: '#f97316' }}>Brief</span>
+    <nav style={{
+      background: 'rgba(26,60,143,0.95)',
+      backdropFilter: 'blur(12px)',
+      borderBottom: '1px solid rgba(255,255,255,0.1)',
+      position: 'sticky', top: 0, zIndex: 50,
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
+
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
+          <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
+            Student<span style={{ color: '#f97316' }}>Brief</span>
+          </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link href="/jobs" className="hover:text-orange-400 transition">Jobs</Link>
-          <Link href="/results" className="hover:text-orange-400 transition">Results</Link>
+        {/* Desktop Nav */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="hidden-mobile">
+          <Link href="/jobs" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Jobs</Link>
+          <Link href="/results" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Results</Link>
           {user && (
             <>
-              <Link href="/dashboard/mock-test" className="hover:text-orange-400 transition">Mock Test</Link>
-              <Link href="/dashboard/pyp" className="hover:text-orange-400 transition">PYP</Link>
-              <Link href="/dashboard/live-test" className="hover:text-orange-400 transition">Live Test</Link>
+              <Link href="/dashboard/mock-test" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Mock Test</Link>
+              <Link href="/dashboard/pyp" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>PYP</Link>
+              <Link href="/dashboard/live-test" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Live Test</Link>
             </>
           )}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          {loading ? null : user ? (
-            <div className="flex items-center gap-3">
-              <Link href="/dashboard" className="text-sm hover:text-orange-400 transition">
-                {dbUser?.name || 'Dashboard'}
+        {/* Right Side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {!loading && (
+            user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{
+                    width: '34px', height: '34px', borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #f97316, #fb923c)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.9rem', fontWeight: 900, color: 'white',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                  }}>
+                    {dbUser?.name?.charAt(0)?.toUpperCase() || '👤'}
+                  </div>
+                  <span style={{ color: 'white', fontSize: '0.8rem', fontWeight: 600 }} className="hidden-mobile">
+                    {dbUser?.name?.split(' ')[0] || 'Profile'}
+                  </span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)',
+                    color: '#fca5a5', padding: '6px 12px', borderRadius: '8px',
+                    cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
+                    fontFamily: 'Poppins, sans-serif',
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link href="/login" style={{
+                background: 'linear-gradient(135deg, #f97316, #fb923c)',
+                color: 'white', padding: '8px 18px', borderRadius: '10px',
+                fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
+                boxShadow: '0 4px 15px rgba(249,115,22,0.3)',
+              }}>
+                Login / Sign Up
               </Link>
-              <button
-                onClick={handleLogout}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded-lg transition"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded-lg transition"
-            >
-              Login / Sign Up
-            </Link>
+            )
           )}
-        </div>
 
-        <button
-          className="md:hidden text-white"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+              color: 'white', width: '36px', height: '36px', borderRadius: '8px',
+              cursor: 'pointer', fontSize: '1rem', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+            }}
+            className="show-mobile"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
 
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-blue-900 px-4 py-3 flex flex-col gap-3 text-sm font-medium">
-          <Link href="/jobs" onClick={() => setMenuOpen(false)} className="hover:text-orange-400 transition">Jobs</Link>
-          <Link href="/results" onClick={() => setMenuOpen(false)} className="hover:text-orange-400 transition">Results</Link>
+        <div style={{
+          background: 'rgba(15,36,96,0.98)', backdropFilter: 'blur(10px)',
+          padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+        }}>
+          <Link href="/jobs" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>💼 Jobs</Link>
+          <Link href="/results" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📊 Results</Link>
           {user && (
             <>
-              <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} className="hover:text-orange-400 transition">Mock Test</Link>
-              <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} className="hover:text-orange-400 transition">PYP</Link>
-              <Link href="/dashboard/live-test" onClick={() => setMenuOpen(false)} className="hover:text-orange-400 transition">Live Test</Link>
+              <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📝 Mock Test</Link>
+              <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📄 PYP</Link>
+              <Link href="/dashboard/live-test" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>🏆 Live Test</Link>
+              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>👤 Profile</Link>
             </>
           )}
           {user ? (
-            <button onClick={handleLogout} className="text-left text-red-400 hover:text-red-300 transition">Logout</button>
+            <button onClick={handleLogout} style={{ color: '#fca5a5', background: 'rgba(239,68,68,0.2)', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, fontFamily: 'Poppins, sans-serif', textAlign: 'left', marginTop: '0.5rem' }}>
+              🚪 Logout
+            </button>
           ) : (
-            <Link href="/login" onClick={() => setMenuOpen(false)} className="text-orange-400 hover:text-orange-300 transition">Login / Sign Up</Link>
- )}
+            <Link href="/login" onClick={() => setMenuOpen(false)} style={{ color: '#fb923c', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, padding: '10px 0' }}>Login / Sign Up →</Link>
+          )}
         </div>
       )}
     </nav>
