@@ -143,3 +143,70 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* ================================
+   MOBILE SPACING FIX
+================================ */
+@media (max-width: 768px) {
+  section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .hero-gradient {
+    min-height: 75vh !important;
+    padding: 2.5rem 1rem 1.5rem !important;
+  }
+
+  .card {
+    padding: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .category-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 1.3rem !important;
+  }
+
+  .section-title {
+    font-size: 1.1rem !important;
+  }
+
+  .section-title-center {
+    font-size: 1.2rem !important;
+  }
+
+  .main-content {
+    padding: 0.75rem !important;
+    padding-bottom: 4rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .hero-gradient {
+    min-height: 70vh !important;
+    padding: 2rem 1rem 1rem !important;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.8rem !important;
+  }
+}
