@@ -44,16 +44,18 @@ export default function DashboardPage() {
     setEditing(true)
   }
 
-  async function handleSave() {
+async function handleSave() {
     setSaving(true)
     const supabase = createClient()
-    await supabase.from('users').update({
+    const { error } = await supabase.from('users').update({
       ...form,
       age: parseInt(form.age) || null,
     }).eq('id', user.id)
     setSaving(false)
-    setEditing(false)
-    router.refresh()
+    if (!error) {
+      setEditing(false)
+      window.location.href = '/dashboard'
+    }
   }
 
   if (loading) return <Loader />
