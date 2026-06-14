@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/components/UserProvider'
 import { initiatePayment } from '@/lib/razorpay'
 import { useRouter } from 'next/navigation'
 import Loader from '@/components/ui/Loader'

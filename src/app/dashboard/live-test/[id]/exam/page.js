@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/components/UserProvider'
 import { createClient } from '@/lib/supabase/client'
 import { shuffleArray, formatTime } from '@/lib/utils'
 import Loader from '@/components/ui/Loader'

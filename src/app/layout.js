@@ -1,4 +1,5 @@
 import './globals.css'
+import { UserProvider } from '@/components/UserProvider'
 
 export const metadata = {
   title: 'StudentBrief - Latest Jobs, Results & Tests',
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <UserProvider>
+          {children}
+        </UserProvider>
       </body>
     </html>
   )

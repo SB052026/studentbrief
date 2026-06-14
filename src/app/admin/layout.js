@@ -1,6 +1,6 @@
 'use client'
 
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/components/UserProvider'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'

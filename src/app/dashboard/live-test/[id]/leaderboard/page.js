@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useLeaderboard } from '@/hooks/useLeaderboard'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/components/UserProvider'
 import Link from 'next/link'
 import Loader from '@/components/ui/Loader'
 import EmptyState from '@/components/ui/EmptyState'
