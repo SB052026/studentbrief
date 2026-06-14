@@ -60,6 +60,17 @@ async function handleSave() {
 
   if (loading) return <Loader />
 
+if (!user || !dbUser) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
+        <p style={{ color: '#64748b' }}>Profile load nahi hua. Refresh karo.</p>
+        <button onClick={() => window.location.reload()} style={{ background: '#1a3c8f', color: 'white', padding: '10px 24px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', fontWeight: 700 }}>
+          Refresh Karo
+        </button>
+      </div>
+    )
+  }
+
   const tabs = [
     { id: 'profile', label: '👤 Profile' },
     { id: 'performance', label: '📊 Performance' },
