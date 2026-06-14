@@ -11,54 +11,67 @@ export function useUser() {
   async function fetchOrCreateDbUser(supabase, authUser) {
     if (!authUser) return null
 
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', authUser.id)
-      .single()
+    try {
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authUser.id)
+        .maybeSingle()
 
-    if (existingUser) return existingUser
+      if (existingUser) return existingUser
 
-    const newUser = {
-      id: authUser.id,
-      name: authUser.user_metadata?.full_name || authUser.email || 'Student',
-      email: authUser.email || null,
-      mobile: authUser.phone || null,
-      role: 'student',
-      trial_start: new Date().toISOString(),
-      subscription_status: 'trial',
+      const newUser = {
+        id: authUser.id,
+        name: authUser.user_metadata?.full_name || authUser.email || 'Student',
+        email: authUser.email || null,
+        mobile: authUser.phone || null,
+        role: 'student',
+        trial_start: new Date().toISOString(),
+        subscription_status: 'trial',
+      }
+
+      const { data: insertedUser } = await supabase
+        .from('users')
+        .insert(newUser)
+        .select()
+        .maybeSingle()
+
+      return insertedUser || newUser
+    } catch (err) {
+      console.error('fetchOrCreateDbUser error:', err)
+      return null
     }
-
-    const { data: insertedUser } = await supabase
-      .from('users')
-      .insert(newUser)
-      .select()
-      .single()
-
-    return insertedUser || newUser
   }
 
   useEffect(() => {
     const supabase = createClient()
+    let mounted = true
 
     async function getUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      if (user) {
-        const dbUserData = await fetchOrCreateDbUser(supabase, user)
-        setDbUser(dbUserData)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!mounted) return
+        setUser(user)
+        if (user) {
+          const dbUserData = await fetchOrCreateDbUser(supabase, user)
+          if (mounted) setDbUser(dbUserData)
+        }
+      } catch (err) {
+        console.error('getUser error:', err)
+      } finally {
+        if (mounted) setLoading(false)
       }
-      setLoading(false)
     }
 
     getUser()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!mounted) return
         setUser(session?.user ?? null)
         if (session?.user) {
           const dbUserData = await fetchOrCreateDbUser(supabase, session.user)
-          setDbUser(dbUserData)
+          if (mounted) setDbUser(dbUserData)
         } else {
           setDbUser(null)
         }
@@ -66,7 +79,10 @@ export function useUser() {
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   return { user, dbUser, loading }
