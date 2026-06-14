@@ -16,14 +16,12 @@ export default async function ResultDetailPage({ params }) {
 
   if (!result) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="page-wrapper">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-700">Result nahi mila</h2>
-            <Link href="/results" className="text-blue-600 hover:underline mt-2 block">
-              Wapas Results pe jao
-            </Link>
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+          <div style={{ textAlign: 'center' }}>
+            <h2 style={{ fontWeight: 700, color: '#475569' }}>Result nahi mila</h2>
+            <Link href="/results" style={{ color: '#1a3c8f', marginTop: '8px', display: 'block' }}>← Wapas Results pe jao</Link>
           </div>
         </main>
         <Footer />
@@ -31,99 +29,79 @@ export default async function ResultDetailPage({ params }) {
     )
   }
 
+  const dateItems = [
+    { label: 'Published Date', value: formatDate(result.published_date), color: '#1e293b' },
+    { label: 'Exam Date', value: formatDate(result.exam_date), color: '#1e293b' },
+    { label: 'Result Date', value: formatDate(result.result_date), color: '#22c55e' },
+  ]
+
+  const detailCards = [
+    { icon: '🏢', title: 'Organization', value: result.organization, bg: '#dbeafe' },
+    { icon: '📋', title: 'Post Name', value: result.post_name, bg: '#dcfce7' },
+    { icon: '👥', title: 'Total Vacancies', value: result.total_vacancies?.toLocaleString('en-IN'), bg: '#fef3c7' },
+    { icon: '📊', title: 'Result Status', value: result.result_status, bg: '#fce7f3' },
+  ]
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="page-wrapper">
       <Navbar />
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-10">
-        <div className="flex items-center gap-2 mb-6 text-sm">
-          <Link href="/results" className="text-blue-600 hover:underline">Results</Link>
-          <span className="text-gray-400">→</span>
-          <Link href={`/results/${category}`} className="text-blue-600 hover:underline">
-            {result.result_categories?.name}
-          </Link>
-          <span className="text-gray-400">→</span>
-          <span className="text-gray-700 truncate">{result.title}</span>
+      <main style={{ flex: 1, maxWidth: '800px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
+
+        {/* Breadcrumb */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px', fontSize: '0.75rem', marginBottom: '1rem' }}>
+          <Link href="/results" style={{ color: '#1a3c8f', textDecoration: 'none' }}>Results</Link>
+          <span style={{ color: '#94a3b8' }}>→</span>
+          <Link href={`/results/${category}`} style={{ color: '#1a3c8f', textDecoration: 'none' }}>{result.result_categories?.name}</Link>
         </div>
 
-        <div className="card">
-          <div className="flex items-start justify-between mb-6 pb-4 border-b">
-            <h1 className="text-xl md:text-2xl font-bold text-blue-900">
-              {result.title}
-            </h1>
-            <span className={`text-xs px-3 py-1 rounded-full font-semibold ml-2 shrink-0 ${result.result_status === 'Declared' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-              {result.result_status}
-            </span>
-          </div>
+        {/* Title Card */}
+        <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1.5rem', marginBottom: '1rem', boxShadow: '0 8px 25px rgba(22,163,74,0.25)' }}>
+          <span style={{ background: 'rgba(255,255,255,0.2)', color: 'white', padding: '3px 12px', borderRadius: '9999px', fontSize: '0.7rem', fontWeight: 700, display: 'inline-block', marginBottom: '8px' }}>
+            {result.result_status}
+          </span>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', lineHeight: 1.3 }}>{result.title}</h1>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">
-                  📅 Important Dates
-                </h3>
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Published Date</span>
-                    <span className="font-medium">{formatDate(result.published_date)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Exam Date</span>
-                    <span className="font-medium">{formatDate(result.exam_date)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Result Date</span>
-                    <span className="font-medium text-green-600">{formatDate(result.result_date)}</span>
-                  </div>
-                </div>
+        {/* Important Dates */}
+        <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+          <h3 style={{ fontWeight: 800, color: '#16a34a', fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            📅 Important Dates
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem' }}>
+            {dateItems.map((item, i) => (
+              <div key={i} style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '4px' }}>{item.label}</p>
+                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: item.color }}>{item.value}</p>
               </div>
-
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">
-                  🏢 Organization
-                </h3>
-                <p className="text-sm font-medium text-gray-700">{result.organization}</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">
-                  📋 Post Details
-                </h3>
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Post Name</span>
-                    <span className="font-medium">{result.post_name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Total Vacancies</span>
-                    <span className="font-medium text-blue-600">{result.total_vacancies?.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">
-                  📊 Result Status
-                </h3>
-                <span className={`text-sm font-semibold px-3 py-1 rounded-full ${result.result_status === 'Declared' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                  {result.result_status}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-6 border-t">
-            <a
-              href={result.result_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full md:w-auto md:inline-block text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg transition text-lg"
-            >
-              Check Result — Official Website →
-            </a>
+            ))}
           </div>
         </div>
+
+        {/* Detail Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+          {detailCards.map((card, i) => (
+            <div key={i} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: card.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+                {card.icon}
+              </div>
+              <div>
+                <p style={{ fontSize: '0.72rem', color: '#94a3b8', marginBottom: '2px' }}>{card.title}</p>
+                <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>{card.value || 'N/A'}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Check Result Button */}
+        <a href={result.result_link} target="_blank" rel="noopener noreferrer" style={{
+          display: 'block', textAlign: 'center', textDecoration: 'none',
+          background: 'linear-gradient(135deg, #f97316, #fb923c)',
+          color: 'white', padding: '16px', borderRadius: '14px',
+          fontWeight: 800, fontSize: '1.05rem',
+          boxShadow: '0 8px 25px rgba(249,115,22,0.4)',
+        }}>
+          Check Result — Official Website →
+        </a>
       </main>
       <Footer />
     </div>

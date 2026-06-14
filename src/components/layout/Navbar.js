@@ -28,16 +28,20 @@ export default function Navbar() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
 
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
-            Student<span style={{ color: '#f97316' }}>Brief</span>
-          </span>
+<Link href="/" style={{ textDecoration: 'none' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
+              Student<span style={{ color: '#f97316' }}>Brief</span>
+            </span>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(191,219,254,0.8)', fontWeight: 500, letterSpacing: '0.02em' }}>
+              Every Student Deserves to Excel
+            </span>
+          </div>
         </Link>
 
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Profile Icon / Login */}
-          {!loading && (
+          {/* Profile Icon / Login */}          {!loading && (
             user ? (
               <Link href="/dashboard" style={{ textDecoration: 'none' }}>
                 <div style={{
@@ -90,6 +94,7 @@ export default function Navbar() {
           <Link href="/" onClick={() => setMenuOpen(false)} style={menuLink}>🏠 Home</Link>
           <Link href="/jobs" onClick={() => setMenuOpen(false)} style={menuLink}>💼 Jobs</Link>
           <Link href="/results" onClick={() => setMenuOpen(false)} style={menuLink}>📊 Results</Link>
+<Link href="/syllabus" onClick={() => setMenuOpen(false)} style={menuLink}>📚 Syllabus</Link>
           {user && (
             <>
               <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
