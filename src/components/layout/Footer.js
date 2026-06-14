@@ -2,37 +2,53 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: '#1a3c8f' }} className="text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer style={{ background: 'linear-gradient(135deg, #0f2460, #1a3c8f)', marginTop: 'auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2.5rem 1rem 1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2rem' }}>
           <div>
-            <h3 className="text-xl font-bold mb-3">
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white', marginBottom: '0.75rem' }}>
               Student<span style={{ color: '#f97316' }}>Brief</span>
             </h3>
-            <p className="text-blue-200 text-sm">
-              Latest Govt Jobs, Results, Mock Tests, Previous Year Papers and Live Tests for students.
+            <p style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', lineHeight: 1.6 }}>
+              Latest Govt Jobs, Results, Mock Tests, Previous Year Papers aur Live Tests students ke liye.
             </p>
           </div>
+
           <div>
-            <h4 className="font-semibold mb-3 text-orange-400">Quick Links</h4>
-            <ul className="flex flex-col gap-2 text-sm text-blue-200">
-              <li><Link href="/jobs" className="hover:text-white transition">Latest Jobs</Link></li>
-              <li><Link href="/results" className="hover:text-white transition">Latest Results</Link></li>
-              <li><Link href="/dashboard/mock-test" className="hover:text-white transition">Mock Test</Link></li>
-              <li><Link href="/dashboard/pyp" className="hover:text-white transition">Previous Year Papers</Link></li>
-              <li><Link href="/dashboard/live-test" className="hover:text-white transition">Live Test</Link></li>
+            <h4 style={{ fontWeight: 700, color: '#f97316', fontSize: '0.9rem', marginBottom: '0.75rem' }}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li><Link href="/jobs" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Latest Jobs</Link></li>
+              <li><Link href="/results" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Latest Results</Link></li>
+              <li><Link href="/dashboard/mock-test" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Mock Test</Link></li>
+              <li><Link href="/dashboard/pyp" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Previous Year Papers</Link></li>
+              <li><Link href="/dashboard/live-test" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Live Test</Link></li>
             </ul>
           </div>
+
           <div>
-            <h4 className="font-semibold mb-3 text-orange-400">Contact</h4>
-            <ul className="flex flex-col gap-2 text-sm text-blue-200">
-              <li>Email: support@studentbrief.in</li>
-              <li>Website: studentbrief.in</li>
+            <h4 style={{ fontWeight: 700, color: '#f97316', fontSize: '0.9rem', marginBottom: '0.75rem' }}>Legal</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li><Link href="/about" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>About Us</Link></li>
+              <li><Link href="/contact" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Contact Us</Link></li>
+              <li><Link href="/privacy" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Privacy Policy</Link></li>
+              <li><Link href="/terms" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Terms & Conditions</Link></li>
+              <li><Link href="/refund" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Refund Policy</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style={{ fontWeight: 700, color: '#f97316', fontSize: '0.9rem', marginBottom: '0.75rem' }}>Contact</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem' }}>📧 support@studentbrief.in</li>
+              <li style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem' }}>🌐 www.studentbrief.in</li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-blue-800 mt-8 pt-6 text-center text-sm text-blue-300">
-          © 2025 StudentBrief.in — All Rights Reserved
+
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '2rem', paddingTop: '1.5rem', textAlign: 'center' }}>
+          <p style={{ color: 'rgba(191,219,254,0.6)', fontSize: '0.8rem' }}>
+            © 2026 StudentBrief.in — All Rights Reserved
+          </p>
         </div>
       </div>
     </footer>

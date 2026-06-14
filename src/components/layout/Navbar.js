@@ -14,6 +14,7 @@ export default function Navbar() {
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
+    setMenuOpen(false)
     router.push('/')
   }
 
@@ -27,110 +28,101 @@ export default function Navbar() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
 
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
+        <Link href="/" style={{ textDecoration: 'none' }}>
           <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
             Student<span style={{ color: '#f97316' }}>Brief</span>
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="hidden-mobile">
-          <Link href="/jobs" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Jobs</Link>
-          <Link href="/results" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Results</Link>
-          {user && (
-            <>
-              <Link href="/dashboard/mock-test" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Mock Test</Link>
-              <Link href="/dashboard/pyp" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>PYP</Link>
-              <Link href="/dashboard/live-test" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Live Test</Link>
-            </>
-          )}
-        </div>
-
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Profile Icon / Login */}
           {!loading && (
             user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{
-                    width: '34px', height: '34px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #f97316, #fb923c)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '0.9rem', fontWeight: 900, color: 'white',
-                    border: '2px solid rgba(255,255,255,0.3)',
-                  }}>
-                    {dbUser?.name?.charAt(0)?.toUpperCase() || '👤'}
-                  </div>
-                  <span style={{ color: 'white', fontSize: '0.8rem', fontWeight: 600 }} className="hidden-mobile">
-                    {dbUser?.name?.split(' ')[0] || 'Profile'}
-                  </span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)',
-                    color: '#fca5a5', padding: '6px 12px', borderRadius: '8px',
-                    cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
-                    fontFamily: 'Poppins, sans-serif',
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
+              <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+                <div style={{
+                  width: '38px', height: '38px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #f97316, #fb923c)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1rem', fontWeight: 900, color: 'white',
+                  border: '2px solid rgba(255,255,255,0.3)', cursor: 'pointer',
+                }}>
+                  {dbUser?.name?.charAt(0)?.toUpperCase() || '👤'}
+                </div>
+              </Link>
             ) : (
-              <Link href="/login" style={{
-                background: 'linear-gradient(135deg, #f97316, #fb923c)',
-                color: 'white', padding: '8px 18px', borderRadius: '10px',
-                fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
-                boxShadow: '0 4px 15px rgba(249,115,22,0.3)',
-              }}>
-                Login / Sign Up
+              <Link href="/login" style={{ textDecoration: 'none' }}>
+                <div style={{
+                  width: '38px', height: '38px', borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.2rem', border: '2px solid rgba(255,255,255,0.3)', cursor: 'pointer',
+                }}>
+                  👤
+                </div>
               </Link>
             )
           )}
 
-          {/* Mobile Menu Button */}
+          {/* Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             style={{
               background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
-              color: 'white', width: '36px', height: '36px', borderRadius: '8px',
-              cursor: 'pointer', fontSize: '1rem', display: 'flex',
+              color: 'white', width: '38px', height: '38px', borderRadius: '10px',
+              cursor: 'pointer', fontSize: '1.1rem', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
             }}
-            className="show-mobile"
           >
             {menuOpen ? '✕' : '☰'}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Dropdown Menu */}
       {menuOpen && (
         <div style={{
           background: 'rgba(15,36,96,0.98)', backdropFilter: 'blur(10px)',
-          padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem',
+          padding: '0.75rem 1rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem',
           borderTop: '1px solid rgba(255,255,255,0.1)',
+          maxWidth: '1200px', margin: '0 auto',
         }}>
-          <Link href="/jobs" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>💼 Jobs</Link>
-          <Link href="/results" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📊 Results</Link>
+          <Link href="/" onClick={() => setMenuOpen(false)} style={menuLink}>🏠 Home</Link>
+          <Link href="/jobs" onClick={() => setMenuOpen(false)} style={menuLink}>💼 Jobs</Link>
+          <Link href="/results" onClick={() => setMenuOpen(false)} style={menuLink}>📊 Results</Link>
           {user && (
             <>
-              <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📝 Mock Test</Link>
-              <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>📄 PYP</Link>
-              <Link href="/dashboard/live-test" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>🏆 Live Test</Link>
-              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>👤 Profile</Link>
+              <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
+              <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={menuLink}>📄 PYP</Link>
+              <Link href="/dashboard/live-test" onClick={() => setMenuOpen(false)} style={menuLink}>🏆 Live Test</Link>
+              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={menuLink}>👤 My Profile</Link>
             </>
           )}
-          {user ? (
-            <button onClick={handleLogout} style={{ color: '#fca5a5', background: 'rgba(239,68,68,0.2)', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, fontFamily: 'Poppins, sans-serif', textAlign: 'left', marginTop: '0.5rem' }}>
-              🚪 Logout
-            </button>
-          ) : (
-            <Link href="/login" onClick={() => setMenuOpen(false)} style={{ color: '#fb923c', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, padding: '10px 0' }}>Login / Sign Up →</Link>
-          )}
+          <Link href="/about" onClick={() => setMenuOpen(false)} style={menuLink}>ℹ️ About Us</Link>
+          <Link href="/contact" onClick={() => setMenuOpen(false)} style={menuLink}>📞 Contact Us</Link>
+
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+            {user ? (
+              <button onClick={handleLogout} style={{ color: '#fca5a5', background: 'rgba(239,68,68,0.2)', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', width: '100%', textAlign: 'left' }}>
+                🚪 Logout
+              </button>
+            ) : (
+              <Link href="/login" onClick={() => setMenuOpen(false)} style={{ display: 'block', background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', padding: '12px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
+                🚀 Login / Sign Up
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </nav>
   )
+}
+
+const menuLink = {
+  color: 'rgba(255,255,255,0.85)',
+  textDecoration: 'none',
+  fontSize: '0.9rem',
+  fontWeight: 500,
+  padding: '10px 12px',
+  borderRadius: '8px',
 }
