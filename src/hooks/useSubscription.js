@@ -16,17 +16,24 @@ export function useSubscription(user) {
       return
     }
     async function getSubscription() {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .single()
-      setSubscription(data)
-      setHasAccess(hasAccessToContent(user, data))
-      setTrialDaysLeft(getTrialDaysLeft(user.trial_start))
-      setLoading(false)
+      try {
+        const supabase = createClient()
+        const { data } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .maybeSingle()
+        setSubscription(data)
+        setHasAccess(hasAccessToContent(user, data))
+        setTrialDaysLeft(getTrialDaysLeft(user.trial_start))
+      } catch (err) {
+        console.error('subscription error:', err)
+        setHasAccess(getTrialDaysLeft(user.trial_start) > 0)
+        setTrialDaysLeft(getTrialDaysLeft(user.trial_start))
+      } finally {
+        setLoading(false)
+      }
     }
     getSubscription()
   }, [user])

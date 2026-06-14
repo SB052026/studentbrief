@@ -15,7 +15,7 @@ const JOB_INTERESTS = ['Govt Jobs','Bank Jobs','Railway Jobs','Defence Jobs','Po
 
 export default function DashboardPage() {
   const { user, dbUser, loading } = useUser()
-  const { subscription, hasAccess, trialDaysLeft } = useSubscription(dbUser)
+  const { subscription, hasAccess, trialDaysLeft } = useSubscription(dbUser) || {}
   const [activeTab, setActiveTab] = useState('profile')
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
