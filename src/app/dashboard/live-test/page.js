@@ -27,7 +27,7 @@ export default function LiveTestPage() {
     fetchTests()
   }, [])
 
-  if (userLoading || loading) return <Loader />
+  if (loading) return <Loader />
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">

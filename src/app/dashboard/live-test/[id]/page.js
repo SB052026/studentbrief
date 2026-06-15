@@ -95,7 +95,7 @@ export default function LiveTestDetailPage({ params }) {
     setPayLoading(false)
   }
 
-  if (userLoading || loading) return <Loader />
+  if (loading) return <Loader />
 
   if (!test) {
     return (

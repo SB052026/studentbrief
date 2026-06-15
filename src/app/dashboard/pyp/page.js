@@ -24,7 +24,7 @@ export default function PypPage() {
     fetchPapers()
   }, [])
 
-  if (userLoading || loading) return <div className="page-wrapper"><Navbar /><Loader /><Footer /></div>
+  if (loading) return <div className="page-wrapper"><Navbar /><Loader /><Footer /></div>
 
   if (!user) {
     return (

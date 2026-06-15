@@ -274,7 +274,7 @@ export default function LiveTestExamPage({ params }) {
     setAnswers(prev => ({ ...prev, [questionId]: optionKey }))
   }
 
-  if (userLoading || loading) return <Loader />
+  if (loading) return <Loader />
 
   if (submitted) {
     return (
