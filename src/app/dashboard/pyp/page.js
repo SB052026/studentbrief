@@ -2,98 +2,73 @@
 
 import { useEffect, useState } from 'react'
 import { useUser } from '@/components/UserProvider'
-import { useSubscription } from '@/hooks/useSubscription'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
 import Loader from '@/components/ui/Loader'
 import EmptyState from '@/components/ui/EmptyState'
 
 export default function PypPage() {
-  const { dbUser, loading: userLoading } = useUser()
-  const { hasAccess, trialDaysLeft, loading: subLoading } = useSubscription(dbUser)
+  const { user, loading: userLoading } = useUser()
   const [papers, setPapers] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchPapers() {
       const supabase = createClient()
-      const { data } = await supabase
-        .from('pyp')
-        .select('*')
-        .order('year', { ascending: false })
+      const { data } = await supabase.from('pyp').select('*').order('year', { ascending: false })
       setPapers(data || [])
       setLoading(false)
     }
     fetchPapers()
   }, [])
 
-  if (userLoading || subLoading || loading) return <Loader />
+  if (userLoading || loading) return <div className="page-wrapper"><Navbar /><Loader /><Footer /></div>
 
-  if (!hasAccess) {
+  if (!user) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <span className="text-6xl mb-6 block">🔒</span>
-        <h2 className="text-2xl font-bold text-blue-900 mb-3">Subscription Required</h2>
-        <p className="text-gray-500 mb-6">
-          Previous Year Papers use karne ke liye ₹29/month subscribe karo
-        </p>
-        <Link
-          href="/dashboard/subscribe"
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition"
-        >
-          Subscribe Karo — ₹29/month
-        </Link>
+      <div className="page-wrapper">
+        <Navbar />
+        <main style={{ flex: 1, maxWidth: '500px', margin: '0 auto', padding: '4rem 1rem', textAlign: 'center' }}>
+          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>lock</span>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1.3rem', marginBottom: '0.5rem' }}>Login Required</h2>
+          <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>PYP ke liye pehle login karo</p>
+          <Link href="/login" style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', padding: '12px 28px', borderRadius: '12px', fontWeight: 700, textDecoration: 'none' }}>Login Karo</Link>
+        </main>
+        <Footer />
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="section-title">Previous Year Papers</h1>
-          <p className="text-gray-500 text-sm">Purane papers se practice karo</p>
-        </div>
-        {trialDaysLeft > 0 && (
-          <span className="badge-trial">{trialDaysLeft} din baaki</span>
-        )}
-      </div>
-
-      {papers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {papers.map((paper) => (
-            <div key={paper.id} className="card">
-              <div className="flex items-start justify-between mb-3">
-                <span className="text-3xl">📄</span>
-                <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-semibold">
-                  {paper.year}
-                </span>
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-4">{paper.exam_name}</h3>
-              {paper.file_url ? (
-                <a
-                  href={paper.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center bg-blue-900 hover:bg-blue-800 text-white text-sm font-medium py-2 rounded-lg transition"
-                >
-                  Download / View PDF
-                </a>
-              ) : (
-                <div className="w-full text-center bg-gray-100 text-gray-500 text-sm py-2 rounded-lg">
-                  Coming Soon
+    <div className="page-wrapper">
+      <Navbar />
+      <main style={{ flex: 1, maxWidth: '900px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>Previous Year Papers</h1>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Purane papers se practice karo</p>
+        {papers.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+            {papers.map((paper) => (
+              <div key={paper.id} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                  <span style={{ fontSize: '2rem' }}>PDF</span>
+                  <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 10px', borderRadius: '9999px', fontSize: '0.7rem', fontWeight: 700 }}>{paper.year}</span>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <EmptyState
-          title="Koi paper nahi mila"
-          description="Abhi koi previous year paper available nahi hai"
-          icon="📄"
-        />
-      )}
+                <h3 style={{ fontWeight: 700, color: '#1e293b', marginBottom: '1rem' }}>{paper.exam_name}</h3>
+                {paper.file_url ? (
+                  <a href={paper.file_url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>Download / View PDF</a>
+                ) : (
+                  <div style={{ textAlign: 'center', background: '#f1f5f9', color: '#94a3b8', padding: '10px', borderRadius: '10px', fontSize: '0.85rem' }}>Coming Soon</div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState title="Koi paper nahi mila" description="Abhi koi previous year paper available nahi hai" icon="file" />
+        )}
+      </main>
+      <Footer />
     </div>
   )
 }

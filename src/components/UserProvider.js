@@ -46,11 +46,12 @@ export function UserProvider({ children }) {
 
     async function init() {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
+        const { data: { session } } = await supabase.auth.getSession()
+        const sessionUser = session?.user ?? null
         if (!mounted) return
-        setUser(user)
-        if (user) {
-          const dbUserData = await fetchOrCreateDbUser(supabase, user)
+        setUser(sessionUser)
+        if (sessionUser) {
+          const dbUserData = await fetchOrCreateDbUser(supabase, sessionUser)
           if (mounted) setDbUser(dbUserData)
         }
       } catch (err) {
@@ -72,7 +73,7 @@ export function UserProvider({ children }) {
         } else {
           setDbUser(null)
         }
-        setLoading(false)
+        if (mounted) setLoading(false)
       }
     )
 

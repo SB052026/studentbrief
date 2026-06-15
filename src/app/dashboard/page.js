@@ -47,17 +47,30 @@ export default function DashboardPage() {
 async function handleSave() {
     setSaving(true)
     const supabase = createClient()
-    const { error } = await supabase.from('users').update({
-      ...form,
-      age: parseInt(form.age) || null,
-    }).eq('id', user.id)
+    const { error } = await supabase
+      .from('users')
+      .update({
+        name: form.name,
+        mobile: form.mobile,
+        age: parseInt(form.age) || null,
+        education: form.education,
+        state: form.state,
+        district: form.district,
+        city: form.city,
+        village: form.village,
+        pincode: form.pincode,
+        interested_jobs: form.interested_jobs,
+      })
+      .eq('id', user.id)
+
     setSaving(false)
-    if (!error) {
+    if (error) {
+      alert('Error: ' + error.message)
+    } else {
+      alert('Profile save ho gaya!')
       setEditing(false)
-      window.location.href = '/dashboard'
     }
   }
-
   if (loading) return <Loader />
 
 if (!user || !dbUser) {
@@ -71,6 +84,7 @@ if (!user || !dbUser) {
     )
   }
 
+  const isAdmin = dbUser?.role === 'admin'
   const tabs = [
     { id: 'profile', label: '👤 Profile' },
     { id: 'performance', label: '📊 Performance' },
@@ -90,6 +104,18 @@ if (!user || !dbUser) {
                 Student<span style={{ color: '#f97316' }}>Brief</span>
               </span>
             </Link>
+
+
+            {isAdmin && (
+              <Link href="/admin" style={{
+                background: 'rgba(249,115,22,0.9)', color: 'white',
+                padding: '8px 16px', borderRadius: '10px', textDecoration: 'none',
+                fontSize: '0.8rem', fontWeight: 700,
+              }}>
+                🛡️ Admin Panel
+              </Link>
+            )}
+
             <button onClick={handleLogout} style={{
               background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255,255,255,0.3)', color: 'white',
