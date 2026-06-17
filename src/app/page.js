@@ -272,29 +272,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* LIVE TEST PROMO */}
-      <section style={{ padding: '2rem 1rem', background: '#fff7ed' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, white, #f0f4ff)',
-            borderRadius: '20px', padding: '2rem',
-            boxShadow: '0 8px 30px rgba(26,60,143,0.1)',
-            border: '2px solid #dbeafe',
-            display: 'flex', flexWrap: 'wrap',
-            alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
-          }}>
-            <div>
-              <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '6px' }}>🏆 Live Test Me Join Karo</h2>
-              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Sirf ₹9 me participate karo — Books, Laptops aur aur bhi prizes!</p>
-            </div>
-            <Link href="/dashboard/live-test" style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', padding: '14px 28px', borderRadius: '12px', fontWeight: 800, fontSize: '1rem', textDecoration: 'none', boxShadow: '0 8px 25px rgba(249,115,22,0.4)', flexShrink: 0 }}>
-              Join Karo — ₹9
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </div>
   )

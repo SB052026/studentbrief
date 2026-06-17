@@ -357,14 +357,6 @@ if (!user || !dbUser) {
                 </div>
                 <span style={{ marginLeft: 'auto', color: '#94a3b8' }}>→</span>
               </Link>
-              <Link href="/dashboard/live-test" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#f8fafc', borderRadius: '10px', textDecoration: 'none', color: '#1e293b' }}>
-                <span style={{ fontSize: '1.5rem' }}>🏆</span>
-                <div>
-                  <p style={{ fontWeight: 700, fontSize: '0.875rem' }}>Live Test</p>
-                  <p style={{ fontSize: '0.72rem', color: '#64748b' }}>₹9 me participate karo</p>
-                </div>
-                <span style={{ marginLeft: 'auto', color: '#94a3b8' }}>→</span>
-              </Link>
             </div>
           </div>
         )}

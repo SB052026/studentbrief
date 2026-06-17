@@ -99,7 +99,6 @@ export default function Navbar() {
             <>
               <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
               <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={menuLink}>📄 PYP</Link>
-              <Link href="/dashboard/live-test" onClick={() => setMenuOpen(false)} style={menuLink}>🏆 Live Test</Link>
               <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={menuLink}>👤 My Profile</Link>
             </>
           )}

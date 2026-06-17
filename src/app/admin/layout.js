@@ -48,14 +48,8 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/syllabus" className="px-4 py-2 rounded-lg hover:bg-blue-800 text-sm font-medium transition">
             📚 Syllabus
           </Link>
-          <Link href="/admin/live-test" className="px-4 py-2 rounded-lg hover:bg-blue-800 text-sm font-medium transition">
-            🎯 Live Tests
-          </Link>
           <Link href="/admin/students" className="px-4 py-2 rounded-lg hover:bg-blue-800 text-sm font-medium transition">
             👥 Students
-          </Link>
-          <Link href="/admin/rewards" className="px-4 py-2 rounded-lg hover:bg-blue-800 text-sm font-medium transition">
-            🎁 Rewards
           </Link>
         </nav>
       </aside>

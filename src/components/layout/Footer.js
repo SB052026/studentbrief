@@ -21,7 +21,6 @@ export default function Footer() {
               <li><Link href="/results" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Latest Results</Link></li>
               <li><Link href="/dashboard/mock-test" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Mock Test</Link></li>
               <li><Link href="/dashboard/pyp" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Previous Year Papers</Link></li>
-              <li><Link href="/dashboard/live-test" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Live Test</Link></li>
             </ul>
           </div>
 
