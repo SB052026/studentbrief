@@ -17,7 +17,7 @@ export default function Home() {
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
-        padding: '4rem 1rem 3rem',
+        padding: '2.5rem 1rem 1.5rem',
       }}>
         <div style={{
           position: 'absolute', top: '10%', right: '10%',
@@ -46,7 +46,7 @@ export default function Home() {
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(2rem, 7vw, 4.5rem)',
+            fontSize: 'clamp(1.6rem, 6vw, 4.5rem)',
             fontWeight: 900, color: 'white',
             lineHeight: 1.1, marginBottom: '1rem',
           }}>
@@ -56,14 +56,14 @@ export default function Home() {
 
           <p style={{
             color: 'rgba(191,219,254,0.9)', fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
-            marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem',
+            marginBottom: '1.2rem', maxWidth: '600px', margin: '0 auto 2rem',
           }}>
             Latest Govt Jobs, Results, Mock Tests, PYP aur Live Tests — sab kuch ek jagah
           </p>
 
           <div style={{
             display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-            gap: '0.75rem', marginBottom: '3rem',
+            gap: '0.5rem', marginBottom: '1.5rem',
           }}>
             <Link href="/jobs" style={{
               background: 'linear-gradient(135deg, #f97316, #fb923c)',
@@ -218,37 +218,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section style={{ padding: '3rem 1rem', background: '#f8fafc' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', textAlign: 'center', marginBottom: '6px' }}>
-            Kaise Kaam Karta Hai?
-          </h2>
-          <p style={{ color: '#64748b', textAlign: 'center', marginBottom: '2rem', fontSize: '0.85rem' }}>
-            3 simple steps me shuru karo
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-            {[
-              { step: '01', icon: '📝', title: 'Register Karo', desc: 'Gmail ya Mobile se free me sign up karo', color: '#dbeafe', border: '#93c5fd' },
-              { step: '02', icon: '📚', title: 'Practice Karo', desc: 'Mock Test aur PYP se taiyari strong karo', color: '#fef3c7', border: '#fcd34d' },
-              { step: '03', icon: '🏆', title: 'Jeeto', desc: 'Live Test me participate karo aur prizes jeeto', color: '#dcfce7', border: '#86efac' },
-            ].map((item, index) => (
-              <div key={index} style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: `2px solid ${item.border}`, textAlign: 'center' }}>
-                <div style={{ position: 'relative', display: 'inline-block', marginBottom: '0.75rem' }}>
-                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: item.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.75rem', margin: '0 auto' }}>
-                    {item.icon}
-                  </div>
-                  <span style={{ position: 'absolute', top: '-6px', right: '-6px', width: '22px', height: '22px', background: '#1a3c8f', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 900 }}>
-                    {item.step}
-                  </span>
-                </div>
-                <h3 style={{ fontWeight: 800, color: '#1e293b', fontSize: '1rem', marginBottom: '6px' }}>{item.title}</h3>
-                <p style={{ color: '#64748b', fontSize: '0.8rem', lineHeight: 1.5 }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
       <Footer />
     </div>
   )
