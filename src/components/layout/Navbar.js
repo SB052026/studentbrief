@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useUser } from '@/components/UserProvider'
 import { createClient } from '@/lib/supabase/client'
@@ -10,6 +10,24 @@ export default function Navbar() {
   const { user, dbUser, loading } = useUser()
   const [menuOpen, setMenuOpen] = useState(false)
   const router = useRouter()
+  const [quickLinks, setQuickLinks] = useState({ job: '/jobs', result: '/results', admitcard: '/admitcard', answerkey: '/answerkey' })
+
+  useEffect(() => {
+    async function fetchLatest() {
+      const supabase = createClient()
+      const { data: job } = await supabase.from('jobs').select('id, job_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      const { data: result } = await supabase.from('results').select('id, result_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      const { data: admitcard } = await supabase.from('admitcards').select('id, admitcard_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      const { data: answerkey } = await supabase.from('answerkeys').select('id, answerkey_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      setQuickLinks({
+        job: job ? `/jobs/${job.job_categories?.slug}/${job.id}` : '/jobs',
+        result: result ? `/results/${result.result_categories?.slug}/${result.id}` : '/results',
+        admitcard: admitcard ? `/admitcard/${admitcard.admitcard_categories?.slug}/${admitcard.id}` : '/admitcard',
+        answerkey: answerkey ? `/answerkey/${answerkey.answerkey_categories?.slug}/${answerkey.id}` : '/answerkey',
+      })
+    }
+    fetchLatest()
+  }, [])
 
   async function handleLogout() {
     const supabase = createClient()
@@ -120,6 +138,14 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", overflowX: "auto", whiteSpace: "nowrap", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem" }}>
+        <Link href={quickLinks.job} style={{ flexShrink: 0, background: "#dbeafe", color: "#1e40af", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>💼 Jobs</Link>
+        <Link href={quickLinks.result} style={{ flexShrink: 0, background: "#dcfce7", color: "#166534", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📊 Results</Link>
+        <Link href={quickLinks.admitcard} style={{ flexShrink: 0, background: "#fef3c7", color: "#92400e", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>🎫 Admit Cards</Link>
+        <Link href={quickLinks.answerkey} style={{ flexShrink: 0, background: "#fce7f3", color: "#9d174d", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📝 Answer Keys</Link>
+        <Link href="/syllabus" style={{ flexShrink: 0, background: "#e0e7ff", color: "#3730a3", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📚 Syllabus</Link>
+      </div>
     </nav>
   )
 }
