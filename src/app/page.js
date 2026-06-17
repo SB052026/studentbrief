@@ -131,7 +131,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* JOBS & RESULTS CARDS */}
+      {/* JOBS RESULTS ANSWERKEY ADMITCARD CARDS */}
       <section style={{ padding: '2.5rem 1rem', background: '#f0f4ff' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a3c8f', textAlign: 'center', marginBottom: '0.5rem' }}>
@@ -140,69 +140,46 @@ export default function Home() {
           <p style={{ color: '#64748b', textAlign: 'center', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
             Apni zaroorat ke hisab se select karo
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             <Link href="/jobs" style={{ textDecoration: 'none' }}>
-              <div style={{
-                background: 'linear-gradient(135deg, #1a3c8f, #2952c4)',
-                borderRadius: '20px', padding: '1rem',
-                boxShadow: '0 8px 30px rgba(26,60,143,0.3)',
-                textAlign: 'center', cursor: 'pointer',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}>
-                <div style={{
-                  width: '45px', height: '45px', borderRadius: '10px',
-                  background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.4rem', margin: '0 auto 1rem',
-                }}>💼</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.9rem', marginBottom: '8px' }}>Latest Jobs</h3>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.7rem', marginBottom: '1.25rem' }}>
-                  Govt, Bank, Railway, Defence — sab latest jobs dekho
-                </p>
-                <span style={{
-                  display: 'inline-block',
-                  background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)',
-                  color: 'white', padding: '8px 20px', borderRadius: '9999px',
-                  fontSize: '0.8rem', fontWeight: 700,
-                  border: '1px solid rgba(255,255,255,0.3)',
-                }}>
-                  Jobs Dekho →
-                </span>
+              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>💼</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Jobs</h3>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway jobs</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
               </div>
             </Link>
 
             <Link href="/results" style={{ textDecoration: 'none' }}>
-              <div style={{
-                background: 'linear-gradient(135deg, #16a34a, #22c55e)',
-                borderRadius: '20px', padding: '1rem',
-                boxShadow: '0 8px 30px rgba(22,163,74,0.3)',
-                textAlign: 'center', cursor: 'pointer',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}>
-                <div style={{
-                  width: '45px', height: '45px', borderRadius: '10px',
-                  background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.4rem', margin: '0 auto 1rem',
-                }}>📊</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.9rem', marginBottom: '8px' }}>Latest Results</h3>
-                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.7rem', marginBottom: '1.25rem' }}>
-                  SSC, Railway, Bank, Police — sabhi results ek jagah
-                </p>
-                <span style={{
-                  display: 'inline-block',
-                  background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)',
-                  color: 'white', padding: '8px 20px', borderRadius: '9999px',
-                  fontSize: '0.8rem', fontWeight: 700,
-                  border: '1px solid rgba(255,255,255,0.3)',
-                }}>
-                  Results Dekho →
-                </span>
+              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📊</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Results</h3>
+                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank results</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+              </div>
+            </Link>
+
+            <Link href="/answerkey" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Answer Keys</h3>
+                <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest answer keys dekho</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+              </div>
+            </Link>
+
+            <Link href="/admitcard" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎫</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Admit Cards</h3>
+                <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest admit cards dekho</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
               </div>
             </Link>
           </div>
         </div>
       </section>
+
 
       {/* SUBSCRIPTION SECTION */}
       <section style={{

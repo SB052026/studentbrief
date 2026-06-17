@@ -95,6 +95,8 @@ export default function Navbar() {
           <Link href="/jobs" onClick={() => setMenuOpen(false)} style={menuLink}>💼 Jobs</Link>
           <Link href="/results" onClick={() => setMenuOpen(false)} style={menuLink}>📊 Results</Link>
 <Link href="/syllabus" onClick={() => setMenuOpen(false)} style={menuLink}>📚 Syllabus</Link>
+          <Link href="/answerkey" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Answer Keys</Link>
+          <Link href="/admitcard" onClick={() => setMenuOpen(false)} style={menuLink}>🎫 Admit Cards</Link>
           {user && (
             <>
               <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
