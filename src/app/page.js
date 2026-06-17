@@ -144,19 +144,19 @@ export default function Home() {
             <Link href="/jobs" style={{ textDecoration: 'none' }}>
               <div style={{
                 background: 'linear-gradient(135deg, #1a3c8f, #2952c4)',
-                borderRadius: '20px', padding: '2rem',
+                borderRadius: '20px', padding: '1rem',
                 boxShadow: '0 8px 30px rgba(26,60,143,0.3)',
                 textAlign: 'center', cursor: 'pointer',
                 border: '1px solid rgba(255,255,255,0.1)',
               }}>
                 <div style={{
-                  width: '70px', height: '70px', borderRadius: '18px',
+                  width: '45px', height: '45px', borderRadius: '10px',
                   background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '2.5rem', margin: '0 auto 1rem',
+                  fontSize: '1.4rem', margin: '0 auto 1rem',
                 }}>💼</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '1.3rem', marginBottom: '8px' }}>Latest Jobs</h3>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.9rem', marginBottom: '8px' }}>Latest Jobs</h3>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.7rem', marginBottom: '1.25rem' }}>
                   Govt, Bank, Railway, Defence — sab latest jobs dekho
                 </p>
                 <span style={{
@@ -174,19 +174,19 @@ export default function Home() {
             <Link href="/results" style={{ textDecoration: 'none' }}>
               <div style={{
                 background: 'linear-gradient(135deg, #16a34a, #22c55e)',
-                borderRadius: '20px', padding: '2rem',
+                borderRadius: '20px', padding: '1rem',
                 boxShadow: '0 8px 30px rgba(22,163,74,0.3)',
                 textAlign: 'center', cursor: 'pointer',
                 border: '1px solid rgba(255,255,255,0.1)',
               }}>
                 <div style={{
-                  width: '70px', height: '70px', borderRadius: '18px',
+                  width: '45px', height: '45px', borderRadius: '10px',
                   background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '2.5rem', margin: '0 auto 1rem',
+                  fontSize: '1.4rem', margin: '0 auto 1rem',
                 }}>📊</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '1.3rem', marginBottom: '8px' }}>Latest Results</h3>
-                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.9rem', marginBottom: '8px' }}>Latest Results</h3>
+                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.7rem', marginBottom: '1.25rem' }}>
                   SSC, Railway, Bank, Police — sabhi results ek jagah
                 </p>
                 <span style={{
