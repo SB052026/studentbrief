@@ -111,26 +111,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SUBSCRIPTION BANNER */}
-      <section style={{ background: 'linear-gradient(135deg, #fff7ed, #ffedd5)', padding: '0.875rem 1rem' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '1.25rem' }}>🎯</span>
-            <div>
-              <p style={{ fontWeight: 700, color: '#9a3412', fontSize: '0.85rem' }}>Mock Test + Previous Year Papers</p>
-              <p style={{ color: '#c2410c', fontSize: '0.72rem' }}>Sirf ₹29/month — 7 Din Free Trial</p>
-            </div>
-          </div>
-          <Link href="/login" style={{
-            background: 'linear-gradient(135deg, #f97316, #fb923c)',
-            color: 'white', padding: '8px 20px', borderRadius: '10px',
-            fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
-          }}>
-            Free Trial →
-          </Link>
-        </div>
-      </section>
-
       {/* JOBS RESULTS ANSWERKEY ADMITCARD CARDS */}
       <section style={{ padding: '2.5rem 1rem', background: '#f0f4ff' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -142,7 +122,7 @@ export default function Home() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             <Link href="/jobs" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>💼</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Jobs</h3>
                 <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway jobs</p>
@@ -151,7 +131,7 @@ export default function Home() {
             </Link>
 
             <Link href="/results" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📊</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Results</h3>
                 <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank results</p>
@@ -160,7 +140,7 @@ export default function Home() {
             </Link>
 
             <Link href="/answerkey" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Answer Keys</h3>
                 <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest answer keys dekho</p>
@@ -169,7 +149,7 @@ export default function Home() {
             </Link>
 
             <Link href="/admitcard" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎫</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Admit Cards</h3>
                 <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest admit cards dekho</p>
@@ -181,42 +161,6 @@ export default function Home() {
       </section>
 
 
-      {/* SUBSCRIPTION SECTION */}
-      <section style={{
-        padding: '3rem 1rem',
-        background: 'linear-gradient(135deg, #0f2460 0%, #1a3c8f 50%, #2952c4 100%)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{ maxWidth: '480px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: 'white', textAlign: 'center', marginBottom: '6px' }}>
-            Subscription Plan
-          </h2>
-          <p style={{ color: 'rgba(191,219,254,0.8)', textAlign: 'center', marginBottom: '2rem', fontSize: '0.85rem' }}>
-            Mock Test + Previous Year Papers unlock karo
-          </p>
-          <div style={{ background: 'rgba(255,255,255,0.95)', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}>
-            <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 900, color: '#1a3c8f' }}>
-                ₹29<span style={{ fontSize: '1rem', fontWeight: 400, color: '#94a3b8' }}>/month</span>
-              </div>
-              <span style={{ background: '#dcfce7', color: '#166534', padding: '3px 14px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, display: 'inline-block', marginTop: '6px' }}>
-                ✅ 7 Din Free Trial
-              </span>
-            </div>
-            <ul style={{ listStyle: 'none', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {['Unlimited Mock Tests', 'All Previous Year Papers', 'Detailed Solutions', 'Performance Analysis'].map((item, i) => (
-                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.875rem', color: '#374151' }}>
-                  <span style={{ width: '20px', height: '20px', background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 900, flexShrink: 0 }}>✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/login" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 700, fontSize: '0.95rem' }}>
-              🚀 Free Trial Shuru Karo
-            </Link>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

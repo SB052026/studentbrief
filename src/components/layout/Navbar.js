@@ -11,6 +11,39 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const router = useRouter()
   const [quickLinks, setQuickLinks] = useState({ job: '/jobs', result: '/results', admitcard: '/admitcard', answerkey: '/answerkey' })
+  const [expandedSection, setExpandedSection] = useState(null)
+  const [sectionData, setSectionData] = useState([])
+  const [sectionLoading, setSectionLoading] = useState(false)
+
+  async function handleQuickLink(type, href) {
+  if (expandedSection === type) {
+    setExpandedSection(null)
+    setSectionData([])
+    return
+  }
+  setSectionLoading(true)
+  setExpandedSection(type)
+  const supabase = createClient()
+  let data = []
+  if (type === 'job') {
+    const { data: d } = await supabase.from('jobs').select('id, title, job_categories(slug)').order('created_at', { ascending: false }).limit(8)
+    data = (d || []).map(i => ({ title: i.title, href: `/jobs/${i.job_categories?.slug}/${i.id}` }))
+  } else if (type === 'result') {
+    const { data: d } = await supabase.from('results').select('id, title, result_categories(slug)').order('created_at', { ascending: false }).limit(8)
+    data = (d || []).map(i => ({ title: i.title, href: `/results/${i.result_categories?.slug}/${i.id}` }))
+  } else if (type === 'admitcard') {
+    const { data: d } = await supabase.from('admitcards').select('id, title, admitcard_categories(slug)').order('created_at', { ascending: false }).limit(8)
+    data = (d || []).map(i => ({ title: i.title, href: `/admitcard/${i.admitcard_categories?.slug}/${i.id}` }))
+  } else if (type === 'answerkey') {
+    const { data: d } = await supabase.from('answerkeys').select('id, title, answerkey_categories(slug)').order('created_at', { ascending: false }).limit(8)
+    data = (d || []).map(i => ({ title: i.title, href: `/answerkey/${i.answerkey_categories?.slug}/${i.id}` }))
+  } else if (type === 'syllabus') {
+    const { data: d } = await supabase.from('syllabus').select('id, title').order('created_at', { ascending: false }).limit(8)
+    data = (d || []).map(i => ({ title: i.title, href: `/syllabus` }))
+  }
+  setSectionData(data)
+  setSectionLoading(false)
+  }
 
   useEffect(() => {
     async function fetchLatest() {
@@ -59,33 +92,7 @@ export default function Navbar() {
 
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Profile Icon / Login */}          {!loading && (
-            user ? (
-              <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-                <div style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #f97316, #fb923c)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1rem', fontWeight: 900, color: 'white',
-                  border: '2px solid rgba(255,255,255,0.3)', cursor: 'pointer',
-                }}>
-                  {dbUser?.name?.charAt(0)?.toUpperCase() || '👤'}
-                </div>
-              </Link>
-            ) : (
-              <Link href="/login" style={{ textDecoration: 'none' }}>
-                <div style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.2rem', border: '2px solid rgba(255,255,255,0.3)', cursor: 'pointer',
-                }}>
-                  👤
-                </div>
-              </Link>
-            )
-          )}
-
+          {/* Profile Icon / Login */}
           {/* Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -139,13 +146,34 @@ export default function Navbar() {
         </div>
       )}
 
-      <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", overflowX: "auto", whiteSpace: "nowrap", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem" }}>
-        <Link href={quickLinks.job} style={{ flexShrink: 0, background: "#dbeafe", color: "#1e40af", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>💼 Jobs</Link>
-        <Link href={quickLinks.result} style={{ flexShrink: 0, background: "#dcfce7", color: "#166534", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📊 Results</Link>
-        <Link href={quickLinks.admitcard} style={{ flexShrink: 0, background: "#fef3c7", color: "#92400e", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>🎫 Admit Cards</Link>
-        <Link href={quickLinks.answerkey} style={{ flexShrink: 0, background: "#fce7f3", color: "#9d174d", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📝 Answer Keys</Link>
-        <Link href="/syllabus" style={{ flexShrink: 0, background: "#e0e7ff", color: "#3730a3", padding: "6px 14px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>📚 Syllabus</Link>
+      <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", justifyContent: "space-between" }}>
+        <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>💼 Jobs</button>
+        <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📊 Results</button>
+        <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>🎫 Admit Cards</button>
+        <button onClick={() => handleQuickLink('answerkey', quickLinks.answerkey)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'answerkey' ? "#9d174d" : "#fce7f3", color: expandedSection === 'answerkey' ? "white" : "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📝 Answer Keys</button>
+        <button onClick={() => handleQuickLink('syllabus', '/syllabus')} style={{ flex: 1, textAlign: "center", background: expandedSection === 'syllabus' ? "#3730a3" : "#e0e7ff", color: expandedSection === 'syllabus' ? "white" : "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📚 Syllabus</button>
       </div>
+
+      {expandedSection && (
+        <div style={{ background: "white", borderBottom: "2px solid #e2e8f0", padding: "0.75rem 1rem", maxHeight: "280px", overflowY: "auto" }}>
+          {sectionLoading ? (
+            <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "0.8rem" }}>Loading...</p>
+          ) : sectionData.length > 0 ? (
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+              {sectionData.map((item, i) => (
+                <li key={i} style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: "0.4rem" }}>
+                  <Link href={item.href} onClick={() => setExpandedSection(null)} style={{ color: "#1a3c8f", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span style={{ color: "#f97316", fontSize: "0.6rem" }}>●</span>
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "0.8rem" }}>Koi data nahi mila</p>
+          )}
+        </div>
+      )}
     </nav>
   )
 }
