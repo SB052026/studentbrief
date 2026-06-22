@@ -61,27 +61,6 @@ export default function Home() {
             Latest Govt Jobs, Results, Mock Tests, PYP aur Live Tests — sab kuch ek jagah
           </p>
 
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-            gap: '0.5rem', marginBottom: '1.5rem',
-          }}>
-            <Link href="/jobs" style={{
-              background: 'linear-gradient(135deg, #f97316, #fb923c)',
-              color: 'white', padding: '12px 28px', borderRadius: '12px',
-              fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
-              boxShadow: '0 8px 25px rgba(249,115,22,0.4)',
-            }}>
-              💼 Latest Jobs
-            </Link>
-            <Link href="/login" style={{
-              background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-              color: 'white', padding: '12px 28px', borderRadius: '12px',
-              fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
-              border: '2px solid rgba(255,255,255,0.3)',
-            }}>
-              🚀 Free Shuru Karo
-            </Link>
-          </div>
 
           <div style={{
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',

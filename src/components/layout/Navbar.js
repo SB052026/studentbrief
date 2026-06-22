@@ -9,6 +9,25 @@ import { useRouter } from 'next/navigation'
 export default function Navbar() {
   const { user, dbUser, loading } = useUser()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showQuickLinks, setShowQuickLinks] = useState(true)
+  const [lastScroll, setLastScroll] = useState(0)
+
+  useEffect(() => {
+    function handleScroll() {
+      const currentScroll = window.scrollY
+      if (currentScroll <= 50) {
+        setShowQuickLinks(true)
+      } else if (currentScroll > lastScroll) {
+        setShowQuickLinks(false)
+        setExpandedSection(null)
+      } else {
+        setShowQuickLinks(true)
+      }
+      setLastScroll(currentScroll)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScroll])
   const router = useRouter()
   const [quickLinks, setQuickLinks] = useState({ job: '/jobs', result: '/results', admitcard: '/admitcard', answerkey: '/answerkey' })
   const [expandedSection, setExpandedSection] = useState(null)
@@ -132,27 +151,16 @@ export default function Navbar() {
           <Link href="/about" onClick={() => setMenuOpen(false)} style={menuLink}>ℹ️ About Us</Link>
           <Link href="/contact" onClick={() => setMenuOpen(false)} style={menuLink}>📞 Contact Us</Link>
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '0.5rem', paddingTop: '0.5rem' }}>
-            {user ? (
-              <button onClick={handleLogout} style={{ color: '#fca5a5', background: 'rgba(239,68,68,0.2)', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', width: '100%', textAlign: 'left' }}>
-                🚪 Logout
-              </button>
-            ) : (
-              <Link href="/login" onClick={() => setMenuOpen(false)} style={{ display: 'block', background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', padding: '12px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
-                🚀 Login / Sign Up
-              </Link>
-            )}
-          </div>
         </div>
       )}
 
-      <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", justifyContent: "space-between" }}>
+      {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", justifyContent: "space-between" }}>
         <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>💼 Jobs</button>
         <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📊 Results</button>
         <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>🎫 Admit Cards</button>
         <button onClick={() => handleQuickLink('answerkey', quickLinks.answerkey)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'answerkey' ? "#9d174d" : "#fce7f3", color: expandedSection === 'answerkey' ? "white" : "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📝 Answer Keys</button>
         <button onClick={() => handleQuickLink('syllabus', '/syllabus')} style={{ flex: 1, textAlign: "center", background: expandedSection === 'syllabus' ? "#3730a3" : "#e0e7ff", color: expandedSection === 'syllabus' ? "white" : "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📚 Syllabus</button>
-      </div>
+      </div>}
 
       {expandedSection && (
         <div style={{ background: "white", borderBottom: "2px solid #e2e8f0", padding: "0.75rem 1rem", maxHeight: "280px", overflowY: "auto" }}>
