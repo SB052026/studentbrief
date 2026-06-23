@@ -10,24 +10,31 @@ export default function Navbar() {
   const { user, dbUser, loading } = useUser()
   const [menuOpen, setMenuOpen] = useState(false)
   const [showQuickLinks, setShowQuickLinks] = useState(true)
-  const [lastScroll, setLastScroll] = useState(0)
+  const lastScrollRef = require('react').useRef(0)
 
   useEffect(() => {
+    let ticking = false
     function handleScroll() {
-      const currentScroll = window.scrollY
-      if (currentScroll <= 50) {
-        setShowQuickLinks(true)
-      } else if (currentScroll > lastScroll) {
-        setShowQuickLinks(false)
-        setExpandedSection(null)
-      } else {
-        setShowQuickLinks(true)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.scrollY
+          if (currentScroll <= 10) {
+            setShowQuickLinks(true)
+          } else if (currentScroll > lastScrollRef.current + 5) {
+            setShowQuickLinks(false)
+            setExpandedSection(null)
+          } else if (currentScroll < lastScrollRef.current - 5) {
+            setShowQuickLinks(true)
+          }
+          lastScrollRef.current = currentScroll
+          ticking = false
+        })
+        ticking = true
       }
-      setLastScroll(currentScroll)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScroll])
+  }, [])
   const router = useRouter()
   const [quickLinks, setQuickLinks] = useState({ job: '/jobs', result: '/results', admitcard: '/admitcard', answerkey: '/answerkey' })
   const [expandedSection, setExpandedSection] = useState(null)
@@ -141,12 +148,10 @@ export default function Navbar() {
 <Link href="/syllabus" onClick={() => setMenuOpen(false)} style={menuLink}>📚 Syllabus</Link>
           <Link href="/answerkey" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Answer Keys</Link>
           <Link href="/admitcard" onClick={() => setMenuOpen(false)} style={menuLink}>🎫 Admit Cards</Link>
+          <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
+          <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={menuLink}>📄 PYP</Link>
           {user && (
-            <>
-              <Link href="/dashboard/mock-test" onClick={() => setMenuOpen(false)} style={menuLink}>📝 Mock Test</Link>
-              <Link href="/dashboard/pyp" onClick={() => setMenuOpen(false)} style={menuLink}>📄 PYP</Link>
-              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={menuLink}>👤 My Profile</Link>
-            </>
+            <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={menuLink}>👤 My Profile</Link>
           )}
           <Link href="/about" onClick={() => setMenuOpen(false)} style={menuLink}>ℹ️ About Us</Link>
           <Link href="/contact" onClick={() => setMenuOpen(false)} style={menuLink}>📞 Contact Us</Link>
@@ -154,7 +159,7 @@ export default function Navbar() {
         </div>
       )}
 
-      {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", justifyContent: "space-between" }}>
+      {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", overflowX: "auto", transition: "all 0.3s ease", scrollbarWidth: "none" }}>
         <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>💼 Jobs</button>
         <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📊 Results</button>
         <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>🎫 Admit Cards</button>
