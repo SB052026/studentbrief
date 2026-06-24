@@ -44,7 +44,7 @@ export default function Home() {
       {/* HERO SECTION */}
       <section style={{
         background: 'linear-gradient(135deg, #0f2460 0%, #1a3c8f 50%, #2952c4 100%)',
-        minHeight: '90vh',
+        minHeight: 'auto',
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
