@@ -82,6 +82,7 @@ export default function AdminAdmitCardsPage() {
   }
 
   const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
+  const labelStyle = { display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }
 
   return (
     <div>
@@ -96,24 +97,30 @@ export default function AdminAdmitCardsPage() {
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Edit Karo' : 'Naya Admit Card Add Karo'}</h2>
 
+          <label style={labelStyle}>📁 Category *</label>
           <select value={form.category_id} onChange={e => setForm(p => ({ ...p, category_id: e.target.value }))} style={inputStyle}>
-            <option value="">Category Select Karo *</option>
+            <option value="">Category Select Karo</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Admit Card Title *" />
-          <input style={inputStyle} value={form.organization} onChange={e => setForm(p => ({ ...p, organization: e.target.value }))} placeholder="Organization" />
-          <input style={inputStyle} value={form.post_name} onChange={e => setForm(p => ({ ...p, post_name: e.target.value }))} placeholder="Post Name" />
+          <label style={labelStyle}>🎫 Admit Card Title *</label>
+          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC CGL Admit Card 2025" />
+          <label style={labelStyle}>🏢 Organization</label>
+          <input style={inputStyle} value={form.organization} onChange={e => setForm(p => ({ ...p, organization: e.target.value }))} placeholder="e.g. Staff Selection Commission" />
+          <label style={labelStyle}>📋 Post Name</label>
+          <input style={inputStyle} value={form.post_name} onChange={e => setForm(p => ({ ...p, post_name: e.target.value }))} placeholder="e.g. Combined Graduate Level" />
+          <label style={labelStyle}>📊 Status</label>
           <select value={form.admitcard_status} onChange={e => setForm(p => ({ ...p, admitcard_status: e.target.value }))} style={inputStyle}>
             <option value="Released">Released</option>
             <option value="Expected">Expected</option>
             <option value="Pending">Pending</option>
           </select>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            <input style={inputStyle} type="date" value={form.published_date} onChange={e => setForm(p => ({ ...p, published_date: e.target.value }))} placeholder="Published Date" />
-            <input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} placeholder="Exam Date" />
-            <input style={inputStyle} type="date" value={form.download_last_date} onChange={e => setForm(p => ({ ...p, download_last_date: e.target.value }))} placeholder="Download Last Date" />
+            <div><label style={labelStyle}>📅 Published Date</label><input style={inputStyle} type="date" value={form.published_date} onChange={e => setForm(p => ({ ...p, published_date: e.target.value }))} /></div>
+            <div><label style={labelStyle}>📆 Exam Date</label><input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} /></div>
+            <div><label style={labelStyle}>⏰ Download Last Date</label><input style={inputStyle} type="date" value={form.download_last_date} onChange={e => setForm(p => ({ ...p, download_last_date: e.target.value }))} /></div>
           </div>
-          <input style={inputStyle} value={form.admitcard_link} onChange={e => setForm(p => ({ ...p, admitcard_link: e.target.value }))} placeholder="Admit Card Link (https://...)" />
+          <label style={labelStyle}>🔗 Admit Card Link</label>
+          <input style={inputStyle} value={form.admitcard_link} onChange={e => setForm(p => ({ ...p, admitcard_link: e.target.value }))} placeholder="https://..." />
 
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
             <button onClick={handleSave} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>

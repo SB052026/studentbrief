@@ -84,6 +84,7 @@ export default function AdminJobsPage() {
   }
 
   const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
+  const labelStyle = { display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }
 
   return (
     <div>
@@ -98,24 +99,29 @@ export default function AdminJobsPage() {
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Job Edit Karo' : 'Naya Job Add Karo'}</h2>
 
+          <label style={labelStyle}>📁 Category *</label>
           <select value={form.category_id} onChange={e => setForm(p => ({ ...p, category_id: e.target.value }))} style={inputStyle}>
-            <option value="">Category Select Karo *</option>
+            <option value="">Category Select Karo</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
 
-          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Job Title *" />
-          <textarea style={{ ...inputStyle, height: '80px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Job Description" />
+          <label style={labelStyle}>📝 Job Title *</label>
+          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC CGL Recruitment 2025" />
+          
+          <label style={labelStyle}>📄 Job Description</label>
+          <textarea style={{ ...inputStyle, height: '80px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Job ke baare mein likhein..." />
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            <input style={inputStyle} type="date" value={form.published_date} onChange={e => setForm(p => ({ ...p, published_date: e.target.value }))} placeholder="Published Date" />
-            <input style={inputStyle} type="date" value={form.last_date} onChange={e => setForm(p => ({ ...p, last_date: e.target.value }))} placeholder="Last Date" />
-            <input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} placeholder="Exam Date" />
-            <input style={inputStyle} value={form.education} onChange={e => setForm(p => ({ ...p, education: e.target.value }))} placeholder="Education" />
-            <input style={inputStyle} type="number" value={form.age_min} onChange={e => setForm(p => ({ ...p, age_min: e.target.value }))} placeholder="Age Min" />
-            <input style={inputStyle} type="number" value={form.age_max} onChange={e => setForm(p => ({ ...p, age_max: e.target.value }))} placeholder="Age Max" />
+            <div><label style={labelStyle}>📅 Published Date</label><input style={inputStyle} type="date" value={form.published_date} onChange={e => setForm(p => ({ ...p, published_date: e.target.value }))} /></div>
+            <div><label style={labelStyle}>⏰ Last Date</label><input style={inputStyle} type="date" value={form.last_date} onChange={e => setForm(p => ({ ...p, last_date: e.target.value }))} /></div>
+            <div><label style={labelStyle}>📆 Exam Date</label><input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} /></div>
+            <div><label style={labelStyle}>🎓 Education</label><input style={inputStyle} value={form.education} onChange={e => setForm(p => ({ ...p, education: e.target.value }))} placeholder="e.g. 10th/12th/Graduate" /></div>
+            <div><label style={labelStyle}>👤 Age Min</label><input style={inputStyle} type="number" value={form.age_min} onChange={e => setForm(p => ({ ...p, age_min: e.target.value }))} placeholder="e.g. 18" /></div>
+            <div><label style={labelStyle}>👤 Age Max</label><input style={inputStyle} type="number" value={form.age_max} onChange={e => setForm(p => ({ ...p, age_max: e.target.value }))} placeholder="e.g. 35" /></div>
           </div>
 
-          <input style={inputStyle} value={form.apply_link} onChange={e => setForm(p => ({ ...p, apply_link: e.target.value }))} placeholder="Apply Link (https://...)" />
+          <label style={labelStyle}>🔗 Apply Link</label>
+          <input style={inputStyle} value={form.apply_link} onChange={e => setForm(p => ({ ...p, apply_link: e.target.value }))} placeholder="https://..." />
 
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
             <button onClick={handleSave} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
