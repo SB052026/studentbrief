@@ -139,6 +139,17 @@ export default function MockTestExamPage({ params }) {
 
   if (submitted) {
     const correctAnswers = questions.filter(q => answers[q.id] === q.correct_option)
+
+    function getAnswerText(q, key) {
+      if (!key) return 'नहीं दिया'
+      const map = { A: q.option_a, B: q.option_b, C: q.option_c, D: q.option_d }
+      return map[key] || key
+    }
+
+    function getCorrectText(q) {
+      const map = { A: q.option_a, B: q.option_b, C: q.option_c, D: q.option_d }
+      return map[q.correct_option] || q.correct_option
+    }
     const wrongAnswers = questions.filter(q => answers[q.id] && answers[q.id] !== q.correct_option)
     const skipped = questions.filter(q => !answers[q.id])
     const percentage = Math.round((score / questions.length) * 100)
@@ -184,10 +195,10 @@ export default function MockTestExamPage({ params }) {
                     <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '6px' }}>{i + 1}. {q.question}</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '0.75rem' }}>
                       <span style={{ background: 'white', padding: '3px 8px', borderRadius: '6px', color: '#475569' }}>
-                        आपका: <strong>{answers[q.id] || 'नहीं दिया'}</strong>
+                        आपका: <strong>{getAnswerText(q, answers[q.id])}</strong>
                       </span>
                       <span style={{ background: '#dcfce7', padding: '3px 8px', borderRadius: '6px', color: '#166534' }}>
-                        सही: <strong>{q.correct_option}</strong>
+                        सही: <strong>{getCorrectText(q)}</strong>
                       </span>
                       {q.explanation && (
                       <p style={{ fontSize: '0.72rem', color: '#475569', marginTop: '6px', padding: '6px 8px', background: 'rgba(255,255,255,0.7)', borderRadius: '6px', lineHeight: 1.5 }}>

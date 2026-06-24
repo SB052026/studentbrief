@@ -91,6 +91,17 @@ export default function PypPracticePage({ params }) {
     return () => clearInterval(timer)
   }, [submitted, loading])
 
+  function getAnswerText(q, key) {
+    if (!key) return 'नहीं दिया'
+    const map = { A: q.option_a, B: q.option_b, C: q.option_c, D: q.option_d }
+    return map[key] || key
+  }
+
+  function getCorrectText(q) {
+    const map = { A: q.option_a, B: q.option_b, C: q.option_c, D: q.option_d }
+    return map[q.correct_option] || q.correct_option
+  }
+
   function handleAnswer(questionId, optionKey) {
     setAnswers(prev => ({ ...prev, [questionId]: optionKey }))
   }
@@ -153,9 +164,11 @@ export default function PypPracticePage({ params }) {
               {questions.map((q, i) => (
                 <div key={q.id} style={{ padding: '0.75rem', background: answers[q.id] === q.correct_option ? '#dcfce7' : '#fee2e2', borderRadius: '10px', borderLeft: `4px solid ${answers[q.id] === q.correct_option ? '#22c55e' : '#ef4444'}` }}>
                   <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>{i + 1}. {q.question}</p>
-                  <p style={{ fontSize: '0.75rem', color: '#475569' }}>
-                    आपका उत्तर: <span style={{ fontWeight: 700 }}>{answers[q.id] || 'नहीं दिया'}</span> |
-                    सही उत्तर: <span style={{ fontWeight: 700, color: '#16a34a' }}>{q.correct_option}</span>
+                  <p style={{ fontSize: '0.75rem', color: '#475569', marginBottom: '4px' }}>
+                    आपका उत्तर: <span style={{ fontWeight: 700 }}>{getAnswerText(q, answers[q.id])}</span>
+                  </p>
+                  <p style={{ fontSize: '0.75rem', color: '#16a34a' }}>
+                    सही उत्तर: <span style={{ fontWeight: 700 }}>{getCorrectText(q)}</span>
                   </p>
                 </div>
               ))}

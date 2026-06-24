@@ -65,6 +65,14 @@ export default async function JobDetailPage({ params }) {
           <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', lineHeight: 1.3 }}>{job.title}</h1>
         </div>
 
+        {/* Description Card */}
+        {job.description && (
+          <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderLeft: '4px solid #f97316' }}>
+            <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.9rem', marginBottom: '8px' }}>📋 Job Description</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7 }}>{job.description}</p>
+          </div>
+        )}
+
         {/* Short Info Card */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
           <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
