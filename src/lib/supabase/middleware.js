@@ -33,7 +33,7 @@ export async function updateSession(request) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const protectedRoutes = ['/admin']
+  const protectedRoutes = []
   const adminRoutes = ['/admin']
   const authRoutes = ['/login']
 
