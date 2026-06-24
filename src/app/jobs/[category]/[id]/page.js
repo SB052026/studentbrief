@@ -65,6 +65,22 @@ export default async function JobDetailPage({ params }) {
           <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', lineHeight: 1.3 }}>{job.title}</h1>
         </div>
 
+        {/* Short Info Card */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: '#1e40af', marginBottom: '4px', fontWeight: 600 }}>👤 Age Limit</p>
+            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{job.age_min}-{job.age_max} Yrs</p>
+          </div>
+          <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: '#166534', marginBottom: '4px', fontWeight: 600 }}>📅 Last Date</p>
+            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#ef4444' }}>{formatDate(job.last_date)}</p>
+          </div>
+          <div style={{ background: '#fef3c7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: '#92400e', marginBottom: '4px', fontWeight: 600 }}>📝 Exam Date</p>
+            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{formatDate(job.exam_date)}</p>
+          </div>
+        </div>
+
         {/* Important Dates */}
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
           <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>

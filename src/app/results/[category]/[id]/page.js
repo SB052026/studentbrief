@@ -62,6 +62,22 @@ export default async function ResultDetailPage({ params }) {
           <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', lineHeight: 1.3 }}>{result.title}</h1>
         </div>
 
+        {/* Short Info Card */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: '#1e40af', marginBottom: '4px', fontWeight: 600 }}>🏢 Organization</p>
+            <p style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1e293b' }}>{result.organization}</p>
+          </div>
+          <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: '#166534', marginBottom: '4px', fontWeight: 600 }}>👥 Vacancies</p>
+            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{result.total_vacancies?.toLocaleString('en-IN')}</p>
+          </div>
+          <div style={{ background: result.result_status === 'Declared' ? '#dcfce7' : '#fef3c7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.65rem', color: result.result_status === 'Declared' ? '#166534' : '#92400e', marginBottom: '4px', fontWeight: 600 }}>📊 Status</p>
+            <p style={{ fontSize: '0.75rem', fontWeight: 800, color: result.result_status === 'Declared' ? '#16a34a' : '#d97706' }}>{result.result_status}</p>
+          </div>
+        </div>
+
         {/* Important Dates */}
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
           <h3 style={{ fontWeight: 800, color: '#16a34a', fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>

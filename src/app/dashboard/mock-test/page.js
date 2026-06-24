@@ -44,7 +44,7 @@ export default function MockTestPage() {
                 </div>
                 <h3 style={{ fontWeight: 700, color: '#1e293b', marginBottom: '6px' }}>{test.title}</h3>
                 <p style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '1rem' }}>⏱️ {test.duration_minutes} minutes</p>
-                <Link href={`/dashboard/mock-test/${test.id}`} style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+                <Link href={`/dashboard/mock-test/instructions?id=${test.id}&title=${encodeURIComponent(test.title)}`} style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
                   Test Shuru Karo
                 </Link>
               </div>

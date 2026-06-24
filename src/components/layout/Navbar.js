@@ -11,29 +11,29 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showQuickLinks, setShowQuickLinks] = useState(true)
   const lastScrollRef = require('react').useRef(0)
+  const timerRef = require('react').useRef(null)
 
   useEffect(() => {
-    let ticking = false
     function handleScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScroll = window.scrollY
-          if (currentScroll <= 10) {
-            setShowQuickLinks(true)
-          } else if (currentScroll > lastScrollRef.current + 5) {
-            setShowQuickLinks(false)
-            setExpandedSection(null)
-          } else if (currentScroll < lastScrollRef.current - 5) {
-            setShowQuickLinks(true)
-          }
-          lastScrollRef.current = currentScroll
-          ticking = false
-        })
-        ticking = true
-      }
+      const currentScroll = window.scrollY
+      if (timerRef.current) clearTimeout(timerRef.current)
+      timerRef.current = setTimeout(() => {
+        if (currentScroll <= 10) {
+          setShowQuickLinks(true)
+        } else if (currentScroll > lastScrollRef.current + 20) {
+          setShowQuickLinks(false)
+          setExpandedSection(null)
+        } else if (currentScroll < lastScrollRef.current - 20) {
+          setShowQuickLinks(true)
+        }
+        lastScrollRef.current = currentScroll
+      }, 100)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
   }, [])
   const router = useRouter()
   const [quickLinks, setQuickLinks] = useState({ job: '/jobs', result: '/results', admitcard: '/admitcard', answerkey: '/answerkey' })

@@ -1,10 +1,42 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
 export default function Home() {
+  const [pageLoading, setPageLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPageLoading(false), 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (pageLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        background: 'linear-gradient(135deg, #0f2460 0%, #1a3c8f 50%, #2952c4 100%)',
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem' }}>
+            Student<span style={{ color: '#f97316' }}>Brief</span>
+          </div>
+          <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem', marginBottom: '2rem' }}>
+            Every Student Deserves to Excel
+          </p>
+          <div style={{
+            width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.3)',
+            borderTop: '3px solid #f97316', borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite', margin: '0 auto',
+          }}/>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="page-wrapper">
       <Navbar />

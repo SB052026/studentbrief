@@ -7,93 +7,73 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { useRouter } from 'next/navigation'
 
-export default function MockTestExamPage({ params }) {
-  const [testId, setTestId] = useState(null)
-  const [test, setTest] = useState(null)
+export default function PypPracticePage({ params }) {
+  const [pypId, setPypId] = useState(null)
+  const [paper, setPaper] = useState(null)
   const [questions, setQuestions] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState({})
-  const [timeLeft, setTimeLeft] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(0)
   const [loading, setLoading] = useState(true)
   const [warning, setWarning] = useState('')
+  const [timeLeft, setTimeLeft] = useState(1800)
   const router = useRouter()
 
   useEffect(() => {
-    async function loadParams() {
+    async function load() {
       const resolvedParams = await params
-      setTestId(resolvedParams.id)
+      setPypId(resolvedParams.id)
+      const supabase = createClient()
+      const { data: paperData } = await supabase
+        .from('pyp')
+        .select('*')
+        .eq('id', resolvedParams.id)
+        .single()
+      const { data: questionsData } = await supabase
+        .from('pyp_questions')
+        .select('*')
+        .eq('pyp_id', resolvedParams.id)
+      setPaper(paperData)
+      const shuffled = shuffleArray(questionsData || []).map(q => ({
+        ...q,
+        options: shuffleArray([
+          { key: 'A', value: q.option_a },
+          { key: 'B', value: q.option_b },
+          { key: 'C', value: q.option_c },
+          { key: 'D', value: q.option_d },
+        ])
+      }))
+      setQuestions(shuffled)
+      setLoading(false)
     }
-    loadParams()
+    load()
   }, [params])
 
   useEffect(() => {
-    if (!testId) return
-    async function fetchTest() {
-      const supabase = createClient()
-      const { data: testData } = await supabase
-        .from('mock_tests')
-        .select('*')
-        .eq('id', testId)
-        .single()
-      const { data: questionsData } = await supabase
-        .from('mock_questions')
-        .select('*')
-        .eq('mock_test_id', testId)
-      if (testData) {
-        setTest(testData)
-        setTimeLeft(testData.duration_minutes * 60)
-        const shuffled = shuffleArray(questionsData || []).map(q => ({
-          ...q,
-          options: shuffleArray([
-            { key: 'A', value: q.option_a },
-            { key: 'B', value: q.option_b },
-            { key: 'C', value: q.option_c },
-            { key: 'D', value: q.option_d },
-          ])
-        }))
-        setQuestions(shuffled)
-      }
-      setLoading(false)
-    }
-    fetchTest()
-  }, [testId])
-
-  useEffect(() => {
     if (submitted) return
-
     function showWarning(msg) {
       setWarning(msg)
       setTimeout(() => setWarning(''), 3000)
     }
-
     function handleCopy(e) { e.preventDefault(); showWarning('Copy allowed nahi hai!') }
-    function handleCut(e) { e.preventDefault(); showWarning('Cut allowed nahi hai!') }
     function handlePaste(e) { e.preventDefault(); showWarning('Paste allowed nahi hai!') }
     function handleContextMenu(e) { e.preventDefault(); showWarning('Right click allowed nahi hai!') }
     function handleKeyDown(e) {
       if (
-        (e.ctrlKey && ['c', 'v', 'x', 'a', 'u', 's', 'p'].includes(e.key.toLowerCase())) ||
-        (e.metaKey && ['c', 'v', 'x', 'a', 'u', 's', 'p'].includes(e.key.toLowerCase())) ||
-        e.key === 'PrintScreen' ||
-        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) ||
-        e.key === 'F12'
+        (e.ctrlKey && ['c','v','x','a','u','s','p'].includes(e.key.toLowerCase())) ||
+        e.key === 'PrintScreen' || e.key === 'F12'
       ) {
         e.preventDefault()
         showWarning('Ye shortcut allowed nahi hai!')
       }
     }
-
     document.addEventListener('copy', handleCopy)
-    document.addEventListener('cut', handleCut)
     document.addEventListener('paste', handlePaste)
     document.addEventListener('contextmenu', handleContextMenu)
     document.addEventListener('keydown', handleKeyDown)
-
     return () => {
       document.removeEventListener('copy', handleCopy)
-      document.removeEventListener('cut', handleCut)
       document.removeEventListener('paste', handlePaste)
       document.removeEventListener('contextmenu', handleContextMenu)
       document.removeEventListener('keydown', handleKeyDown)
@@ -101,19 +81,15 @@ export default function MockTestExamPage({ params }) {
   }, [submitted])
 
   useEffect(() => {
-    if (submitted || timeLeft <= 0 || loading) return
+    if (submitted || loading) return
     const timer = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          handleSubmit()
-          return 0
-        }
+        if (prev <= 1) { clearInterval(timer); handleSubmit(); return 0 }
         return prev - 1
       })
     }, 1000)
     return () => clearInterval(timer)
-  }, [submitted, loading, timeLeft])
+  }, [submitted, loading])
 
   function handleAnswer(questionId, optionKey) {
     setAnswers(prev => ({ ...prev, [questionId]: optionKey }))
@@ -137,67 +113,57 @@ export default function MockTestExamPage({ params }) {
     )
   }
 
-  if (submitted) {
-    const correctAnswers = questions.filter(q => answers[q.id] === q.correct_option)
-    const wrongAnswers = questions.filter(q => answers[q.id] && answers[q.id] !== q.correct_option)
-    const skipped = questions.filter(q => !answers[q.id])
-    const percentage = Math.round((score / questions.length) * 100)
-
+  if (questions.length === 0) {
     return (
       <div className="page-wrapper">
         <Navbar />
-        <main style={{ flex: 1, maxWidth: '700px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
+        <main style={{ flex: 1, maxWidth: '500px', margin: '0 auto', padding: '4rem 1rem', textAlign: 'center' }}>
+          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>📄</span>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1.3rem', marginBottom: '0.5rem' }}>Questions abhi available nahi hain</h2>
+          <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>Is paper ke questions jald add honge</p>
+          <button onClick={() => router.push('/dashboard/pyp')} style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '12px 28px', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif' }}>
+            वापस जाओ
+          </button>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
-          {/* Score Card */}
-          <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1.5rem', marginBottom: '1rem', textAlign: 'center', boxShadow: '0 8px 25px rgba(26,60,143,0.3)' }}>
-            <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.5rem' }}>🎉</span>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem' }}>Test Complete!</h2>
-            <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{score}/{questions.length}</div>
-            <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{percentage}% सही</p>
+  if (submitted) {
+    return (
+      <div className="page-wrapper">
+        <Navbar />
+        <main style={{ flex: 1, maxWidth: '600px', margin: '0 auto', padding: '2rem 1rem' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', textAlign: 'center', marginBottom: '1rem' }}>
+            <span style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem' }}>🎉</span>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.5rem' }}>Practice Complete!</h2>
+            <p style={{ color: '#64748b', marginBottom: '0.5rem' }}>{paper?.exam_name}</p>
+            <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#f97316', marginBottom: '0.5rem' }}>
+              {score}/{questions.length}
+            </div>
+            <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>
+              {Math.round((score / questions.length) * 100)}% सही
+            </p>
           </div>
 
-          {/* Summary Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
-            <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#16a34a' }}>{correctAnswers.length}</div>
-              <p style={{ fontSize: '0.72rem', color: '#166534', fontWeight: 600 }}>✅ सही</p>
-            </div>
-            <div style={{ background: '#fee2e2', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#dc2626' }}>{wrongAnswers.length}</div>
-              <p style={{ fontSize: '0.72rem', color: '#991b1b', fontWeight: 600 }}>❌ गलत</p>
-            </div>
-            <div style={{ background: '#fef3c7', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#d97706' }}>{skipped.length}</div>
-              <p style={{ fontSize: '0.72rem', color: '#92400e', fontWeight: 600 }}>⏭️ छोड़े</p>
-            </div>
-          </div>
-
-          {/* Answer Review */}
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
             <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem' }}>📊 उत्तर समीक्षा</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {questions.map((q, i) => {
-                const isCorrect = answers[q.id] === q.correct_option
-                const isSkipped = !answers[q.id]
-                return (
-                  <div key={q.id} style={{ padding: '0.875rem', background: isSkipped ? '#fef3c7' : isCorrect ? '#dcfce7' : '#fee2e2', borderRadius: '10px', borderLeft: `4px solid ${isSkipped ? '#f59e0b' : isCorrect ? '#22c55e' : '#ef4444'}` }}>
-                    <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '6px' }}>{i + 1}. {q.question}</p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '0.75rem' }}>
-                      <span style={{ background: 'white', padding: '3px 8px', borderRadius: '6px', color: '#475569' }}>
-                        आपका: <strong>{answers[q.id] || 'नहीं दिया'}</strong>
-                      </span>
-                      <span style={{ background: '#dcfce7', padding: '3px 8px', borderRadius: '6px', color: '#166534' }}>
-                        सही: <strong>{q.correct_option}</strong>
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
+              {questions.map((q, i) => (
+                <div key={q.id} style={{ padding: '0.75rem', background: answers[q.id] === q.correct_option ? '#dcfce7' : '#fee2e2', borderRadius: '10px', borderLeft: `4px solid ${answers[q.id] === q.correct_option ? '#22c55e' : '#ef4444'}` }}>
+                  <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>{i + 1}. {q.question}</p>
+                  <p style={{ fontSize: '0.75rem', color: '#475569' }}>
+                    आपका उत्तर: <span style={{ fontWeight: 700 }}>{answers[q.id] || 'नहीं दिया'}</span> |
+                    सही उत्तर: <span style={{ fontWeight: 700, color: '#16a34a' }}>{q.correct_option}</span>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
-          <button onClick={() => router.push('/dashboard/mock-test')} style={{ width: '100%', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', fontSize: '0.95rem' }}>
-            वापस Mock Tests पर जाओ
+          <button onClick={() => router.push('/dashboard/pyp')} style={{ width: '100%', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', fontSize: '0.95rem' }}>
+            वापस PYP पर जाओ
           </button>
         </main>
         <Footer />
@@ -212,14 +178,17 @@ export default function MockTestExamPage({ params }) {
       <Navbar />
 
       {warning && (
-        <div style={{ position: 'fixed', top: '70px', left: '50%', transform: 'translateX(-50%)', background: '#ef4444', color: 'white', padding: '10px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '0.875rem', zIndex: 9999, boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+        <div style={{ position: 'fixed', top: '70px', left: '50%', transform: 'translateX(-50%)', background: '#ef4444', color: 'white', padding: '10px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '0.875rem', zIndex: 9999 }}>
           ⚠️ {warning}
         </div>
       )}
 
       <main style={{ flex: 1, maxWidth: '700px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h1 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem' }}>{test?.title}</h1>
+          <div>
+            <h1 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem' }}>{paper?.exam_name}</h1>
+            <p style={{ color: '#64748b', fontSize: '0.75rem' }}>{paper?.year}</p>
+          </div>
           <div style={{ background: timeLeft < 60 ? '#fee2e2' : '#dbeafe', color: timeLeft < 60 ? '#991b1b' : '#1e40af', padding: '6px 14px', borderRadius: '10px', fontWeight: 700, fontSize: '0.9rem' }}>
             ⏱️ {formatTime(timeLeft)}
           </div>
@@ -235,7 +204,7 @@ export default function MockTestExamPage({ params }) {
 
         {currentQuestion && (
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
-            <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.75rem' }}>Question {currentIndex + 1} of {questions.length}</p>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.75rem' }}>प्रश्न {currentIndex + 1} / {questions.length}</p>
             <h2 style={{ fontWeight: 700, color: '#1e293b', fontSize: '1rem', marginBottom: '1.25rem', lineHeight: 1.5 }}>
               {currentQuestion.question}
             </h2>
@@ -252,13 +221,13 @@ export default function MockTestExamPage({ params }) {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
           <button onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))} disabled={currentIndex === 0} style={{ flex: 1, padding: '10px', background: '#f1f5f9', color: '#64748b', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins, sans-serif', opacity: currentIndex === 0 ? 0.5 : 1 }}>
-            ← Pehla
+            ← पिछला
           </button>
           <button onClick={handleSubmit} style={{ flex: 1, padding: '10px', background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins, sans-serif' }}>
             Submit
           </button>
           <button onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))} disabled={currentIndex === questions.length - 1} style={{ flex: 1, padding: '10px', background: '#f1f5f9', color: '#64748b', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins, sans-serif', opacity: currentIndex === questions.length - 1 ? 0.5 : 1 }}>
-            Agla →
+            अगला →
           </button>
         </div>
       </main>
