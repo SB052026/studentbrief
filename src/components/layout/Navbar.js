@@ -100,7 +100,7 @@ export default function Navbar() {
         {/* Logo */}
 <Link href="/" style={{ textDecoration: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/logo.png" alt="StudentBrief Logo" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover' }} />
+            <img src="/logo.png" alt="StudentBrief Logo" width={38} height={38} style={{ borderRadius: '8px', objectFit: 'cover', display: 'block' }} />
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
             <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
               Student<span style={{ color: '#f97316' }}>Brief</span>

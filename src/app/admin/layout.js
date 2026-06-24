@@ -44,9 +44,14 @@ export default function AdminLayout({ children }) {
             <span style={{ fontSize: '0.7rem', background: 'rgba(249,115,22,0.3)', color: '#fb923c', padding: '2px 8px', borderRadius: '9999px', marginLeft: '8px', fontWeight: 700 }}>Admin</span>
           </span>
         </Link>
-        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem' }}>
-          {menuOpen ? '✕' : '☰'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button onClick={() => { localStorage.removeItem('sb_admin_auth'); localStorage.removeItem('sb_admin_token'); localStorage.removeItem('sb_admin_time'); window.location.href = '/admin/login' }} style={{ background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.3)', color: '#fca5a5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+            🚪 Logout
+          </button>
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem' }}>
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
