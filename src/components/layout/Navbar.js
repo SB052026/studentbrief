@@ -140,7 +140,8 @@ export default function Navbar() {
           background: 'rgba(15,36,96,0.98)', backdropFilter: 'blur(10px)',
           padding: '0.75rem 1rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem',
           borderTop: '1px solid rgba(255,255,255,0.1)',
-          maxWidth: '1200px', margin: '0 auto',
+          position: 'fixed', top: '56px', left: 0, right: 0,
+          zIndex: 9999, maxHeight: '80vh', overflowY: 'auto',
         }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={menuLink}>🏠 Home</Link>
           <Link href="/jobs" onClick={() => setMenuOpen(false)} style={menuLink}>💼 Jobs</Link>
@@ -159,16 +160,16 @@ export default function Navbar() {
         </div>
       )}
 
-      {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.5rem 0.75rem", display: "flex", gap: "0.5rem", overflowX: "auto", transition: "all 0.3s ease", scrollbarWidth: "none" }}>
-        <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>💼 Jobs</button>
-        <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📊 Results</button>
-        <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>🎫 Admit Cards</button>
-        <button onClick={() => handleQuickLink('answerkey', quickLinks.answerkey)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'answerkey' ? "#9d174d" : "#fce7f3", color: expandedSection === 'answerkey' ? "white" : "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📝 Answer Keys</button>
-        <button onClick={() => handleQuickLink('syllabus', '/syllabus')} style={{ flex: 1, textAlign: "center", background: expandedSection === 'syllabus' ? "#3730a3" : "#e0e7ff", color: expandedSection === 'syllabus' ? "white" : "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif" }}>📚 Syllabus</button>
+      {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.4rem 0.75rem", display: "flex", gap: "0.5rem", overflowX: "auto", overflowY: "hidden", transition: "all 0.3s ease", scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}>
+        <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>💼 Jobs</button>
+        <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📊 Results</button>
+        <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>🎫 Admit Cards</button>
+        <button onClick={() => handleQuickLink('answerkey', quickLinks.answerkey)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'answerkey' ? "#9d174d" : "#fce7f3", color: expandedSection === 'answerkey' ? "white" : "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📝 Answer Keys</button>
+        <button onClick={() => handleQuickLink('syllabus', '/syllabus')} style={{ flex: 1, textAlign: "center", background: expandedSection === 'syllabus' ? "#3730a3" : "#e0e7ff", color: expandedSection === 'syllabus' ? "white" : "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📚 Syllabus</button>
       </div>}
 
       {expandedSection && (
-        <div style={{ background: "white", borderBottom: "2px solid #e2e8f0", padding: "0.75rem 1rem", maxHeight: "280px", overflowY: "auto" }}>
+        <div style={{ background: "white", borderBottom: "2px solid #e2e8f0", padding: "0.75rem 1rem", maxHeight: "60vh", overflowY: "auto", position: "fixed", top: "96px", left: 0, right: 0, zIndex: 9998, boxShadow: "0 8px 30px rgba(0,0,0,0.15)" }}>
           {sectionLoading ? (
             <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "0.8rem" }}>Loading...</p>
           ) : sectionData.length > 0 ? (
