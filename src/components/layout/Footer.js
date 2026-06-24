@@ -47,7 +47,7 @@ export default function Footer() {
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '2rem', paddingTop: '1.5rem', textAlign: 'center' }}>
           <p style={{ color: 'rgba(191,219,254,0.6)', fontSize: '0.8rem' }}>
             © 2026 StudentBrief.in — All Rights Reserved
-          <a href="/admin/login" style={{ color: 'rgba(148,163,184,0.5)', fontSize: '0.65rem', textDecoration: 'none', marginLeft: '8px' }}>Admin</a>
+          <a href="/admin-login" style={{ color: 'rgba(148,163,184,0.5)', fontSize: '0.65rem', textDecoration: 'none', marginLeft: '8px' }}>Admin</a>
           </p>
         </div>
       </div>
