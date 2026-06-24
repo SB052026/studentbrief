@@ -8,6 +8,7 @@ export default function AdminLayout({ children }) {
 
 
     const [isAuth, setIsAuth] = useState(false)
+  const [checking, setChecking] = useState(true)
 
       useEffect(() => {
         const auth = localStorage.getItem('sb_admin_auth')
@@ -18,6 +19,13 @@ export default function AdminLayout({ children }) {
     }
   }, [])
 
+  if (checking) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0f2460, #1a3c8f)' }}>
+      <div style={{ color: 'white', fontSize: '1.2rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+        Student<span style={{ color: '#f97316' }}>Brief</span> Admin...
+      </div>
+    </div>
+  )
   if (!isAuth) return null
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
