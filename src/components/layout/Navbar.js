@@ -99,13 +99,16 @@ export default function Navbar() {
 
         {/* Logo */}
 <Link href="/" style={{ textDecoration: 'none' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <img src="/logo.png" alt="StudentBrief Logo" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
             <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
               Student<span style={{ color: '#f97316' }}>Brief</span>
             </span>
             <span style={{ fontSize: '0.6rem', color: 'rgba(191,219,254,0.8)', fontWeight: 500, letterSpacing: '0.02em' }}>
               Every Student Deserves to Excel
             </span>
+            </div>
           </div>
         </Link>
 
