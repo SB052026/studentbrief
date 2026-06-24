@@ -189,6 +189,11 @@ export default function MockTestExamPage({ params }) {
                       <span style={{ background: '#dcfce7', padding: '3px 8px', borderRadius: '6px', color: '#166534' }}>
                         सही: <strong>{q.correct_option}</strong>
                       </span>
+                      {q.explanation && (
+                      <p style={{ fontSize: '0.72rem', color: '#475569', marginTop: '6px', padding: '6px 8px', background: 'rgba(255,255,255,0.7)', borderRadius: '6px', lineHeight: 1.5 }}>
+                        💡 {q.explanation}
+                      </p>
+                    )}
                     </div>
                   </div>
                 )
