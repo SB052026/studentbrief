@@ -13,14 +13,41 @@ export default function AdminMockTestPage() {
   const [selectedTest, setSelectedTest] = useState(null)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10' })
+  const [subjects, setSubjects] = useState([])
+  const [topics, setTopics] = useState([])
+  const [sections, setSections] = useState([])
+  const [subsections, setSubsections] = useState([])
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', topic_id: '', section_id: '', subsection_id: '' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '' })
 
   async function fetchTests() {
     const supabase = createClient()
     const { data } = await supabase.from('mock_tests').select('*').order('created_at', { ascending: false })
     setTests(data || [])
+    const { data: subs } = await supabase.from('mock_subjects').select('*').order('name')
+    setSubjects(subs || [])
     setLoading(false)
+  }
+
+  async function fetchTopics(subjectId) {
+    const supabase = createClient()
+    const { data } = await supabase.from('mock_topics').select('*').eq('subject_id', subjectId).order('name')
+    setTopics(data || [])
+    setSections([])
+    setSubsections([])
+  }
+
+  async function fetchSections(topicId) {
+    const supabase = createClient()
+    const { data } = await supabase.from('mock_sections').select('*').eq('topic_id', topicId).order('name')
+    setSections(data || [])
+    setSubsections([])
+  }
+
+  async function fetchSubsections(sectionId) {
+    const supabase = createClient()
+    const { data } = await supabase.from('mock_subsections').select('*').eq('section_id', sectionId).order('name')
+    setSubsections(data || [])
   }
 
   async function fetchQuestions(testId) {
@@ -35,14 +62,22 @@ export default function AdminMockTestPage() {
     if (!testForm.title) return alert('Title zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    const data = { title: testForm.title, duration_minutes: parseInt(testForm.duration_minutes), total_questions: parseInt(testForm.total_questions) }
+    const data = {
+      title: testForm.title,
+      duration_minutes: parseInt(testForm.duration_minutes) || 30,
+      total_questions: parseInt(testForm.total_questions) || 10,
+      subject_id: testForm.subject_id || null,
+      topic_id: testForm.topic_id || null,
+      section_id: testForm.section_id || null,
+      subsection_id: testForm.subsection_id || null,
+    }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
     } else {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', topic_id: '', section_id: '', subsection_id: '' })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
@@ -105,6 +140,7 @@ export default function AdminMockTestPage() {
     reader.readAsBinaryString(file)
   }
 
+  const labelStyle = { display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }
   const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
 
   return (
@@ -119,11 +155,56 @@ export default function AdminMockTestPage() {
       {showTestForm && (
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>Naya Mock Test</h2>
-          <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="Test Title *" />
+          
+          <label style={labelStyle}>📝 Test Title *</label>
+          <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Ancient History Test 1" />
+          
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            <input style={inputStyle} type="number" value={testForm.duration_minutes} onChange={e => setTestForm(p => ({ ...p, duration_minutes: e.target.value }))} placeholder="Duration (minutes)" />
-            <input style={inputStyle} type="number" value={testForm.total_questions} onChange={e => setTestForm(p => ({ ...p, total_questions: e.target.value }))} placeholder="Total Questions" />
+            <div>
+              <label style={labelStyle}>⏱️ Duration (minutes)</label>
+              <input style={inputStyle} type="number" value={testForm.duration_minutes} onChange={e => setTestForm(p => ({ ...p, duration_minutes: e.target.value }))} placeholder="30" />
+            </div>
+            <div>
+              <label style={labelStyle}>❓ Total Questions</label>
+              <input style={inputStyle} type="number" value={testForm.total_questions} onChange={e => setTestForm(p => ({ ...p, total_questions: e.target.value }))} placeholder="10" />
+            </div>
           </div>
+
+          <label style={labelStyle}>📚 Subject (Optional)</label>
+          <select style={inputStyle} value={testForm.subject_id} onChange={e => { setTestForm(p => ({ ...p, subject_id: e.target.value, topic_id: '', section_id: '', subsection_id: '' })); if(e.target.value) fetchTopics(e.target.value) }}>
+            <option value="">Subject Select Karo</option>
+            {subjects.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+          </select>
+
+          {topics.length > 0 && (
+            <>
+              <label style={labelStyle}>📖 Topic</label>
+              <select style={inputStyle} value={testForm.topic_id} onChange={e => { setTestForm(p => ({ ...p, topic_id: e.target.value, section_id: '', subsection_id: '' })); if(e.target.value) fetchSections(e.target.value) }}>
+                <option value="">Topic Select Karo</option>
+                {topics.map(t => <option key={t.id} value={t.id}>{t.icon} {t.name}</option>)}
+              </select>
+            </>
+          )}
+
+          {sections.length > 0 && (
+            <>
+              <label style={labelStyle}>📝 Section</label>
+              <select style={inputStyle} value={testForm.section_id} onChange={e => { setTestForm(p => ({ ...p, section_id: e.target.value, subsection_id: '' })); if(e.target.value) fetchSubsections(e.target.value) }}>
+                <option value="">Section Select Karo</option>
+                {sections.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+              </select>
+            </>
+          )}
+
+          {subsections.length > 0 && (
+            <>
+              <label style={labelStyle}>📌 Sub-section</label>
+              <select style={inputStyle} value={testForm.subsection_id} onChange={e => setTestForm(p => ({ ...p, subsection_id: e.target.value }))}>
+                <option value="">Sub-section Select Karo</option>
+                {subsections.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+              </select>
+            </>
+          )}
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={handleSaveTest} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
               {saving ? 'Saving...' : 'Save Karo'}
