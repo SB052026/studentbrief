@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import * as XLSX from 'xlsx'
 
 export default function AdminMockTestPage() {
   const [tests, setTests] = useState([])
@@ -74,6 +75,36 @@ export default function AdminMockTestPage() {
     await fetchQuestions(selectedTest.id)
   }
 
+  async function handleExcelUpload(e, testId) {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async (evt) => {
+      const wb = XLSX.read(evt.target.result, { type: 'binary' })
+      const ws = wb.Sheets[wb.SheetNames[0]]
+      const rows = XLSX.utils.sheet_to_json(ws)
+      const supabase = createClient()
+      let count = 0
+      for (const row of rows) {
+        if (!row.question || !row.option_a || !row.option_b || !row.option_c || !row.option_d || !row.correct_option) continue
+        await supabase.from('mock_questions').insert({
+          mock_test_id: testId,
+          question: row.question,
+          option_a: row.option_a,
+          option_b: row.option_b,
+          option_c: row.option_c,
+          option_d: row.option_d,
+          correct_option: row.correct_option.toString().toUpperCase(),
+          explanation: row.explanation || null,
+        })
+        count++
+      }
+      await fetchQuestions(testId)
+      alert(count + ' questions upload ho gaye!')
+    }
+    reader.readAsBinaryString(file)
+  }
+
   const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
 
   return (
@@ -123,7 +154,13 @@ export default function AdminMockTestPage() {
                 <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '1rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                     <p style={{ fontWeight: 700, color: '#1a3c8f', fontSize: '0.85rem' }}>Questions ({questions.length})</p>
-                    <button onClick={() => setShowQForm(!showQForm)} style={{ background: '#dcfce7', color: '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ Add Question</button>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button onClick={() => setShowQForm(!showQForm)} style={{ background: '#dcfce7', color: '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ Add Question</button>
+                      <label style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+                        📊 Excel Upload
+                        <input type="file" accept=".xlsx,.xls" style={{ display: 'none' }} onChange={e => handleExcelUpload(e, test.id)} />
+                      </label>
+                    </div>
                   </div>
 
                   {showQForm && (

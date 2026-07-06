@@ -26,6 +26,7 @@ export default function AdminLayout({ children }) {
 
   const links = [
     { href: '/admin', label: '📊 Dashboard' },
+    { href: '/admin/categories', label: '📁 Categories' },
     { href: '/admin/jobs', label: '💼 Jobs' },
     { href: '/admin/results', label: '📋 Results' },
     { href: '/admin/answerkeys', label: '📝 Answer Keys' },
@@ -33,6 +34,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/mock-test', label: '🧪 Mock Test' },
     { href: '/admin/pyp', label: '📄 PYP' },
     { href: '/admin/syllabus', label: '📚 Syllabus' },
+    { href: '/admin/settings', label: '⚙️ Settings' },
   ]
 
   function handleLogout() {
