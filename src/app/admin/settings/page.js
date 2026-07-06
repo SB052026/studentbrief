@@ -73,6 +73,28 @@ export default function AdminSettingsPage() {
             <label style={labelStyle}>💬 Website Slogan</label>
             <input style={inputStyle} value={settings.slogan || ''} onChange={e => setSettings(p => ({ ...p, slogan: e.target.value }))} placeholder="e.g. Every Student Deserves to Excel" />
             <label style={labelStyle}>📲 App Download Link</label>
+<label style={labelStyle}>🖼️ Logo Upload</label>
+            <input type="file" accept="image/*" onChange={async (e) => {
+              const file = e.target.files[0]
+              if (!file) return
+              const supabase = createClient()
+              const fileName = `logo-${Date.now()}.${file.name.split('.').pop()}`
+              const { data, error } = await supabase.storage.from('site-assets').upload(fileName, file, { upsert: true })
+              if (!error) {
+                const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(fileName)
+                setSettings(p => ({ ...p, logo_url: urlData.publicUrl }))
+                alert('Logo upload ho gaya!')
+              } else {
+                alert('Error: ' + error.message)
+              }
+            }} style={{ ...inputStyle, padding: '8px' }} />
+            {settings.logo_url && (
+              <div style={{ marginBottom: '0.6rem' }}>
+                <img src={settings.logo_url} alt="Logo" style={{ width: `${settings.logo_size || 38}px`, height: `${settings.logo_size || 38}px`, borderRadius: '8px', objectFit: 'cover' }} />
+              </div>
+            )}
+            <label style={labelStyle}>📐 Logo Size (px)</label>
+            <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} placeholder="38" min="20" max="100" />
             <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
           </div>
         )}

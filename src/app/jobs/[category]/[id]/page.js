@@ -29,21 +29,12 @@ export default async function JobDetailPage({ params }) {
     )
   }
 
-  const dateItems = [
-    { label: 'Published Date', value: formatDate(job.published_date), color: '#1e293b' },
-    { label: 'Last Date', value: formatDate(job.last_date), color: '#ef4444' },
-    { label: 'Exam Date', value: formatDate(job.exam_date), color: '#1e293b' },
-    { label: 'Physical Date', value: formatDate(job.physical_date), color: '#1e293b' },
-    { label: 'Medical Date', value: formatDate(job.medical_date), color: '#1e293b' },
-  ]
-
-  const detailCards = [
-    { icon: '👤', title: 'Age Limit', value: `${job.age_min} - ${job.age_max} Years`, bg: '#dbeafe' },
-    { icon: '🎓', title: 'Education', value: job.education, bg: '#dcfce7' },
-    { icon: '📄', title: 'Required Documents', value: job.documents, bg: '#fef3c7' },
-    { icon: '📏', title: 'Physical Measurements', value: job.physical_measurements, bg: '#fce7f3' },
-    { icon: '🏥', title: 'Medical Criteria', value: job.medical_criteria, bg: '#e0e7ff' },
-  ]
+  const sectionStyle = { background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }
+  const headingStyle = { fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }
+  const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }
+  const thStyle = { padding: '8px 12px', background: '#1a3c8f', color: 'white', fontWeight: 700, textAlign: 'left' }
+  const tdStyle = { padding: '8px 12px', borderBottom: '1px solid #f1f5f9', color: '#374151' }
+  const tdAltStyle = { ...tdStyle, background: '#f8fafc' }
 
   return (
     <div className="page-wrapper">
@@ -65,19 +56,19 @@ export default async function JobDetailPage({ params }) {
           <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', lineHeight: 1.3 }}>{job.title}</h1>
         </div>
 
-        {/* Description Card */}
+        {/* Description */}
         {job.description && (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderLeft: '4px solid #f97316' }}>
-            <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.9rem', marginBottom: '8px' }}>📋 Job Description</h3>
+          <div style={{ ...sectionStyle, borderLeft: '4px solid #f97316' }}>
+            <h3 style={headingStyle}>📋 Job Description</h3>
             <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7 }}>{job.description}</p>
           </div>
         )}
 
-        {/* Short Info Card */}
+        {/* Short Info Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
           <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.65rem', color: '#1e40af', marginBottom: '4px', fontWeight: 600 }}>👤 Age Limit</p>
-            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{job.age_min}-{job.age_max} Yrs</p>
+            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{job.age_criteria?.[0]?.min_age || 'N/A'}-{job.age_criteria?.[0]?.max_age || 'N/A'} Yrs</p>
           </div>
           <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.65rem', color: '#166534', marginBottom: '4px', fontWeight: 600 }}>📅 Last Date</p>
@@ -90,34 +81,129 @@ export default async function JobDetailPage({ params }) {
         </div>
 
         {/* Important Dates */}
-        <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', marginBottom: '1rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-          <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            📅 Important Dates
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem' }}>
-            {dateItems.map((item, i) => (
-              <div key={i} style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '4px' }}>{item.label}</p>
-                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: item.color }}>{item.value}</p>
-              </div>
-            ))}
-          </div>
+        <div style={sectionStyle}>
+          <h3 style={headingStyle}>📅 Important Dates</h3>
+          <table style={tableStyle}>
+            <tbody>
+              {[
+                { label: 'Published Date', value: formatDate(job.published_date) },
+                { label: 'Last Date to Apply', value: formatDate(job.last_date), highlight: true },
+                { label: 'Exam Date', value: formatDate(job.exam_date) },
+                { label: 'Physical Date', value: formatDate(job.physical_date) },
+                { label: 'Medical Date', value: formatDate(job.medical_date) },
+              ].map((item, i) => (
+                <tr key={i}>
+                  <td style={i % 2 === 0 ? tdStyle : tdAltStyle}>{item.label}</td>
+                  <td style={{ ...(i % 2 === 0 ? tdStyle : tdAltStyle), color: item.highlight ? '#ef4444' : '#374151', fontWeight: item.highlight ? 700 : 400 }}>{item.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* Detail Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
-          {detailCards.map((card, i) => (
-            <div key={i} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: card.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', flexShrink: 0 }}>
-                  {card.icon}
-                </div>
-                <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.9rem' }}>{card.title}</h3>
-              </div>
-              <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.6, paddingLeft: '50px' }}>{card.value || 'N/A'}</p>
+        {/* Age Criteria Table */}
+        {job.age_criteria && job.age_criteria.length > 0 && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>👤 Age Limit (Category Wise)</h3>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={thStyle}>Category</th>
+                    <th style={{ ...thStyle, textAlign: 'center' }}>Min Age</th>
+                    <th style={{ ...thStyle, textAlign: 'center' }}>Max Age</th>
+                    <th style={{ ...thStyle, textAlign: 'center' }}>Relaxation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {job.age_criteria.map((row, i) => (
+                    <tr key={i}>
+                      <td style={i % 2 === 0 ? tdStyle : tdAltStyle}>{row.category}</td>
+                      <td style={{ ...(i % 2 === 0 ? tdStyle : tdAltStyle), textAlign: 'center' }}>{row.min_age} Years</td>
+                      <td style={{ ...(i % 2 === 0 ? tdStyle : tdAltStyle), textAlign: 'center' }}>{row.max_age} Years</td>
+                      <td style={{ ...(i % 2 === 0 ? tdStyle : tdAltStyle), textAlign: 'center' }}>{row.relaxation}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
+
+        {/* Fee Criteria Table */}
+        {job.fee_criteria && job.fee_criteria.length > 0 && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>💰 Application Fee</h3>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={thStyle}>Category</th>
+                    <th style={{ ...thStyle, textAlign: 'center' }}>Fee Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {job.fee_criteria.map((row, i) => (
+                    <tr key={i}>
+                      <td style={i % 2 === 0 ? tdStyle : tdAltStyle}>{row.category}</td>
+                      <td style={{ ...(i % 2 === 0 ? tdStyle : tdAltStyle), textAlign: 'center', fontWeight: 700, color: row.fee === '0' ? '#16a34a' : '#1e293b' }}>
+                        {row.fee === '0' ? 'Free' : `₹${row.fee}`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Vacancy Details */}
+        {job.vacancy_details && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>📊 Vacancy Details</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{job.vacancy_details}</p>
+          </div>
+        )}
+
+        {/* Education */}
+        {job.education && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>🎓 Education Qualification</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7 }}>{job.education}</p>
+          </div>
+        )}
+
+        {/* Selection Process */}
+        {job.selection_process && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>📋 Selection Process</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7 }}>{job.selection_process}</p>
+          </div>
+        )}
+
+        {/* Physical Requirements */}
+        {job.physical_measurements && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>🏃 Physical Requirements</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{job.physical_measurements}</p>
+          </div>
+        )}
+
+        {/* Medical Criteria */}
+        {job.medical_criteria && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>🏥 Medical Criteria</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{job.medical_criteria}</p>
+          </div>
+        )}
+
+        {/* Required Documents */}
+        {job.documents && (
+          <div style={sectionStyle}>
+            <h3 style={headingStyle}>📄 Required Documents</h3>
+            <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{job.documents}</p>
+          </div>
+        )}
 
         {/* Apply Button */}
         <a href={job.apply_link} target="_blank" rel="noopener noreferrer" style={{
@@ -129,6 +215,7 @@ export default async function JobDetailPage({ params }) {
         }}>
           Apply Now — Official Website →
         </a>
+
       </main>
       <Footer />
     </div>

@@ -7,6 +7,16 @@ import Footer from '@/components/layout/Footer'
 
 export default function Home() {
   const [pageLoading, setPageLoading] = useState(true)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [showInstall, setShowInstall] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault()
+      setInstallPrompt(e)
+      setShowInstall(true)
+    })
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setPageLoading(false), 1500)
@@ -200,6 +210,19 @@ export default function Home() {
 
 
 
+      {showInstall && (
+        <div style={{ position: 'fixed', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, background: 'white', borderRadius: '14px', padding: '0.75rem 1.25rem', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '12px', maxWidth: '320px', width: '90%' }}>
+          <img src="/logo.png" alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px' }} />
+          <div style={{ flex: 1 }}>
+            <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', marginBottom: '2px' }}>StudentBrief Install Karo</p>
+            <p style={{ fontSize: '0.7rem', color: '#64748b' }}>Home screen pe add karo</p>
+          </div>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button onClick={() => { installPrompt?.prompt(); setShowInstall(false) }} style={{ background: '#1a3c8f', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Install</button>
+            <button onClick={() => setShowInstall(false)} style={{ background: '#f1f5f9', color: '#64748b', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: 'Poppins, sans-serif' }}>✕</button>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   )
