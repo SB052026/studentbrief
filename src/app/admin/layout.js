@@ -34,6 +34,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/mock-test', label: '🧪 Mock Test' },
     { href: '/admin/pyp', label: '📄 PYP' },
     { href: '/admin/syllabus', label: '📚 Syllabus' },
+    { href: '/admin/subjects', label: '🎯 Subject Mock' },
     { href: '/admin/settings', label: '⚙️ Settings' },
   ]
 

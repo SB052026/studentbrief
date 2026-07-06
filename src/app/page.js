@@ -185,6 +185,15 @@ export default function Home() {
                 <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Download →</span>
               </div>
             </Link>
+
+            <Link href="/dashboard/subject-mock" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(190,24,93,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎯</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Subject Mock</h3>
+                <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject wise practice</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Shuru Karo →</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

@@ -39,6 +39,7 @@ export default function AdminSettingsPage() {
   const tabs = [
     { key: 'general', label: '⚙️ General' },
     { key: 'contact', label: '📞 Contact' },
+    { key: 'social', label: '📱 Social Media' },
     { key: 'privacy', label: '🔒 Privacy' },
     { key: 'terms', label: '📜 Terms' },
     { key: 'refund', label: '💰 Refund' },
@@ -73,6 +74,22 @@ export default function AdminSettingsPage() {
             <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>⚙️ General Settings</h2>
             <label style={labelStyle}>💬 Website Slogan</label>
             <input style={inputStyle} value={settings.slogan || ''} onChange={e => setSettings(p => ({ ...p, slogan: e.target.value }))} placeholder="e.g. Every Student Deserves to Excel" />
+          </div>
+        )}
+
+        {activeTab === 'social' && (
+          <div>
+            <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>📱 Social Media Links</h2>
+            <label style={labelStyle}>📘 Facebook</label>
+            <input style={inputStyle} value={settings.social_facebook || ''} onChange={e => setSettings(p => ({ ...p, social_facebook: e.target.value }))} placeholder="https://facebook.com/..." />
+            <label style={labelStyle}>📸 Instagram</label>
+            <input style={inputStyle} value={settings.social_instagram || ''} onChange={e => setSettings(p => ({ ...p, social_instagram: e.target.value }))} placeholder="https://instagram.com/..." />
+            <label style={labelStyle}>▶️ YouTube</label>
+            <input style={inputStyle} value={settings.social_youtube || ''} onChange={e => setSettings(p => ({ ...p, social_youtube: e.target.value }))} placeholder="https://youtube.com/..." />
+            <label style={labelStyle}>🐦 Twitter/X</label>
+            <input style={inputStyle} value={settings.social_twitter || ''} onChange={e => setSettings(p => ({ ...p, social_twitter: e.target.value }))} placeholder="https://twitter.com/..." />
+            <label style={labelStyle}>📲 App Download Link</label>
+            <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
           </div>
         )}
 
