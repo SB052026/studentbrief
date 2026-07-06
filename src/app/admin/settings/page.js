@@ -39,7 +39,7 @@ export default function AdminSettingsPage() {
   const tabs = [
     { key: 'general', label: '⚙️ General' },
     { key: 'contact', label: '📞 Contact' },
-    { key: 'social', label: '📱 Social Media' },
+    { key: 'social', label: '📱 Social' },
     { key: 'privacy', label: '🔒 Privacy' },
     { key: 'terms', label: '📜 Terms' },
     { key: 'refund', label: '💰 Refund' },
@@ -58,7 +58,6 @@ export default function AdminSettingsPage() {
 
       {msg && <div style={{ background: '#dcfce7', color: '#166534', padding: '10px 14px', borderRadius: '10px', marginBottom: '1rem', fontWeight: 600, fontSize: '0.85rem' }}>{msg}</div>}
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {tabs.map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ padding: '6px 14px', borderRadius: '9999px', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.78rem', fontFamily: 'Poppins, sans-serif', background: activeTab === tab.key ? '#1a3c8f' : '#f1f5f9', color: activeTab === tab.key ? 'white' : '#64748b' }}>
@@ -68,26 +67,11 @@ export default function AdminSettingsPage() {
       </div>
 
       <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-
         {activeTab === 'general' && (
           <div>
             <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>⚙️ General Settings</h2>
             <label style={labelStyle}>💬 Website Slogan</label>
             <input style={inputStyle} value={settings.slogan || ''} onChange={e => setSettings(p => ({ ...p, slogan: e.target.value }))} placeholder="e.g. Every Student Deserves to Excel" />
-          </div>
-        )}
-
-        {activeTab === 'social' && (
-          <div>
-            <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>📱 Social Media Links</h2>
-            <label style={labelStyle}>📘 Facebook</label>
-            <input style={inputStyle} value={settings.social_facebook || ''} onChange={e => setSettings(p => ({ ...p, social_facebook: e.target.value }))} placeholder="https://facebook.com/..." />
-            <label style={labelStyle}>📸 Instagram</label>
-            <input style={inputStyle} value={settings.social_instagram || ''} onChange={e => setSettings(p => ({ ...p, social_instagram: e.target.value }))} placeholder="https://instagram.com/..." />
-            <label style={labelStyle}>▶️ YouTube</label>
-            <input style={inputStyle} value={settings.social_youtube || ''} onChange={e => setSettings(p => ({ ...p, social_youtube: e.target.value }))} placeholder="https://youtube.com/..." />
-            <label style={labelStyle}>🐦 Twitter/X</label>
-            <input style={inputStyle} value={settings.social_twitter || ''} onChange={e => setSettings(p => ({ ...p, social_twitter: e.target.value }))} placeholder="https://twitter.com/..." />
             <label style={labelStyle}>📲 App Download Link</label>
             <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
           </div>
@@ -102,6 +86,20 @@ export default function AdminSettingsPage() {
             <input style={inputStyle} value={settings.contact_phone || ''} onChange={e => setSettings(p => ({ ...p, contact_phone: e.target.value }))} placeholder="+91 XXXXXXXXXX" />
             <label style={labelStyle}>📍 Address</label>
             <textarea style={{ ...inputStyle, height: '100px', resize: 'vertical' }} value={settings.contact_address || ''} onChange={e => setSettings(p => ({ ...p, contact_address: e.target.value }))} placeholder="Address likhein..." />
+          </div>
+        )}
+
+        {activeTab === 'social' && (
+          <div>
+            <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>📱 Social Media Links</h2>
+            <label style={labelStyle}>📘 Facebook</label>
+            <input style={inputStyle} value={settings.social_facebook || ''} onChange={e => setSettings(p => ({ ...p, social_facebook: e.target.value }))} placeholder="https://facebook.com/..." />
+            <label style={labelStyle}>📸 Instagram</label>
+            <input style={inputStyle} value={settings.social_instagram || ''} onChange={e => setSettings(p => ({ ...p, social_instagram: e.target.value }))} placeholder="https://instagram.com/..." />
+            <label style={labelStyle}>▶️ YouTube</label>
+            <input style={inputStyle} value={settings.social_youtube || ''} onChange={e => setSettings(p => ({ ...p, social_youtube: e.target.value }))} placeholder="https://youtube.com/..." />
+            <label style={labelStyle}>🐦 Twitter/X</label>
+            <input style={inputStyle} value={settings.social_twitter || ''} onChange={e => setSettings(p => ({ ...p, social_twitter: e.target.value }))} placeholder="https://twitter.com/..." />
           </div>
         )}
 

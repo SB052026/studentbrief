@@ -76,7 +76,7 @@ export default function AdminSubjectsPage() {
     await fetchAll()
   }
 
-  function handleEdit(item, tab) {
+  function handleEdit(item) {
     setForm({
       name: item.name || '',
       icon: item.icon || '',
@@ -129,7 +129,7 @@ export default function AdminSubjectsPage() {
               <label style={labelStyle}>📚 Subject *</label>
               <select value={form.subject_id} onChange={e => setForm(p => ({ ...p, subject_id: e.target.value }))} style={inputStyle}>
                 <option value="">Subject Select Karo</option>
-                {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {subjects.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
               </select>
             </>
           )}
@@ -162,8 +162,8 @@ export default function AdminSubjectsPage() {
 
           {activeTab === 'subjects' && (
             <>
-              <label style={labelStyle}>🎨 Color</label>
-              <input style={{ ...inputStyle, padding: '6px' }} type="color" value={form.color} onChange={e => setForm(p => ({ ...p, color: e.target.value }))} />
+              <label style={labelStyle}>🎨 Card Color</label>
+              <input style={{ ...inputStyle, padding: '6px', height: '44px' }} type="color" value={form.color} onChange={e => setForm(p => ({ ...p, color: e.target.value }))} />
             </>
           )}
 
@@ -195,7 +195,7 @@ export default function AdminSubjectsPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => handleEdit(item, activeTab)} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Edit</button>
+                <button onClick={() => handleEdit(item)} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Edit</button>
                 <button onClick={() => handleDelete(tableMap[activeTab], item.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Delete</button>
               </div>
             </div>
