@@ -46,8 +46,10 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div style={{ minHeight: '100vh', fontFamily: 'Poppins, sans-serif' }}>
-      <nav style={{ background: 'linear-gradient(135deg, #0f2460, #1a3c8f)', padding: '0 1rem', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
+    <div style={{ minHeight: '100vh', fontFamily: 'Poppins, sans-serif', display: 'flex', flexDirection: 'column' }}>
+
+      {/* Navbar */}
+      <nav style={{ background: 'linear-gradient(135deg, #0f2460, #1a3c8f)', padding: '0 1rem', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, flexShrink: 0 }}>
         <Link href="/admin" style={{ textDecoration: 'none' }}>
           <span style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white' }}>
             Student<span style={{ color: '#f97316' }}>Brief</span>
@@ -58,14 +60,15 @@ export default function AdminLayout({ children }) {
           <button onClick={handleLogout} style={{ background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.3)', color: '#fca5a5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
             🚪 Logout
           </button>
-          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem' }}>
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {menuOpen ? '✕' : '☰'}
           </button>
         </div>
       </nav>
 
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div style={{ background: 'rgba(15,36,96,0.98)', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'fixed', top: '56px', left: 0, right: 0, zIndex: 999 }}>
+        <div style={{ background: 'rgba(15,36,96,0.98)', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'fixed', top: '56px', left: 0, right: 0, zIndex: 999, maxHeight: '80vh', overflowY: 'auto' }}>
           {links.map(link => (
             <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)} style={{ color: pathname === link.href ? '#f97316' : 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: pathname === link.href ? 700 : 500, padding: '10px 12px', borderRadius: '8px', background: pathname === link.href ? 'rgba(249,115,22,0.1)' : 'transparent' }}>
               {link.label}
@@ -74,9 +77,32 @@ export default function AdminLayout({ children }) {
         </div>
       )}
 
-      <main style={{ padding: '1.5rem 1rem', background: '#f8fafc', minHeight: 'calc(100vh - 56px)' }}>
-        {children}
-      </main>
+      {/* Body */}
+      <div style={{ display: 'flex', flex: 1 }}>
+
+        {/* Desktop Sidebar */}
+        <aside style={{ width: '220px', background: 'white', borderRight: '1px solid #e2e8f0', display: 'none', flexDirection: 'column', position: 'sticky', top: '56px', height: 'calc(100vh - 56px)', overflowY: 'auto' }} className="admin-sidebar">
+          {links.map(link => (
+            <Link key={link.href} href={link.href} style={{ color: pathname === link.href ? '#1a3c8f' : '#64748b', textDecoration: 'none', fontSize: '0.85rem', fontWeight: pathname === link.href ? 700 : 500, padding: '12px 16px', borderRight: pathname === link.href ? '3px solid #1a3c8f' : '3px solid transparent', background: pathname === link.href ? '#dbeafe' : 'transparent', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {link.label}
+            </Link>
+          ))}
+        </aside>
+
+        {/* Main Content */}
+        <main style={{ flex: 1, padding: '1.5rem 1rem', background: '#f8fafc', minHeight: 'calc(100vh - 56px)', overflowX: 'hidden' }}>
+          {children}
+        </main>
+      </div>
+
+      {/* CSS for desktop sidebar */}
+      <style>{`
+        @media (min-width: 768px) {
+          .admin-sidebar {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }
