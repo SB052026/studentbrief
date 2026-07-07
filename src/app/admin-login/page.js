@@ -200,7 +200,10 @@ export default function AdminLoginPage() {
           </>
         )}
 
-        <p style={{ textAlign: 'center', fontSize: '0.65rem', color: '#cbd5e1', marginTop: '1.5rem' }}>
+        <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#94a3b8', marginTop: '1.5rem' }}>
+          Operator? <a href="/operator-login" style={{ color: '#1a3c8f', fontWeight: 700, textDecoration: 'none' }}>Operator Login →</a>
+        </p>
+        <p style={{ textAlign: 'center', fontSize: '0.65rem', color: '#cbd5e1', marginTop: '0.5rem' }}>
           🛡️ Secured Admin Access
         </p>
       </div>
