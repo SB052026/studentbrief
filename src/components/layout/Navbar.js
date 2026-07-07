@@ -146,6 +146,18 @@ export default function Navbar() {
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {/* Profile Icon / Login */}
+          {/* Search Button */}
+          <button
+            onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }}
+            style={{
+              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+              color: 'white', width: '38px', height: '38px', borderRadius: '10px',
+              cursor: 'pointer', fontSize: '1.1rem', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            🔍
+          </button>
           {/* Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
