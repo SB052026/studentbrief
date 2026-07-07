@@ -10,6 +10,18 @@ export default function Navbar() {
   const { user, dbUser, loading } = useUser()
   const [menuOpen, setMenuOpen] = useState(false)
   const [showQuickLinks, setShowQuickLinks] = useState(true)
+  const [siteSettings, setSiteSettings] = useState({ logo_url: '', logo_size: '38', slogan: 'Every Student Deserves to Excel' })
+
+  useEffect(() => {
+    async function fetchSiteSettings() {
+      const supabase = createClient()
+      const { data } = await supabase.from('site_settings').select('*')
+      const obj = {}
+      data?.forEach(s => { obj[s.key] = s.value })
+      setSiteSettings(prev => ({ ...prev, ...obj }))
+    }
+    fetchSiteSettings()
+  }, [])
   const lastScrollRef = require('react').useRef(0)
 
   useEffect(() => {
@@ -100,13 +112,13 @@ export default function Navbar() {
         {/* Logo */}
 <Link href="/" style={{ textDecoration: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/logo.png" alt="StudentBrief Logo" width={38} height={38} style={{ borderRadius: '8px', objectFit: 'cover', display: 'block', width: '38px', height: '38px' }} />
+            <img src={siteSettings.logo_url || '/logo.png'} alt="StudentBrief Logo" style={{ borderRadius: '8px', objectFit: 'cover', display: 'block', width: `${siteSettings.logo_size || 38}px`, height: `${siteSettings.logo_size || 38}px` }} />
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
             <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>
               Student<span style={{ color: '#f97316' }}>Brief</span>
             </span>
             <span style={{ fontSize: '0.6rem', color: 'rgba(191,219,254,0.8)', fontWeight: 500, letterSpacing: '0.02em' }}>
-              Every Student Deserves to Excel
+              {siteSettings.slogan || 'Every Student Deserves to Excel'}
             </span>
             </div>
           </div>
