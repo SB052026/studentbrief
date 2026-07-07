@@ -94,7 +94,7 @@ export default function AdminSettingsPage() {
               </div>
             )}
             <label style={labelStyle}>📐 Logo Size (px)</label>
-            <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} placeholder="38" min="20" max="100" />
+            <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} placeholder="38" min="20" max="200" />
             <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
           </div>
         )}

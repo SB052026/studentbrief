@@ -1,29 +1,33 @@
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { RESULT_CATEGORIES } from '@/constants'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
   title: 'Latest Results - StudentBrief',
   description: 'Latest Exam Results on StudentBrief.in',
 }
 
-export default function ResultsPage() {
+export default async function ResultsPage() {
+  const supabase = await createClient()
+  const { data: categories } = await supabase
+    .from('result_categories')
+    .select('*')
+    .order('name')
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="page-wrapper">
       <Navbar />
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-10">
-        <h1 className="section-title text-2xl md:text-3xl mb-2">Latest Results</h1>
-        <p className="text-gray-500 text-sm mb-8">Apni category select karo</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {RESULT_CATEGORIES.map((category) => (
-            <Link
-              key={category.slug}
-              href={`/results/${category.slug}`}
-              className="card flex flex-col items-center justify-center text-center py-8 cursor-pointer"
-            >
-              <span className="text-4xl mb-3">{category.icon}</span>
-              <span className="font-semibold text-gray-800 text-sm">{category.name}</span>
+      <main style={{ flex: 1, maxWidth: '900px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>📊 Latest Results</h1>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Apni category select karo</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+          {categories?.map(category => (
+            <Link key={category.slug} href={`/results/${category.slug}`} style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem 0.75rem', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+                <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.5rem' }}>{category.icon}</span>
+                <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.85rem' }}>{category.name}</span>
+              </div>
             </Link>
           ))}
         </div>

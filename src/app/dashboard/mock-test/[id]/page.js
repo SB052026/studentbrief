@@ -17,7 +17,6 @@ export default function MockTestExamPage({ params }) {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [warning, setWarning] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -60,45 +59,7 @@ export default function MockTestExamPage({ params }) {
     fetchTest()
   }, [testId])
 
-  useEffect(() => {
-    if (submitted) return
 
-    function showWarning(msg) {
-      setWarning(msg)
-      setTimeout(() => setWarning(''), 3000)
-    }
-
-    function handleCopy(e) { e.preventDefault(); showWarning('Copy allowed nahi hai!') }
-    function handleCut(e) { e.preventDefault(); showWarning('Cut allowed nahi hai!') }
-    function handlePaste(e) { e.preventDefault(); showWarning('Paste allowed nahi hai!') }
-    function handleContextMenu(e) { e.preventDefault(); showWarning('Right click allowed nahi hai!') }
-    function handleKeyDown(e) {
-      if (
-        (e.ctrlKey && ['c', 'v', 'x', 'a', 'u', 's', 'p'].includes(e.key.toLowerCase())) ||
-        (e.metaKey && ['c', 'v', 'x', 'a', 'u', 's', 'p'].includes(e.key.toLowerCase())) ||
-        e.key === 'PrintScreen' ||
-        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) ||
-        e.key === 'F12'
-      ) {
-        e.preventDefault()
-        showWarning('Ye shortcut allowed nahi hai!')
-      }
-    }
-
-    document.addEventListener('copy', handleCopy)
-    document.addEventListener('cut', handleCut)
-    document.addEventListener('paste', handlePaste)
-    document.addEventListener('contextmenu', handleContextMenu)
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('copy', handleCopy)
-      document.removeEventListener('cut', handleCut)
-      document.removeEventListener('paste', handlePaste)
-      document.removeEventListener('contextmenu', handleContextMenu)
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [submitted])
 
   useEffect(() => {
     if (submitted || timeLeft <= 0 || loading) return
@@ -224,14 +185,8 @@ export default function MockTestExamPage({ params }) {
   const currentQuestion = questions[currentIndex]
 
   return (
-    <div className="page-wrapper" style={{ userSelect: 'none' }}>
+    <div className="page-wrapper" >
       <Navbar />
-
-      {warning && (
-        <div style={{ position: 'fixed', top: '70px', left: '50%', transform: 'translateX(-50%)', background: '#ef4444', color: 'white', padding: '10px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '0.875rem', zIndex: 9999, boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-          ⚠️ {warning}
-        </div>
-      )}
 
       <main style={{ flex: 1, maxWidth: '700px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
