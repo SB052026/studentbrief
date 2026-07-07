@@ -10,6 +10,10 @@ export default function Navbar() {
   const { user, dbUser, loading } = useUser()
   const [menuOpen, setMenuOpen] = useState(false)
   const [showQuickLinks, setShowQuickLinks] = useState(true)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+  const [searching, setSearching] = useState(false)
   const [siteSettings, setSiteSettings] = useState({ logo_url: '', logo_size: '38', slogan: 'Every Student Deserves to Excel' })
 
   useEffect(() => {
@@ -158,6 +162,44 @@ export default function Navbar() {
       </div>
 
       {/* Dropdown Menu */}
+      {searchOpen && (
+        <div style={{ background: 'white', padding: '0.75rem 1rem', position: 'fixed', top: '56px', left: 0, right: 0, zIndex: 9999, boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+          <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
+            <input
+              autoFocus
+              value={searchQuery}
+              onChange={e => handleSearch(e.target.value)}
+              placeholder="Search jobs, results, mock tests..."
+              style={{ width: '100%', padding: '10px 40px 10px 16px', borderRadius: '12px', border: '2px solid #1a3c8f', fontSize: '0.9rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box' }}
+            />
+            <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
+              {searching ? '⏳' : '🔍'}
+            </span>
+          </div>
+
+          {searchResults.length > 0 && (
+            <div style={{ maxWidth: '600px', margin: '0.5rem auto 0', maxHeight: '60vh', overflowY: 'auto', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              {searchResults.map((item, i) => (
+                <Link key={i} href={getSearchLink(item)} onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchResults([]) }} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 16px', borderBottom: '1px solid #f1f5f9', background: 'white' }}>
+                  <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{getTypeIcon(item.type)}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</p>
+                    <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{getTypeLabel(item.type)}</p>
+                  </div>
+                  <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>→</span>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {searchQuery.length >= 2 && searchResults.length === 0 && !searching && (
+            <div style={{ maxWidth: '600px', margin: '0.5rem auto 0', padding: '1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem', background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              Koi result nahi mila 😔
+            </div>
+          )}
+        </div>
+      )}
+
       {menuOpen && (
         <div style={{
           background: 'rgba(15,36,96,0.98)', backdropFilter: 'blur(10px)',
