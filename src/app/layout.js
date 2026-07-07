@@ -1,17 +1,30 @@
 import './globals.css'
 import { UserProvider } from '@/components/UserProvider'
+import { createClient } from '@/lib/supabase/server'
 
-export const metadata = {
-  title: 'StudentBrief - Latest Jobs, Results & Tests',
-  description: 'StudentBrief.in - Latest Govt Jobs, Results, Mock Tests, Previous Year Papers for students.',
-  icons: {
-    icon: [
-      { url: '/favicon.png', type: 'image/png' },
-      { url: '/favicon.ico', type: 'image/x-icon' },
-    ],
-    apple: '/favicon.png',
-    shortcut: '/favicon.png',
-  },
+export async function generateMetadata() {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase.from('site_settings').select('key, value').in('key', ['meta_title', 'meta_description', 'meta_keywords', 'site_name'])
+    const settings = {}
+    data?.forEach(s => { settings[s.key] = s.value })
+    return {
+      title: settings.meta_title || 'StudentBrief - Latest Govt Jobs, Results & Mock Tests',
+      description: settings.meta_description || 'Latest Govt Jobs, Results, Mock Tests, Previous Year Papers for students.',
+      keywords: settings.meta_keywords || 'govt jobs, ssc, railway, bank jobs, results, mock test',
+      icons: {
+        icon: [{ url: '/favicon.png', type: 'image/png' }],
+        apple: '/favicon.png',
+        shortcut: '/favicon.png',
+      },
+    }
+  } catch {
+    return {
+      title: 'StudentBrief - Latest Govt Jobs, Results & Mock Tests',
+      description: 'Latest Govt Jobs, Results, Mock Tests, Previous Year Papers for students.',
+      icons: { icon: '/favicon.png', apple: '/favicon.png' },
+    }
+  }
 }
 
 export default function RootLayout({ children }) {
@@ -23,14 +36,13 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://baccijzgsxiuyuyiqdgm.supabase.co" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1a3c8f" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="StudentBrief" />
-        <link rel="shortcut icon" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body>
         <UserProvider>

@@ -38,6 +38,7 @@ export default function AdminSettingsPage() {
 
   const tabs = [
     { key: 'general', label: '⚙️ General' },
+    { key: 'meta', label: '🔍 SEO/Meta' },
     { key: 'contact', label: '📞 Contact' },
     { key: 'social', label: '📱 Social' },
     { key: 'privacy', label: '🔒 Privacy' },
@@ -96,6 +97,47 @@ export default function AdminSettingsPage() {
             <label style={labelStyle}>📐 Logo Size (px)</label>
             <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} placeholder="38" min="20" max="200" />
             <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
+          </div>
+        )}
+
+        {activeTab === 'meta' && (
+          <div>
+            <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '1rem', marginBottom: '1rem' }}>🔍 SEO & Meta Tags</h2>
+            
+            <div style={{ background: '#f0f4ff', borderRadius: '10px', padding: '0.75rem', marginBottom: '1rem', fontSize: '0.78rem', color: '#1a3c8f' }}>
+              💡 Ye settings Google search results me dikhengi
+            </div>
+
+            <label style={labelStyle}>📋 Website Title (Browser Tab)</label>
+            <input style={inputStyle} value={settings.meta_title || ''} onChange={e => setSettings(p => ({ ...p, meta_title: e.target.value }))} placeholder="StudentBrief - Latest Govt Jobs, Results & Mock Tests" />
+            
+            <label style={labelStyle}>📝 Meta Description (Google Search)</label>
+            <textarea style={{ ...inputStyle, height: '80px', resize: 'vertical' }} value={settings.meta_description || ''} onChange={e => setSettings(p => ({ ...p, meta_description: e.target.value }))} placeholder="Website description jo Google search me dikhe..." />
+            
+            <label style={labelStyle}>🏷️ Meta Keywords</label>
+            <input style={inputStyle} value={settings.meta_keywords || ''} onChange={e => setSettings(p => ({ ...p, meta_keywords: e.target.value }))} placeholder="govt jobs, ssc, railway, bank jobs..." />
+
+            <div style={{ borderTop: '1px solid #e2e8f0', margin: '1rem 0', paddingTop: '1rem' }}>
+              <p style={{ fontWeight: 700, color: '#475569', fontSize: '0.82rem', marginBottom: '0.75rem' }}>📄 Page Wise Meta</p>
+              
+              <label style={labelStyle}>💼 Jobs Page Title</label>
+              <input style={inputStyle} value={settings.meta_jobs_title || ''} onChange={e => setSettings(p => ({ ...p, meta_jobs_title: e.target.value }))} placeholder="Latest Govt Jobs 2025 - StudentBrief" />
+              
+              <label style={labelStyle}>💼 Jobs Page Description</label>
+              <input style={inputStyle} value={settings.meta_jobs_desc || ''} onChange={e => setSettings(p => ({ ...p, meta_jobs_desc: e.target.value }))} placeholder="Latest Govt Jobs description..." />
+              
+              <label style={labelStyle}>📊 Results Page Title</label>
+              <input style={inputStyle} value={settings.meta_results_title || ''} onChange={e => setSettings(p => ({ ...p, meta_results_title: e.target.value }))} placeholder="Latest Exam Results 2025 - StudentBrief" />
+              
+              <label style={labelStyle}>📊 Results Page Description</label>
+              <input style={inputStyle} value={settings.meta_results_desc || ''} onChange={e => setSettings(p => ({ ...p, meta_results_desc: e.target.value }))} placeholder="Latest Results description..." />
+              
+              <label style={labelStyle}>🧪 Mock Test Page Title</label>
+              <input style={inputStyle} value={settings.meta_mock_title || ''} onChange={e => setSettings(p => ({ ...p, meta_mock_title: e.target.value }))} placeholder="Free Mock Tests 2025 - StudentBrief" />
+              
+              <label style={labelStyle}>🧪 Mock Test Page Description</label>
+              <input style={inputStyle} value={settings.meta_mock_desc || ''} onChange={e => setSettings(p => ({ ...p, meta_mock_desc: e.target.value }))} placeholder="Mock Test description..." />
+            </div>
           </div>
         )}
 
