@@ -1,6 +1,22 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export default function Footer() {
+  const [settings, setSettings] = useState({})
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const supabase = createClient()
+      const { data } = await supabase.from('site_settings').select('*')
+      const obj = {}
+      data?.forEach(s => { obj[s.key] = s.value })
+      setSettings(obj)
+    }
+    fetchSettings()
+  }, [])
   return (
     <footer style={{ background: 'linear-gradient(135deg, #0f2460, #1a3c8f)', marginTop: 'auto' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2.5rem 1rem 1.5rem' }}>
@@ -46,7 +62,15 @@ export default function Footer() {
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '2rem', paddingTop: '1.5rem', textAlign: 'center' }}>
           <p style={{ color: 'rgba(191,219,254,0.6)', fontSize: '0.8rem' }}>
-            © 2026 StudentBrief.in — All Rights Reserved
+            {(settings.social_facebook || settings.social_instagram || settings.social_youtube || settings.social_twitter) && (
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginBottom: '0.75rem' }}>
+              {settings.social_facebook && <a href={settings.social_facebook} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '1.2rem', textDecoration: 'none' }}>📘</a>}
+              {settings.social_instagram && <a href={settings.social_instagram} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '1.2rem', textDecoration: 'none' }}>📸</a>}
+              {settings.social_youtube && <a href={settings.social_youtube} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '1.2rem', textDecoration: 'none' }}>▶️</a>}
+              {settings.social_twitter && <a href={settings.social_twitter} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '1.2rem', textDecoration: 'none' }}>🐦</a>}
+            </div>
+          )}
+          © 2026 StudentBrief.in — All Rights Reserved
           <a href="/admin-login" style={{ color: 'rgba(148,163,184,0.5)', fontSize: '0.65rem', textDecoration: 'none', marginLeft: '8px' }}>Admin</a>
           </p>
         </div>
