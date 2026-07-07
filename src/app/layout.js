@@ -17,6 +17,20 @@ export async function generateMetadata() {
         apple: '/favicon.png',
         shortcut: '/favicon.png',
       },
+      openGraph: {
+        title: settings.meta_title || 'StudentBrief - Latest Govt Jobs, Results & Mock Tests',
+        description: settings.meta_description || 'Latest Govt Jobs, Results, Mock Tests, Previous Year Papers for students.',
+        url: 'https://www.studentbrief.in',
+        siteName: 'StudentBrief',
+        images: [{ url: 'https://www.studentbrief.in/og-image.png', width: 1200, height: 630, alt: 'StudentBrief' }],
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: settings.meta_title || 'StudentBrief',
+        description: settings.meta_description || 'Latest Govt Jobs, Results & Mock Tests',
+        images: ['https://www.studentbrief.in/og-image.png'],
+      },
     }
   } catch {
     return {
@@ -43,6 +57,13 @@ export default function RootLayout({ children }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="StudentBrief" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+              navigator.serviceWorker.register('/sw.js');
+            });
+          }
+        `}} />
       </head>
       <body>
         <UserProvider>
