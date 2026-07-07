@@ -18,6 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="hi">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://baccijzgsxiuyuyiqdgm.supabase.co" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1a3c8f" />

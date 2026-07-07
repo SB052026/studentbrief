@@ -51,8 +51,16 @@ export function UserProvider({ children }) {
         if (!mounted) return
         setUser(sessionUser)
         if (sessionUser) {
-          const dbUserData = await fetchOrCreateDbUser(supabase, sessionUser)
-          if (mounted) setDbUser(dbUserData)
+          const cached = sessionStorage.getItem('sb_db_user')
+          if (cached) {
+            if (mounted) setDbUser(JSON.parse(cached))
+          } else {
+            const dbUserData = await fetchOrCreateDbUser(supabase, sessionUser)
+            if (mounted) {
+              setDbUser(dbUserData)
+              sessionStorage.setItem('sb_db_user', JSON.stringify(dbUserData))
+            }
+          }
         }
       } catch (err) {
         console.error(err)

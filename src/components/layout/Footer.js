@@ -9,11 +9,19 @@ export default function Footer() {
 
   useEffect(() => {
     async function fetchSettings() {
-      const supabase = createClient()
-      const { data } = await supabase.from('site_settings').select('*')
-      const obj = {}
-      data?.forEach(s => { obj[s.key] = s.value })
-      setSettings(obj)
+      try {
+        const cached = sessionStorage.getItem('sb_site_settings')
+        if (cached) {
+          setSettings(JSON.parse(cached))
+          return
+        }
+        const supabase = createClient()
+        const { data } = await supabase.from('site_settings').select('*')
+        const obj = {}
+        data?.forEach(s => { obj[s.key] = s.value })
+        sessionStorage.setItem('sb_site_settings', JSON.stringify(obj))
+        setSettings(obj)
+      } catch(e) {}
     }
     fetchSettings()
   }, [])

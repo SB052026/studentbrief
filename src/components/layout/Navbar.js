@@ -14,11 +14,19 @@ export default function Navbar() {
 
   useEffect(() => {
     async function fetchSiteSettings() {
-      const supabase = createClient()
-      const { data } = await supabase.from('site_settings').select('*')
-      const obj = {}
-      data?.forEach(s => { obj[s.key] = s.value })
-      setSiteSettings(prev => ({ ...prev, ...obj }))
+      try {
+        const cached = sessionStorage.getItem('sb_site_settings')
+        if (cached) {
+          setSiteSettings(prev => ({ ...prev, ...JSON.parse(cached) }))
+          return
+        }
+        const supabase = createClient()
+        const { data } = await supabase.from('site_settings').select('*')
+        const obj = {}
+        data?.forEach(s => { obj[s.key] = s.value })
+        sessionStorage.setItem('sb_site_settings', JSON.stringify(obj))
+        setSiteSettings(prev => ({ ...prev, ...obj }))
+      } catch(e) {}
     }
     fetchSiteSettings()
   }, [])
@@ -78,17 +86,24 @@ export default function Navbar() {
 
   useEffect(() => {
     async function fetchLatest() {
+      const cachedLinks = sessionStorage.getItem('sb_quick_links')
+      if (cachedLinks) {
+        setQuickLinks(JSON.parse(cachedLinks))
+        return
+      }
       const supabase = createClient()
       const { data: job } = await supabase.from('jobs').select('id, job_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
       const { data: result } = await supabase.from('results').select('id, result_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
       const { data: admitcard } = await supabase.from('admitcards').select('id, admitcard_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
       const { data: answerkey } = await supabase.from('answerkeys').select('id, answerkey_categories(slug)').order('created_at', { ascending: false }).limit(1).maybeSingle()
-      setQuickLinks({
+      const links = {
         job: job ? `/jobs/${job.job_categories?.slug}/${job.id}` : '/jobs',
         result: result ? `/results/${result.result_categories?.slug}/${result.id}` : '/results',
         admitcard: admitcard ? `/admitcard/${admitcard.admitcard_categories?.slug}/${admitcard.id}` : '/admitcard',
         answerkey: answerkey ? `/answerkey/${answerkey.answerkey_categories?.slug}/${answerkey.id}` : '/answerkey',
-      })
+      }
+      setQuickLinks(links)
+      sessionStorage.setItem('sb_quick_links', JSON.stringify(links))
     }
     fetchLatest()
   }, [])

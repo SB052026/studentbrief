@@ -23,30 +23,6 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
-  if (pageLoading) {
-    return (
-      <div style={{
-        minHeight: '100vh', display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0f2460 0%, #1a3c8f 50%, #2952c4 100%)',
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem' }}>
-            Student<span style={{ color: '#f97316' }}>Brief</span>
-          </div>
-          <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem', marginBottom: '2rem' }}>
-            Every Student Deserves to Excel
-          </p>
-          <div style={{
-            width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.3)',
-            borderTop: '3px solid #f97316', borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite', margin: '0 auto',
-          }}/>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="page-wrapper">
       <Navbar />
@@ -143,7 +119,7 @@ export default function Home() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             <Link href="/jobs" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>💼</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Jobs</h3>
                 <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway jobs</p>
@@ -152,7 +128,7 @@ export default function Home() {
             </Link>
 
             <Link href="/results" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📊</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Results</h3>
                 <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank results</p>
@@ -161,7 +137,7 @@ export default function Home() {
             </Link>
 
             <Link href="/answerkey" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Answer Keys</h3>
                 <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest answer keys dekho</p>
@@ -170,7 +146,7 @@ export default function Home() {
             </Link>
 
             <Link href="/admitcard" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎫</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Admit Cards</h3>
                 <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest admit cards dekho</p>
@@ -179,7 +155,7 @@ export default function Home() {
             </Link>
 
             <Link href="/dashboard/mock-test" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(124,58,237,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(124,58,237,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Mock Test</h3>
                 <p style={{ color: 'rgba(237,233,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Practice tests se taiyari karo</p>
@@ -188,7 +164,7 @@ export default function Home() {
             </Link>
 
             <Link href="/dashboard/pyp" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(8,145,178,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(8,145,178,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📄</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>PYP</h3>
                 <p style={{ color: 'rgba(207,250,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Previous year papers</p>
@@ -197,7 +173,7 @@ export default function Home() {
             </Link>
 
             <Link href="/dashboard/subject-mock" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(190,24,93,0.3)', textAlign: 'center', minHeight: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(190,24,93,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎯</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Subject Mock</h3>
                 <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject wise practice</p>
