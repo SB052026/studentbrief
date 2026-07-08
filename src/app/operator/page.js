@@ -56,12 +56,7 @@ export default function OperatorDashboard() {
         ))}
       </div>
 
-      <div style={{ background: 'white', borderRadius: '14px', padding: '1.25rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-        <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem' }}>🔑 Account</h2>
-        <Link href="/operator/change-password" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '12px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
-          🔑 Password Change Karo
-        </Link>
-      </div>
+
     </div>
   )
 }

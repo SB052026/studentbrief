@@ -58,6 +58,45 @@ export default function Navbar() {
   const [sectionData, setSectionData] = useState([])
   const [sectionLoading, setSectionLoading] = useState(false)
 
+  async function handleSearch(query) {
+    setSearchQuery(query)
+    if (!query || query.length < 2) {
+      setSearchResults([])
+      return
+    }
+    setSearching(true)
+    try {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('search_index')
+        .select('*')
+        .ilike('title', `%${query}%`)
+        .limit(10)
+      setSearchResults(data || [])
+    } catch(e) {}
+    setSearching(false)
+  }
+
+  function getSearchLink(item) {
+    if (item.type === 'job') return `/jobs/${item.section}/${item.id}`
+    if (item.type === 'result') return `/results/${item.section}/${item.id}`
+    if (item.type === 'answerkey') return `/answerkey/${item.section}/${item.id}`
+    if (item.type === 'admitcard') return `/admitcard/${item.section}/${item.id}`
+    if (item.type === 'mock_test') return `/dashboard/mock-test/instructions?id=${item.id}&title=${encodeURIComponent(item.title)}`
+    if (item.type === 'pyp') return `/dashboard/pyp`
+    return `/${item.section}`
+  }
+
+  function getTypeIcon(type) {
+    const icons = { job: '💼', result: '📊', answerkey: '📝', admitcard: '🎫', syllabus: '📚', mock_test: '🧪', pyp: '📄' }
+    return icons[type] || '📋'
+  }
+
+  function getTypeLabel(type) {
+    const labels = { job: 'Job', result: 'Result', answerkey: 'Answer Key', admitcard: 'Admit Card', syllabus: 'Syllabus', mock_test: 'Mock Test', pyp: 'PYP' }
+    return labels[type] || type
+  }
+
   async function handleQuickLink(type, href) {
   if (expandedSection === type) {
     setExpandedSection(null)

@@ -42,18 +42,15 @@ export default function OperatorLayout({ children }) {
       { href: '/operator/answerkeys', label: '📝 Answer Keys' },
       { href: '/operator/admitcards', label: '🎫 Admit Cards' },
       { href: '/operator/syllabus', label: '📚 Syllabus' },
-      { href: '/operator/change-password', label: '🔑 Change Password' },
-    ],
+],
     pyp: [
       { href: '/operator', label: '📊 Dashboard' },
       { href: '/operator/pyp', label: '📄 PYP Papers' },
-      { href: '/operator/change-password', label: '🔑 Change Password' },
-    ],
+],
     mock: [
       { href: '/operator', label: '📊 Dashboard' },
       { href: '/operator/mock-test', label: '🧪 Mock Test' },
       { href: '/operator/subjects', label: '🎯 Subject Mock' },
-      { href: '/operator/change-password', label: '🔑 Change Password' },
     ],
   }
 
