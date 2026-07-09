@@ -13,8 +13,32 @@ export default function AdminLayout({ children }) {
     const auth = localStorage.getItem('sb_admin_auth')
     if (!auth) {
       window.location.replace('/admin-login')
-    } else {
-      setIsAuth(true)
+      return
+    }
+    setIsAuth(true)
+
+    // Auto logout after 10 min inactive
+    const INACTIVE_TIME = 10 * 60 * 1000
+    let inactiveTimer
+
+    function resetTimer() {
+      clearTimeout(inactiveTimer)
+      inactiveTimer = setTimeout(() => {
+        localStorage.removeItem('sb_admin_auth')
+        localStorage.removeItem('sb_admin_token')
+        localStorage.removeItem('sb_admin_time')
+        alert('10 minute inactive rehne par aap logout ho gaye!')
+        window.location.replace('/admin-login')
+      }, INACTIVE_TIME)
+    }
+
+    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click']
+    events.forEach(e => window.addEventListener(e, resetTimer))
+    resetTimer()
+
+    return () => {
+      clearTimeout(inactiveTimer)
+      events.forEach(e => window.removeEventListener(e, resetTimer))
     }
   }, [])
 
@@ -32,6 +56,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/answerkeys', label: '📝 Answer Keys' },
     { href: '/admin/admitcards', label: '🎫 Admit Cards' },
     { href: '/admin/mock-test', label: '🧪 Mock Test' },
+    { href: '/admin/mock-categories', label: '📁 Mock Categories' },
     { href: '/admin/pyp', label: '📄 PYP' },
     { href: '/admin/syllabus', label: '📚 Syllabus' },
     { href: '/admin/subjects', label: '🎯 Subject Mock' },

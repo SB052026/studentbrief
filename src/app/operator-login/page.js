@@ -26,8 +26,7 @@ export default function OperatorLoginPage() {
           try {
             const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
             const data = await res.json()
-            const name = data.display_name || `${lat}, ${lng}`
-            resolve({ lat, lng, name })
+            resolve({ lat, lng, name: data.display_name || `${lat}, ${lng}` })
           } catch {
             resolve({ lat, lng, name: `${lat}, ${lng}` })
           }
@@ -40,10 +39,9 @@ export default function OperatorLoginPage() {
   function getDevice() {
     const ua = navigator.userAgent
     if (/Android/i.test(ua)) return `Android - ${ua.match(/Android ([^;]+)/)?.[1] || ''}`
-    if (/iPhone|iPad/i.test(ua)) return `iOS - ${ua.match(/OS ([^;]+)/)?.[1] || ''}`
-    if (/Windows/i.test(ua)) return `Windows - ${ua.match(/Windows NT ([^;]+)/)?.[1] || ''}`
+    if (/iPhone|iPad/i.test(ua)) return `iOS`
+    if (/Windows/i.test(ua)) return `Windows`
     if (/Mac/i.test(ua)) return 'MacOS'
-    if (/Linux/i.test(ua)) return 'Linux'
     return ua.substring(0, 50)
   }
 
@@ -51,31 +49,71 @@ export default function OperatorLoginPage() {
     if (!username || !password) return setError('Saare fields zaroori hain!')
     setLoading(true)
     setError('')
-    setLocStatus('📍 Location verify ho rahi hai...')
+    setLocStatus('📍 Verifying...')
 
     const supabase = createClient()
-    const { data, error } = await supabase
+
+    // Check if operator exists and not blocked
+    const { data: op } = await supabase
       .from('operators')
       .select('*')
       .eq('username', username)
-      .eq('password', password)
-      .eq('is_active', true)
       .single()
 
-    if (error || !data) {
-      setError('Galat Username ya Password! Ya account block hai.')
+    if (!op) {
+      setError('Galat Username ya Password!')
       setLoading(false)
       setLocStatus('')
       return
     }
 
+    if (op.is_blocked) {
+      setError('⛔ Aapka account block ho gaya hai! Admin se sampark karein.')
+      setLoading(false)
+      setLocStatus('')
+      return
+    }
+
+    if (!op.is_active) {
+      setError('⛔ Aapka account inactive hai! Admin se sampark karein.')
+      setLoading(false)
+      setLocStatus('')
+      return
+    }
+
+    if (op.password !== password) {
+      const newAttempts = (op.failed_attempts || 0) + 1
+      const shouldBlock = newAttempts >= 5
+
+      await supabase.from('operators').update({
+        failed_attempts: newAttempts,
+        is_blocked: shouldBlock,
+        blocked_at: shouldBlock ? new Date().toISOString() : null
+      }).eq('id', op.id)
+
+      if (shouldBlock) {
+        setError('⛔ 5 baar galat password! Aapka account block ho gaya hai. Admin se sampark karein.')
+      } else {
+        setError(`❌ Galat Password! ${5 - newAttempts} attempts baaki hain.`)
+      }
+      setLoading(false)
+      setLocStatus('')
+      return
+    }
+
+    // Reset failed attempts on success
+    await supabase.from('operators').update({
+      failed_attempts: 0,
+      is_blocked: false,
+      blocked_at: null
+    }).eq('id', op.id)
+
     // Get location
     const location = await getLocation()
     const device = getDevice()
 
-    // Save activity
     const { data: activity } = await supabase.from('operator_activity').insert({
-      operator_id: data.id,
+      operator_id: op.id,
       location_lat: location.lat,
       location_lng: location.lng,
       location_name: location.name,
@@ -84,9 +122,9 @@ export default function OperatorLoginPage() {
     }).select().single()
 
     localStorage.setItem('sb_operator_auth', 'true')
-    localStorage.setItem('sb_operator_role', data.role)
-    localStorage.setItem('sb_operator_name', data.name)
-    localStorage.setItem('sb_operator_id', data.id)
+    localStorage.setItem('sb_operator_role', op.role)
+    localStorage.setItem('sb_operator_name', op.name)
+    localStorage.setItem('sb_operator_id', op.id)
     localStorage.setItem('sb_operator_time', Date.now().toString())
     localStorage.setItem('sb_operator_activity_id', activity?.id || '')
 
@@ -121,7 +159,7 @@ export default function OperatorLoginPage() {
 
         {error && (
           <div style={{ background: '#fee2e2', color: '#991b1b', padding: '10px 14px', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, marginBottom: '1rem', textAlign: 'center' }}>
-            ⚠️ {error}
+            {error}
           </div>
         )}
 
@@ -147,7 +185,7 @@ export default function OperatorLoginPage() {
         </div>
 
         <div style={{ background: '#fef3c7', borderRadius: '10px', padding: '8px 12px', marginBottom: '1rem', fontSize: '0.72rem', color: '#92400e' }}>
-          ⚠️ Login karne par aapki location track ki jayegi
+          ⚠️ 5 baar galat password dene par account block ho jayega
         </div>
 
         <button onClick={handleLogin} disabled={loading} style={{ width: '100%', padding: '14px', borderRadius: '12px', background: loading ? '#94a3b8' : 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Poppins, sans-serif' }}>

@@ -29,6 +29,17 @@ export default function AdminOperatorsPage() {
     setLoading(false)
   }
 
+  async function handleUnblock(id) {
+    if (!confirm('Operator ko unblock karna chahte hain?')) return
+    const supabase = createClient()
+    await supabase.from('operators').update({
+      is_blocked: false,
+      failed_attempts: 0,
+      blocked_at: null
+    }).eq('id', id)
+    await fetchOperators()
+  }
+
   async function handleForceLogout(activityId) {
     const supabase = createClient()
     await supabase.from('operator_activity').update({
@@ -195,8 +206,13 @@ export default function AdminOperatorsPage() {
                   <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {act.device?.substring(0, 40)}</p>
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{ fontSize: '0.65rem', color: '#22c55e', fontWeight: 600 }}>In: {new Date(act.login_time).toLocaleTimeString('en-IN')}</p>
-                  {act.logout_time && <p style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 600 }}>Out: {new Date(act.logout_time).toLocaleTimeString('en-IN')}</p>}
+                  <p style={{ fontSize: '0.65rem', color: '#22c55e', fontWeight: 600 }}>🟢 Login: {new Date(act.login_time).toLocaleString('en-IN')}</p>
+                  {act.logout_time && <p style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 600 }}>🔴 Logout: {new Date(act.logout_time).toLocaleString('en-IN')}</p>}
+                  {act.login_time && act.logout_time && (
+                    <p style={{ fontSize: '0.65rem', color: '#f97316', fontWeight: 600 }}>
+                      ⏱️ Duration: {Math.round((new Date(act.logout_time) - new Date(act.login_time)) / 60000)} min
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -216,6 +232,8 @@ export default function AdminOperatorsPage() {
                     <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>{op.name}</p>
                     <span style={{ background: roleColors[op.role], color: roleText[op.role], padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{roleLabel[op.role]}</span>
                     <span style={{ background: op.is_active ? '#dcfce7' : '#fee2e2', color: op.is_active ? '#166534' : '#991b1b', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{op.is_active ? 'Active' : 'Inactive'}</span>
+                    {op.is_blocked && <span style={{ background: '#fee2e2', color: '#991b1b', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>⛔ Blocked</span>}
+                    {op.failed_attempts > 0 && !op.is_blocked && <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>⚠️ {op.failed_attempts} attempts</span>}
                   </div>
                   <p style={{ fontSize: '0.75rem', color: '#64748b' }}>👤 {op.username} • 🔑 {op.password}</p>
                 </div>
@@ -224,6 +242,11 @@ export default function AdminOperatorsPage() {
                   <button onClick={() => handleToggle(op.id, op.is_active)} style={{ background: op.is_active ? '#fef3c7' : '#dcfce7', color: op.is_active ? '#92400e' : '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
                     {op.is_active ? 'Disable' : 'Enable'}
                   </button>
+                  {op.is_blocked && (
+                    <button onClick={() => handleUnblock(op.id)} style={{ background: '#dcfce7', color: '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+                      ✅ Unblock
+                    </button>
+                  )}
                   <button onClick={() => handleDelete(op.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Delete</button>
                 </div>
               </div>

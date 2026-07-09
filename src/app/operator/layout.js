@@ -21,10 +21,45 @@ export default function OperatorLayout({ children }) {
     if (!auth || Date.now() - loginTime > SESSION) {
       localStorage.removeItem('sb_operator_auth')
       window.location.replace('/operator-login')
-    } else {
-      setIsAuth(true)
-      setRole(operatorRole || '')
-      setName(operatorName || '')
+      return
+    }
+    setIsAuth(true)
+    setRole(operatorRole || '')
+    setName(operatorName || '')
+
+    // Auto logout after 10 min inactive
+    const INACTIVE_TIME = 10 * 60 * 1000
+    let inactiveTimer
+
+    function resetTimer() {
+      clearTimeout(inactiveTimer)
+      inactiveTimer = setTimeout(async () => {
+        const supabase = (await import('@/lib/supabase/client')).createClient()
+        const activityId = localStorage.getItem('sb_operator_activity_id')
+        if (activityId) {
+          await supabase.from('operator_activity').update({
+            logout_time: new Date().toISOString(),
+            is_active: false
+          }).eq('id', activityId)
+        }
+        localStorage.removeItem('sb_operator_auth')
+        localStorage.removeItem('sb_operator_role')
+        localStorage.removeItem('sb_operator_name')
+        localStorage.removeItem('sb_operator_id')
+        localStorage.removeItem('sb_operator_time')
+        localStorage.removeItem('sb_operator_activity_id')
+        alert('10 minute inactive rehne par aap logout ho gaye!')
+        window.location.replace('/operator-login')
+      }, INACTIVE_TIME)
+    }
+
+    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click']
+    events.forEach(e => window.addEventListener(e, resetTimer))
+    resetTimer()
+
+    return () => {
+      clearTimeout(inactiveTimer)
+      events.forEach(e => window.removeEventListener(e, resetTimer))
     }
   }, [])
 

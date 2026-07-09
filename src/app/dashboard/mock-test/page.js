@@ -5,23 +5,22 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import EmptyState from '@/components/ui/EmptyState'
 
 export default function MockTestPage() {
-  const [tests, setTests] = useState([])
+  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchTests() {
+    async function fetchCategories() {
       const supabase = createClient()
       const { data } = await supabase
-        .from('mock_tests')
+        .from('mock_categories')
         .select('*')
-        .order('created_at', { ascending: false })
-      setTests(data || [])
+        .order('name')
+      setCategories(data || [])
       setLoading(false)
     }
-    fetchTests()
+    fetchCategories()
   }, [])
 
   return (
@@ -29,29 +28,21 @@ export default function MockTestPage() {
       <Navbar />
       <main style={{ flex: 1, maxWidth: '900px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>📝 Mock Tests</h1>
-        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Practice karo aur taiyari strong karo</p>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Exam category select karo</p>
+
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '3rem' }}>
-            <div className="loader" style={{ margin: '0 auto' }}></div>
-          </div>
-        ) : tests.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-            {tests.map((test) => (
-              <div key={test.id} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '2rem' }}>📝</span>
-                  <span style={{ background: '#dbeafe', color: '#1e40af', padding: '4px 10px', borderRadius: '9999px', fontSize: '0.7rem', fontWeight: 700 }}>{test.total_questions} Q</span>
+          <div style={{ textAlign: 'center', padding: '3rem' }}><div className="loader" style={{ margin: '0 auto' }}></div></div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+            {categories.map(cat => (
+              <Link key={cat.id} href={`/dashboard/mock-test/category/${cat.id}`} style={{ textDecoration: 'none' }}>
+                <div style={{ background: `linear-gradient(135deg, ${cat.color}, ${cat.color}dd)`, borderRadius: '16px', padding: '1.25rem', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>{cat.icon}</span>
+                  <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.95rem' }}>{cat.name}</h3>
                 </div>
-                <h3 style={{ fontWeight: 700, color: '#1e293b', marginBottom: '6px' }}>{test.title}</h3>
-                <p style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '1rem' }}>⏱️ {test.duration_minutes} minutes</p>
-                <Link href={`/dashboard/mock-test/instructions?id=${test.id}&title=${encodeURIComponent(test.title)}`} style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
-                  Test Shuru Karo
-                </Link>
-              </div>
+              </Link>
             ))}
           </div>
-        ) : (
-          <EmptyState title="Koi mock test nahi mila" description="Abhi koi mock test available nahi hai" icon="📝" />
         )}
       </main>
       <Footer />

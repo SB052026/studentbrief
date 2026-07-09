@@ -12,41 +12,24 @@ export default function AdminMockTestPage() {
   const [selectedTest, setSelectedTest] = useState(null)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [subjects, setSubjects] = useState([])
-  const [topics, setTopics] = useState([])
-  const [sections, setSections] = useState([])
-  const [subsections, setSubsections] = useState([])
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', topic_id: '', section_id: '', subsection_id: '' })
+  const [mockCategories, setMockCategories] = useState([])
+  const [mockSubcategories, setMockSubcategories] = useState([])
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '' })
 
   async function fetchTests() {
     const supabase = createClient()
     const { data } = await supabase.from('mock_tests').select('*').order('created_at', { ascending: false })
     setTests(data || [])
-    const { data: subs } = await supabase.from('mock_subjects').select('*').order('name')
-    setSubjects(subs || [])
+    const { data: mcats } = await supabase.from('mock_categories').select('*').order('name')
+    setMockCategories(mcats || [])
     setLoading(false)
   }
 
-  async function fetchTopics(subjectId) {
+  async function fetchMockSubcategories(categoryId) {
     const supabase = createClient()
-    const { data } = await supabase.from('mock_topics').select('*').eq('subject_id', subjectId).order('name')
-    setTopics(data || [])
-    setSections([])
-    setSubsections([])
-  }
-
-  async function fetchSections(topicId) {
-    const supabase = createClient()
-    const { data } = await supabase.from('mock_sections').select('*').eq('topic_id', topicId).order('name')
-    setSections(data || [])
-    setSubsections([])
-  }
-
-  async function fetchSubsections(sectionId) {
-    const supabase = createClient()
-    const { data } = await supabase.from('mock_subsections').select('*').eq('section_id', sectionId).order('name')
-    setSubsections(data || [])
+    const { data } = await supabase.from('mock_subcategories').select('*').eq('category_id', categoryId).order('name')
+    setMockSubcategories(data || [])
   }
 
   async function fetchQuestions(testId) {
@@ -65,10 +48,8 @@ export default function AdminMockTestPage() {
       title: testForm.title,
       duration_minutes: parseInt(testForm.duration_minutes) || 30,
       total_questions: parseInt(testForm.total_questions) || 10,
-      subject_id: testForm.subject_id || null,
-      topic_id: testForm.topic_id || null,
-      section_id: testForm.section_id || null,
-      subsection_id: testForm.subsection_id || null,
+      mock_category_id: testForm.mock_category_id || null,
+      mock_subcategory_id: testForm.mock_subcategory_id || null,
     }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
@@ -76,7 +57,7 @@ export default function AdminMockTestPage() {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', topic_id: '', section_id: '', subsection_id: '' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '' })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
@@ -172,38 +153,18 @@ export default function AdminMockTestPage() {
             </div>
           </div>
 
-          <label style={labelStyle}>📚 Subject (Optional)</label>
-          <select style={inputStyle} value={testForm.subject_id} onChange={e => { setTestForm(p => ({ ...p, subject_id: e.target.value, topic_id: '', section_id: '', subsection_id: '' })); if(e.target.value) fetchTopics(e.target.value) }}>
-            <option value="">Subject Select Karo</option>
-            {subjects.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+          <label style={labelStyle}>📁 Category *</label>
+          <select style={inputStyle} value={testForm.mock_category_id} onChange={e => { setTestForm(p => ({ ...p, mock_category_id: e.target.value, mock_subcategory_id: '' })); if(e.target.value) fetchMockSubcategories(e.target.value) }}>
+            <option value="">Category Select Karo (Railway, SSC, Army...)</option>
+            {mockCategories.map(c => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
           </select>
 
-          {topics.length > 0 && (
+          {mockSubcategories.length > 0 && (
             <>
-              <label style={labelStyle}>📖 Topic</label>
-              <select style={inputStyle} value={testForm.topic_id} onChange={e => { setTestForm(p => ({ ...p, topic_id: e.target.value, section_id: '', subsection_id: '' })); if(e.target.value) fetchSections(e.target.value) }}>
-                <option value="">Topic Select Karo</option>
-                {topics.map(t => <option key={t.id} value={t.id}>{t.icon} {t.name}</option>)}
-              </select>
-            </>
-          )}
-
-          {sections.length > 0 && (
-            <>
-              <label style={labelStyle}>📝 Section</label>
-              <select style={inputStyle} value={testForm.section_id} onChange={e => { setTestForm(p => ({ ...p, section_id: e.target.value, subsection_id: '' })); if(e.target.value) fetchSubsections(e.target.value) }}>
-                <option value="">Section Select Karo</option>
-                {sections.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
-              </select>
-            </>
-          )}
-
-          {subsections.length > 0 && (
-            <>
-              <label style={labelStyle}>📌 Sub-section</label>
-              <select style={inputStyle} value={testForm.subsection_id} onChange={e => setTestForm(p => ({ ...p, subsection_id: e.target.value }))}>
-                <option value="">Sub-section Select Karo</option>
-                {subsections.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+              <label style={labelStyle}>📋 Sub-Category *</label>
+              <select style={inputStyle} value={testForm.mock_subcategory_id} onChange={e => setTestForm(p => ({ ...p, mock_subcategory_id: e.target.value }))}>
+                <option value="">Sub-Category Select Karo (RRB Group D, SSC GD...)</option>
+                {mockSubcategories.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
               </select>
             </>
           )}
