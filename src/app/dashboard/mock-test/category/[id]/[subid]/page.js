@@ -57,9 +57,20 @@ export default function MockTestListPage({ params }) {
                   <span style={{ background: '#dbeafe', color: '#1e40af', padding: '3px 10px', borderRadius: '9999px', fontSize: '0.7rem', fontWeight: 700 }}>{test.total_questions} Q</span>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '1rem' }}>⏱️ {test.duration_minutes} minutes</p>
-                <Link href={`/dashboard/mock-test/instructions?id=${test.id}&title=${encodeURIComponent(test.title)}`} style={{ display: 'block', textAlign: 'center', background: `linear-gradient(135deg, ${category?.color || '#1a3c8f'}, ${category?.color || '#1a3c8f'}dd)`, color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
-                  Test Shuru Karo →
-                </Link>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <Link href={`/dashboard/mock-test/instructions?id=${test.id}&title=${encodeURIComponent(test.title)}`} style={{ flex: 2, display: 'block', textAlign: 'center', background: `linear-gradient(135deg, ${category?.color || '#1a3c8f'}, ${category?.color || '#1a3c8f'}dd)`, color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+                    📝 Practice
+                  </Link>
+                  {test.pdf_url ? (
+                    <a href={test.pdf_url} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: 'block', textAlign: 'center', background: 'linear-gradient(135deg, #16a34a, #22c55e)', color: 'white', padding: '10px', borderRadius: '10px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+                      ⬇️ PDF
+                    </a>
+                  ) : (
+                    <div style={{ flex: 1, textAlign: 'center', background: '#f1f5f9', color: '#94a3b8', padding: '10px', borderRadius: '10px', fontSize: '0.82rem' }}>
+                      PDF N/A
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>

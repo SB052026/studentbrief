@@ -24,7 +24,7 @@ export default function SubjectMockPage() {
     <div className="page-wrapper">
       <Navbar />
       <main style={{ flex: 1, maxWidth: '900px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>📚 Subject Wise Mock Test</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>🎯 Subject Wise Mock Test</h1>
         <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Subject select karo aur practice shuru karo</p>
 
         {loading ? (
@@ -32,10 +32,10 @@ export default function SubjectMockPage() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             {subjects.map(subject => (
-              <Link key={subject.id} href={`/dashboard/subject-mock/${subject.id}`} style={{ textDecoration: 'none' }}>
-                <div style={{ background: `linear-gradient(135deg, ${subject.color}, ${subject.color}dd)`, borderRadius: '16px', padding: '1.25rem', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', minHeight: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Link key={subject.id} href={`/dashboard/subject-mock/${subject.id}/tests`} style={{ textDecoration: 'none' }}>
+                <div style={{ background: `linear-gradient(135deg, ${subject.color}, ${subject.color}dd)`, borderRadius: '16px', padding: '1.25rem', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>{subject.icon}</span>
-                  <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.9rem' }}>{subject.name}</h3>
+                  <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.95rem' }}>{subject.name}</h3>
                 </div>
               </Link>
             ))}

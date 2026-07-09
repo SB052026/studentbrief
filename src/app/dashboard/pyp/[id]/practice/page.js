@@ -138,9 +138,14 @@ export default function PypPracticePage({ params }) {
                   <p style={{ fontSize: '0.75rem', color: '#475569', marginBottom: '4px' }}>
                     आपका उत्तर: <span style={{ fontWeight: 700 }}>{getAnswerText(q, answers[q.id])}</span>
                   </p>
-                  <p style={{ fontSize: '0.75rem', color: '#16a34a' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#16a34a', marginBottom: '4px' }}>
                     सही उत्तर: <span style={{ fontWeight: 700 }}>{getCorrectText(q)}</span>
                   </p>
+                  {q.explanation && (
+                    <p style={{ fontSize: '0.72rem', color: '#475569', marginTop: '6px', padding: '6px 8px', background: 'rgba(255,255,255,0.7)', borderRadius: '6px', lineHeight: 1.5 }}>
+                      💡 {q.explanation}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

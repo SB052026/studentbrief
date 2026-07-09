@@ -14,7 +14,7 @@ export default function AdminMockTestPage() {
   const [editId, setEditId] = useState(null)
   const [mockCategories, setMockCategories] = useState([])
   const [mockSubcategories, setMockSubcategories] = useState([])
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '' })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '' })
 
   async function fetchTests() {
@@ -50,6 +50,7 @@ export default function AdminMockTestPage() {
       total_questions: parseInt(testForm.total_questions) || 10,
       mock_category_id: testForm.mock_category_id || null,
       mock_subcategory_id: testForm.mock_subcategory_id || null,
+      pdf_url: testForm.pdf_url || null,
     }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
@@ -57,7 +58,7 @@ export default function AdminMockTestPage() {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '' })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
@@ -140,7 +141,10 @@ export default function AdminMockTestPage() {
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>Naya Mock Test</h2>
           
           <label style={labelStyle}>📝 Test Title *</label>
-          <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Ancient History Test 1" />
+          <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC GD Full Test 1" />
+          
+          <label style={labelStyle}>📄 PDF Link (Optional - Download ke liye)</label>
+          <input style={inputStyle} value={testForm.pdf_url || ''} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://... (PDF link)" />
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <div>
