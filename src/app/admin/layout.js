@@ -60,6 +60,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/pyp', label: '📄 PYP' },
     { href: '/admin/syllabus', label: '📚 Syllabus' },
     { href: '/admin/subjects', label: '🎯 Subject Mock' },
+    { href: '/admin/analytics', label: '📊 Analytics' },
     { href: '/admin/operators', label: '👥 Operators' },
     { href: '/admin/settings', label: '⚙️ Settings' },
   ]

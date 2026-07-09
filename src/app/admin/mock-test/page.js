@@ -15,7 +15,8 @@ export default function AdminMockTestPage() {
   const [mockCategories, setMockCategories] = useState([])
   const [mockSubcategories, setMockSubcategories] = useState([])
   const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '' })
-  const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '' })
+  const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
+  const [uploading, setUploading] = useState(false)
 
   async function fetchTests() {
     const supabase = createClient()
@@ -71,6 +72,19 @@ export default function AdminMockTestPage() {
     await supabase.from('mock_tests').delete().eq('id', id)
     if (selectedTest?.id === id) { setSelectedTest(null); setQuestions([]) }
     await fetchTests()
+  }
+
+  async function uploadImage(file, field) {
+    if (!file) return
+    setUploading(true)
+    const supabase = createClient()
+    const fileName = `${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, '_')}`
+    const { data, error } = await supabase.storage.from('question-images').upload(fileName, file, { upsert: true })
+    if (!error) {
+      const { data: urlData } = supabase.storage.from('question-images').getPublicUrl(fileName)
+      setQForm(p => ({ ...p, [field]: urlData.publicUrl }))
+    }
+    setUploading(false)
   }
 
   async function handleSaveQuestion() {
@@ -213,11 +227,46 @@ export default function AdminMockTestPage() {
 
                   {showQForm && (
                     <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '1rem', marginBottom: '0.75rem' }}>
-                      <textarea style={{ ...inputStyle, height: '70px', resize: 'vertical' }} value={qForm.question} onChange={e => setQForm(p => ({ ...p, question: e.target.value }))} placeholder="Question *" />
-                      <input style={inputStyle} value={qForm.option_a} onChange={e => setQForm(p => ({ ...p, option_a: e.target.value }))} placeholder="Option A *" />
-                      <input style={inputStyle} value={qForm.option_b} onChange={e => setQForm(p => ({ ...p, option_b: e.target.value }))} placeholder="Option B *" />
-                      <input style={inputStyle} value={qForm.option_c} onChange={e => setQForm(p => ({ ...p, option_c: e.target.value }))} placeholder="Option C *" />
-                      <input style={inputStyle} value={qForm.option_d} onChange={e => setQForm(p => ({ ...p, option_d: e.target.value }))} placeholder="Option D *" />
+                      <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Question *</label>
+                      <textarea style={{ ...inputStyle, height: '70px', resize: 'vertical' }} value={qForm.question} onChange={e => setQForm(p => ({ ...p, question: e.target.value }))} placeholder="Question text likhein..." />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Question Image:</label>
+                        <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'question_image')} style={{ fontSize: '0.7rem' }} />
+                        {qForm.question_image && <img src={qForm.question_image} alt="Q" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                      </div>
+
+                      <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Option A *</label>
+                      <input style={inputStyle} value={qForm.option_a} onChange={e => setQForm(p => ({ ...p, option_a: e.target.value }))} placeholder="Option A text (khali chhod sakte hain agar image ho)" />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Option A Image:</label>
+                        <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'option_a_image')} style={{ fontSize: '0.7rem' }} />
+                        {qForm.option_a_image && <img src={qForm.option_a_image} alt="A" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                      </div>
+
+                      <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Option B *</label>
+                      <input style={inputStyle} value={qForm.option_b} onChange={e => setQForm(p => ({ ...p, option_b: e.target.value }))} placeholder="Option B text" />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Option B Image:</label>
+                        <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'option_b_image')} style={{ fontSize: '0.7rem' }} />
+                        {qForm.option_b_image && <img src={qForm.option_b_image} alt="B" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                      </div>
+
+                      <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Option C *</label>
+                      <input style={inputStyle} value={qForm.option_c} onChange={e => setQForm(p => ({ ...p, option_c: e.target.value }))} placeholder="Option C text" />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Option C Image:</label>
+                        <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'option_c_image')} style={{ fontSize: '0.7rem' }} />
+                        {qForm.option_c_image && <img src={qForm.option_c_image} alt="C" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                      </div>
+
+                      <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Option D *</label>
+                      <input style={inputStyle} value={qForm.option_d} onChange={e => setQForm(p => ({ ...p, option_d: e.target.value }))} placeholder="Option D text" />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Option D Image:</label>
+                        <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'option_d_image')} style={{ fontSize: '0.7rem' }} />
+                        {qForm.option_d_image && <img src={qForm.option_d_image} alt="D" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                      </div>
+                      {uploading && <p style={{ fontSize: '0.72rem', color: '#1a3c8f', fontWeight: 600 }}>⏳ Image upload ho rahi hai...</p>}
                       <select value={qForm.correct_option} onChange={e => setQForm(p => ({ ...p, correct_option: e.target.value }))} style={inputStyle}>
                         <option value="A">A Sahi Hai</option>
                         <option value="B">B Sahi Hai</option>
