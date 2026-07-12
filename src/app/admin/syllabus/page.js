@@ -2,94 +2,96 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { inputStyle, labelStyle, btnPrimary, btnSecondary, btnEdit, btnDelete, pageTitle, emptyState } from '@/lib/adminStyles'
 
 export default function AdminSyllabusPage() {
-  const [syllabus, setSyllabus] = useState([])
+  const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [form, setForm] = useState({ title: '', exam_name: '', description: '', file_url: '' })
+  const [editId, setEditId] = useState(null)
+  const [form, setForm] = useState({ title: '', exam_name: '', syllabus_link: '', description: '' })
 
-  async function fetchSyllabus() {
+  async function fetchData() {
     const supabase = createClient()
     const { data } = await supabase.from('syllabus').select('*').order('created_at', { ascending: false })
-    setSyllabus(data || [])
+    setItems(data || [])
     setLoading(false)
   }
 
-  useEffect(() => { fetchSyllabus() }, [])
+  useEffect(() => { fetchData() }, [])
+
+  function resetForm() {
+    setForm({ title: '', exam_name: '', syllabus_link: '', description: '' })
+    setEditId(null)
+    setShowForm(false)
+  }
 
   async function handleSave() {
     if (!form.title) return alert('Title zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    await supabase.from('syllabus').insert({
-      title: form.title,
-      exam_name: form.exam_name || null,
-      description: form.description || null,
-      file_url: form.file_url || null,
-    })
-    await fetchSyllabus()
-    setForm({ title: '', exam_name: '', description: '', file_url: '' })
-    setShowForm(false)
+    const data = { title: form.title, exam_name: form.exam_name || null, syllabus_link: form.syllabus_link || null, description: form.description || null }
+    if (editId) await supabase.from('syllabus').update(data).eq('id', editId)
+    else await supabase.from('syllabus').insert(data)
+    await fetchData()
+    resetForm()
     setSaving(false)
   }
 
   async function handleDelete(id) {
-    if (!confirm('Kya aap sure hain?')) return
-    const supabase = createClient()
-    await supabase.from('syllabus').delete().eq('id', id)
-    await fetchSyllabus()
+    if (!confirm('Delete karna chahte hain?')) return
+    await createClient().from('syllabus').delete().eq('id', id)
+    await fetchData()
   }
 
-  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
+  function handleEdit(item) {
+    setForm({ title: item.title || '', exam_name: item.exam_name || '', syllabus_link: item.syllabus_link || '', description: item.description || '' })
+    setEditId(item.id)
+    setShowForm(true)
+  }
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1a3c8f' }}>📚 Syllabus Manage Karo</h1>
-        <button onClick={() => setShowForm(true)} style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
-          + New Syllabus
-        </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h1 style={pageTitle}>📚 Syllabus</h1>
+        <button onClick={() => { resetForm(); setShowForm(true) }} style={{ background: '#f97316', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ New</button>
       </div>
 
       {showForm && (
-        <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
-          <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>Naya Syllabus</h2>
-          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Syllabus Title *" />
-          <input style={inputStyle} value={form.exam_name} onChange={e => setForm(p => ({ ...p, exam_name: e.target.value }))} placeholder="Exam Name" />
-          <textarea style={{ ...inputStyle, height: '80px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Description" />
-          <input style={inputStyle} value={form.file_url} onChange={e => setForm(p => ({ ...p, file_url: e.target.value }))} placeholder="PDF Link (https://...)" />
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <button onClick={handleSave} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
-              {saving ? 'Saving...' : 'Save Karo'}
-            </button>
-            <button onClick={() => setShowForm(false)} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Cancel</button>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Edit' : 'Naya'} Syllabus</h2>
+          <label style={labelStyle}>Title *</label>
+          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Syllabus title" />
+          <label style={labelStyle}>Exam Name</label>
+          <input style={inputStyle} value={form.exam_name} onChange={e => setForm(p => ({ ...p, exam_name: e.target.value }))} placeholder="e.g. SSC GD 2025" />
+          <label style={labelStyle}>Syllabus Link (PDF)</label>
+          <input style={inputStyle} value={form.syllabus_link} onChange={e => setForm(p => ({ ...p, syllabus_link: e.target.value }))} placeholder="https://..." />
+          <label style={labelStyle}>Description</label>
+          <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+            <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, flex: 1 }}>{saving ? 'Saving...' : editId ? 'Update' : 'Save'}</button>
+            <button onClick={resetForm} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>Loading...</div>
-      ) : syllabus.length > 0 ? (
+      {loading ? <div style={emptyState}>Loading...</div> : items.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {syllabus.map(item => (
-            <div key={item.id} style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+          {items.map(item => (
+            <div key={item.id} style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
               <div style={{ flex: 1 }}>
-                <h3 style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>{item.title}</h3>
-                <p style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>{item.exam_name}</p>
-                {item.file_url && <a href={item.file_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.7rem', color: '#1a3c8f' }}>PDF dekho →</a>}
+                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.88rem' }}>{item.title}</p>
+                {item.exam_name && <p style={{ fontSize: '0.72rem', color: '#64748b' }}>{item.exam_name}</p>}
               </div>
-              <button onClick={() => handleDelete(item.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', flexShrink: 0 }}>Delete</button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button onClick={() => handleEdit(item)} style={btnEdit}>Edit</button>
+                <button onClick={() => handleDelete(item.id)} style={btnDelete}>Delete</button>
+              </div>
             </div>
           ))}
         </div>
-      ) : (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
-          <p style={{ fontSize: '2rem' }}>📚</p>
-          <p>Koi syllabus nahi mila</p>
-        </div>
-      )}
+      ) : <div style={emptyState}><p style={{ fontSize: '2rem' }}>📚</p><p>Koi syllabus nahi</p></div>}
     </div>
   )
 }

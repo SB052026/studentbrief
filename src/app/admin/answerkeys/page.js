@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { inputStyle, labelStyle, btnPrimary, btnSecondary, btnEdit, btnDelete, pageTitle, emptyState } from '@/lib/adminStyles'
 
 export default function AdminAnswerKeysPage() {
   const [items, setItems] = useState([])
@@ -10,25 +11,23 @@ export default function AdminAnswerKeysPage() {
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [form, setForm] = useState({
-    category_id: '', title: '', published_date: '', exam_date: '',
-    objection_last_date: '', organization: '', post_name: '',
-    answerkey_status: 'Released', answerkey_link: ''
-  })
+  const [form, setForm] = useState({ category_id: '', title: '', exam_date: '', answer_key_link: '', description: '' })
 
   async function fetchData() {
     const supabase = createClient()
-    const { data: itemsData } = await supabase.from('answerkeys').select('*, answerkey_categories(name)').order('created_at', { ascending: false })
-    const { data: catsData } = await supabase.from('answerkey_categories').select('*').order('name')
-    setItems(itemsData || [])
-    setCategories(catsData || [])
+    const [{ data: a }, { data: c }] = await Promise.all([
+      supabase.from('answerkeys').select('*, answerkey_categories(name)').order('created_at', { ascending: false }),
+      supabase.from('answerkey_categories').select('*').order('name'),
+    ])
+    setItems(a || [])
+    setCategories(c || [])
     setLoading(false)
   }
 
   useEffect(() => { fetchData() }, [])
 
   function resetForm() {
-    setForm({ category_id: '', title: '', published_date: '', exam_date: '', objection_last_date: '', organization: '', post_name: '', answerkey_status: 'Released', answerkey_link: '' })
+    setForm({ category_id: '', title: '', exam_date: '', answer_key_link: '', description: '' })
     setEditId(null)
     setShowForm(false)
   }
@@ -37,128 +36,72 @@ export default function AdminAnswerKeysPage() {
     if (!form.title || !form.category_id) return alert('Title aur Category zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    const data = {
-      category_id: form.category_id,
-      title: form.title,
-      published_date: form.published_date || null,
-      exam_date: form.exam_date || null,
-      objection_last_date: form.objection_last_date || null,
-      organization: form.organization || null,
-      post_name: form.post_name || null,
-      answerkey_status: form.answerkey_status || 'Released',
-      answerkey_link: form.answerkey_link || null,
-    }
-    if (editId) {
-      await supabase.from('answerkeys').update(data).eq('id', editId)
-    } else {
-      await supabase.from('answerkeys').insert(data)
-    }
+    const data = { category_id: form.category_id, title: form.title, exam_date: form.exam_date || null, answer_key_link: form.answer_key_link || null, description: form.description || null }
+    if (editId) await supabase.from('answerkeys').update(data).eq('id', editId)
+    else await supabase.from('answerkeys').insert(data)
     await fetchData()
     resetForm()
     setSaving(false)
   }
 
   async function handleDelete(id) {
-    if (!confirm('Kya aap sure hain?')) return
-    const supabase = createClient()
-    await supabase.from('answerkeys').delete().eq('id', id)
+    if (!confirm('Delete karna chahte hain?')) return
+    await createClient().from('answerkeys').delete().eq('id', id)
     await fetchData()
   }
 
   function handleEdit(item) {
-    setForm({
-      category_id: item.category_id || '',
-      title: item.title || '',
-      published_date: item.published_date || '',
-      exam_date: item.exam_date || '',
-      objection_last_date: item.objection_last_date || '',
-      organization: item.organization || '',
-      post_name: item.post_name || '',
-      answerkey_status: item.answerkey_status || 'Released',
-      answerkey_link: item.answerkey_link || '',
-    })
+    setForm({ category_id: item.category_id || '', title: item.title || '', exam_date: item.exam_date || '', answer_key_link: item.answer_key_link || '', description: item.description || '' })
     setEditId(item.id)
     setShowForm(true)
   }
 
-  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.875rem', fontFamily: 'Poppins, sans-serif', outline: 'none', boxSizing: 'border-box', marginBottom: '0.6rem' }
-  const labelStyle = { display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }
-
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1a3c8f' }}>📝 Answer Keys Manage Karo</h1>
-        <button onClick={() => { resetForm(); setShowForm(true) }} style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
-          + New Answer Key
-        </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h1 style={pageTitle}>📝 Answer Keys</h1>
+        <button onClick={() => { resetForm(); setShowForm(true) }} style={{ background: '#f97316', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ New</button>
       </div>
 
       {showForm && (
-        <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
-          <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Edit Karo' : 'Naya Answer Key Add Karo'}</h2>
-
-          <label style={labelStyle}>📁 Category *</label>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Edit' : 'Naya'} Answer Key</h2>
+          <label style={labelStyle}>Category *</label>
           <select value={form.category_id} onChange={e => setForm(p => ({ ...p, category_id: e.target.value }))} style={inputStyle}>
-            <option value="">Category Select Karo</option>
+            <option value="">Select</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-          <label style={labelStyle}>📝 Answer Key Title *</label>
-          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC CGL Answer Key 2025" />
-          <label style={labelStyle}>🏢 Organization</label>
-          <input style={inputStyle} value={form.organization} onChange={e => setForm(p => ({ ...p, organization: e.target.value }))} placeholder="e.g. Staff Selection Commission" />
-          <label style={labelStyle}>📋 Post Name</label>
-          <input style={inputStyle} value={form.post_name} onChange={e => setForm(p => ({ ...p, post_name: e.target.value }))} placeholder="e.g. Combined Graduate Level" />
-          <label style={labelStyle}>📊 Status</label>
-          <select value={form.answerkey_status} onChange={e => setForm(p => ({ ...p, answerkey_status: e.target.value }))} style={inputStyle}>
-            <option value="Released">Released</option>
-            <option value="Expected">Expected</option>
-            <option value="Pending">Pending</option>
-          </select>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            <div><label style={labelStyle}>📅 Published Date</label><input style={inputStyle} type="date" value={form.published_date} onChange={e => setForm(p => ({ ...p, published_date: e.target.value }))} /></div>
-            <div><label style={labelStyle}>📆 Exam Date</label><input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} /></div>
-            <div><label style={labelStyle}>⏰ Objection Last Date</label><input style={inputStyle} type="date" value={form.objection_last_date} onChange={e => setForm(p => ({ ...p, objection_last_date: e.target.value }))} /></div>
-          </div>
-          <label style={labelStyle}>🔗 Answer Key Link</label>
-          <input style={inputStyle} value={form.answerkey_link} onChange={e => setForm(p => ({ ...p, answerkey_link: e.target.value }))} placeholder="https://..." />
-
+          <label style={labelStyle}>Title *</label>
+          <input style={inputStyle} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Answer key title" />
+          <label style={labelStyle}>Exam Date</label>
+          <input style={inputStyle} type="date" value={form.exam_date} onChange={e => setForm(p => ({ ...p, exam_date: e.target.value }))} />
+          <label style={labelStyle}>Answer Key Link</label>
+          <input style={inputStyle} value={form.answer_key_link} onChange={e => setForm(p => ({ ...p, answer_key_link: e.target.value }))} placeholder="https://..." />
+          <label style={labelStyle}>Description</label>
+          <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-            <button onClick={handleSave} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
-              {saving ? 'Saving...' : editId ? 'Update Karo' : 'Save Karo'}
-            </button>
-            <button onClick={resetForm} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
-              Cancel
-            </button>
+            <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, flex: 1 }}>{saving ? 'Saving...' : editId ? 'Update' : 'Save'}</button>
+            <button onClick={resetForm} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>Loading...</div>
-      ) : items.length > 0 ? (
+      {loading ? <div style={emptyState}>Loading...</div> : items.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {items.map(item => (
-            <div key={item.id} style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                  <span style={{ background: '#fce7f3', color: '#9d174d', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{item.answerkey_categories?.name}</span>
-                  <h3 style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem', marginTop: '4px' }}>{item.title}</h3>
-                  <p style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>{item.organization} • {item.answerkey_status}</p>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                  <button onClick={() => handleEdit(item)} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Edit</button>
-                  <button onClick={() => handleDelete(item.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Delete</button>
-                </div>
+            <div key={item.id} style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ flex: 1 }}>
+                <span style={{ background: '#fce7f3', color: '#9d174d', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{item.answerkey_categories?.name}</span>
+                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.88rem', marginTop: '4px' }}>{item.title}</p>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button onClick={() => handleEdit(item)} style={btnEdit}>Edit</button>
+                <button onClick={() => handleDelete(item.id)} style={btnDelete}>Delete</button>
               </div>
             </div>
           ))}
         </div>
-      ) : (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
-          <p style={{ fontSize: '2rem' }}>📝</p>
-          <p>Koi answer key nahi mili</p>
-        </div>
-      )}
+      ) : <div style={emptyState}><p style={{ fontSize: '2rem' }}>📝</p><p>Koi answer key nahi</p></div>}
     </div>
   )
 }

@@ -189,9 +189,9 @@ export default function Navbar() {
           <button
             onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }}
             style={{
-              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
-              color: 'white', width: '38px', height: '38px', borderRadius: '10px',
-              cursor: 'pointer', fontSize: '1.1rem', display: 'flex',
+              background: 'none', border: 'none',
+              color: 'white', width: '38px', height: '38px',
+              cursor: 'pointer', fontSize: '1.3rem', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
             }}
           >
@@ -277,11 +277,11 @@ export default function Navbar() {
       )}
 
       {showQuickLinks && <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "0.4rem 0.75rem", display: "flex", gap: "0.5rem", overflowX: "auto", overflowY: "hidden", transition: "all 0.3s ease", scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}>
-        <button onClick={() => handleQuickLink('job', quickLinks.job)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'job' ? "#1e40af" : "#dbeafe", color: expandedSection === 'job' ? "white" : "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>💼 Jobs</button>
-        <button onClick={() => handleQuickLink('result', quickLinks.result)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'result' ? "#166534" : "#dcfce7", color: expandedSection === 'result' ? "white" : "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📊 Results</button>
-        <button onClick={() => handleQuickLink('admitcard', quickLinks.admitcard)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'admitcard' ? "#92400e" : "#fef3c7", color: expandedSection === 'admitcard' ? "white" : "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>🎫 Admit Cards</button>
-        <button onClick={() => handleQuickLink('answerkey', quickLinks.answerkey)} style={{ flex: 1, textAlign: "center", background: expandedSection === 'answerkey' ? "#9d174d" : "#fce7f3", color: expandedSection === 'answerkey' ? "white" : "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📝 Answer Keys</button>
-        <button onClick={() => handleQuickLink('syllabus', '/syllabus')} style={{ flex: 1, textAlign: "center", background: expandedSection === 'syllabus' ? "#3730a3" : "#e0e7ff", color: expandedSection === 'syllabus' ? "white" : "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "Poppins, sans-serif", whiteSpace: "nowrap", flexShrink: 0 }}>📚 Syllabus</button>
+        <Link href="/jobs" style={{ flex: 1, textAlign: "center", background: "#dbeafe", color: "#1e40af", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, display: "block" }}>💼 Jobs</Link>
+        <Link href="/results" style={{ flex: 1, textAlign: "center", background: "#dcfce7", color: "#166534", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, display: "block" }}>📊 Results</Link>
+        <Link href="/admitcard" style={{ flex: 1, textAlign: "center", background: "#fef3c7", color: "#92400e", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, display: "block" }}>🎫 Admit Cards</Link>
+        <Link href="/answerkey" style={{ flex: 1, textAlign: "center", background: "#fce7f3", color: "#9d174d", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, display: "block" }}>📝 Answer Keys</Link>
+        <Link href="/syllabus" style={{ flex: 1, textAlign: "center", background: "#e0e7ff", color: "#3730a3", padding: "6px 4px", borderRadius: "9999px", fontSize: "0.72rem", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, display: "block" }}>📚 Syllabus</Link>
       </div>}
 
       {expandedSection && (
