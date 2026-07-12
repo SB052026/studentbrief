@@ -10,6 +10,15 @@ const ATTEMPTS_KEY = 'sb_admin_attempts'
 let EMERGENCY_CODE = 'SB@Emergency#2026'
 
 export default function AdminLoginPage() {
+  useEffect(() => {
+    // Push home to history so back button goes home
+    window.history.pushState(null, '', window.location.href)
+    window.onpopstate = () => {
+      window.location.href = '/'
+    }
+    return () => { window.onpopstate = null }
+  }, [])
+
   const [userId, setUserId] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)

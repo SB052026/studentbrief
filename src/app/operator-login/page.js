@@ -1,10 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function OperatorLoginPage() {
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href)
+    window.onpopstate = () => {
+      window.location.href = '/'
+    }
+    return () => { window.onpopstate = null }
+  }, [])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
@@ -192,9 +200,7 @@ export default function OperatorLoginPage() {
           {loading ? '⏳ Verifying...' : '🔐 Login Karo'}
         </button>
 
-        <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#94a3b8', marginTop: '1rem' }}>
-          Admin? <a href="/admin-login" style={{ color: '#1a3c8f', fontWeight: 700, textDecoration: 'none' }}>Admin Login →</a>
-        </p>
+
       </div>
     </div>
   )

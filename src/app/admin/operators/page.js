@@ -16,9 +16,7 @@ export default function AdminOperatorsPage() {
 
   async function fetchAll() {
     const supabase = createClient()
-    const { data: emergencyData } = await supabase.from('site_settings').select('value').eq('key', 'admin_emergency_code').single()
-    setCurrentEmergencyCode(emergencyData?.value || 'SB@Emergency#2026')
-    const [{ data: ops }, { data: acts }] = await Promise.all([
+const [{ data: ops }, { data: acts }] = await Promise.all([
       supabase.from('operators').select('*').order('created_at'),
       supabase.from('operator_activity').select('*, operators(name, username, role)').order('login_time', { ascending: false }).limit(20),
     ])
