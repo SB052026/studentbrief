@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 const MAX_ATTEMPTS = 5
 const LOCKOUT_KEY = 'sb_admin_lock'
 const ATTEMPTS_KEY = 'sb_admin_attempts'
-const EMERGENCY_CODE = 'SB@Emergency#2026'
+let EMERGENCY_CODE = 'SB@Emergency#2026'
 
 export default function AdminLoginPage() {
   const [userId, setUserId] = useState('')
@@ -104,9 +104,12 @@ export default function AdminLoginPage() {
     setLoading(false)
   }
 
-  function handleEmergencyUnlock() {
+  async function handleEmergencyUnlock() {
     setEmergencyError('')
-    if (emergencyCode === EMERGENCY_CODE) {
+    const supabase = createClient()
+    const { data } = await supabase.from('site_settings').select('value').eq('key', 'admin_emergency_code').single()
+    const code = data?.value || 'SB@Emergency#2026'
+    if (emergencyCode === code) {
       localStorage.removeItem(LOCKOUT_KEY)
       localStorage.removeItem(ATTEMPTS_KEY)
       setLocked(false)
