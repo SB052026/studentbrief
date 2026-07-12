@@ -26,7 +26,7 @@ export default async function AnswerKeyPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {answerkeys?.map(ak => (
             <Link key={ak.id} href={`/answerkey/${ak.answerkey_categories?.slug}/${ak.id}`} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'white', borderRadius: '14px', padding: '1rem 1.25rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '4px solid #db2777' }}>
+              <div style={{ background: 'white', borderRadius: '14px', padding: '0.75rem 1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '4px solid #db2777' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ marginBottom: '4px' }}>
                     <span style={{ background: '#fce7f3', color: '#9d174d', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{ak.answerkey_categories?.name}</span>

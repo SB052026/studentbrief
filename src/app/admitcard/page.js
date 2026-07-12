@@ -26,7 +26,7 @@ export default async function AdmitCardPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {admitcards?.map(ac => (
             <Link key={ac.id} href={`/admitcard/${ac.admitcard_categories?.slug}/${ac.id}`} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'white', borderRadius: '14px', padding: '1rem 1.25rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '4px solid #d97706' }}>
+              <div style={{ background: 'white', borderRadius: '14px', padding: '0.75rem 1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '4px solid #d97706' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ marginBottom: '4px' }}>
                     <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{ac.admitcard_categories?.name}</span>
