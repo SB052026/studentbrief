@@ -23,10 +23,10 @@ export default async function AdmitCardPage() {
         <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>🎫 Admit Cards</h1>
         <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Sabhi Latest Admit Cards</p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           {admitcards?.map(ac => (
             <Link key={ac.id} href={`/admitcard/${ac.admitcard_categories?.slug}/${ac.id}`} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'white', borderRadius: '14px', padding: '0.75rem 1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '4px solid #d97706' }}>
+              <div style={{ background: 'white', borderRadius: '14px', padding: '0.6rem 0.875rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '4px solid #d97706' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ marginBottom: '4px' }}>
                     <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{ac.admitcard_categories?.name}</span>
