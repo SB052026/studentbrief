@@ -10,11 +10,53 @@ export default function AdminSubjectsPage() {
   const [sections, setSections] = useState([])
   const [subsections, setSubsections] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showTestSection, setShowTestSection] = useState(false)
+  const [tests, setTests] = useState([])
+  const [testLoading, setTestLoading] = useState(false)
+  const [showTestForm, setShowTestForm] = useState(false)
+  const [testSaving, setTestSaving] = useState(false)
+  const [testEditId, setTestEditId] = useState(null)
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' })
   const [activeTab, setActiveTab] = useState('subjects')
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
   const [form, setForm] = useState({ name: '', icon: '', color: '#1a3c8f', subject_id: '', topic_id: '', section_id: '' })
+
+  async function fetchTests() {
+    setTestLoading(true)
+    const supabase = createClient()
+    const { data } = await supabase.from('mock_tests').select('*, mock_subjects(name)').eq('test_type', 'subject').order('created_at', { ascending: false })
+    setTests(data || [])
+    setTestLoading(false)
+  }
+
+  async function handleSaveTest() {
+    if (!testForm.title) return alert('Title zaroori hai!')
+    setTestSaving(true)
+    const supabase = createClient()
+    const data = {
+      title: testForm.title,
+      duration_minutes: parseInt(testForm.duration_minutes) || 30,
+      total_questions: parseInt(testForm.total_questions) || 10,
+      subject_id: testForm.subject_id || null,
+      pdf_url: testForm.pdf_url || null,
+      test_type: 'subject',
+    }
+    if (testEditId) await supabase.from('mock_tests').update(data).eq('id', testEditId)
+    else await supabase.from('mock_tests').insert(data)
+    await fetchTests()
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' })
+    setTestEditId(null)
+    setShowTestForm(false)
+    setTestSaving(false)
+  }
+
+  async function handleDeleteTest(id) {
+    if (!confirm('Delete karna chahte hain?')) return
+    await createClient().from('mock_tests').delete().eq('id', id)
+    await fetchTests()
+  }
 
   async function fetchAll() {
     const supabase = createClient()
@@ -178,6 +220,68 @@ export default function AdminSubjectsPage() {
           ))}
         </div>
       ) : <div style={emptyState}><p style={{ fontSize: '2rem' }}>📚</p><p>Koi data nahi</p></div>}
+    {/* Subject Mock Tests Section */}
+    <div style={{ marginTop: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1a3c8f' }}>🧪 Subject Mock Tests</h2>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={() => { setShowTestSection(!showTestSection); if(!showTestSection) fetchTests() }} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '8px 14px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+            {showTestSection ? 'Hide Tests' : 'Show Tests'}
+          </button>
+          {showTestSection && <button onClick={() => setShowTestForm(true)} style={{ background: '#f97316', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ New Test</button>}
+        </div>
+      </div>
+
+      {showTestSection && (
+        <div>
+          {showTestForm && (
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
+              <h3 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '0.95rem' }}>{testEditId ? 'Edit Test' : 'Naya Subject Mock Test'}</h3>
+              <label style={labelStyle}>📝 Test Title *</label>
+              <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. GS History Test 1" />
+              <label style={labelStyle}>📚 Subject</label>
+              <select style={inputStyle} value={testForm.subject_id} onChange={e => setTestForm(p => ({ ...p, subject_id: e.target.value }))}>
+                <option value="">Subject Select Karo</option>
+                {subjects.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+              </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <div>
+                  <label style={labelStyle}>⏱️ Duration (min)</label>
+                  <input style={inputStyle} type="number" value={testForm.duration_minutes} onChange={e => setTestForm(p => ({ ...p, duration_minutes: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={labelStyle}>❓ Questions</label>
+                  <input style={inputStyle} type="number" value={testForm.total_questions} onChange={e => setTestForm(p => ({ ...p, total_questions: e.target.value }))} />
+                </div>
+              </div>
+              <label style={labelStyle}>📄 PDF Link (Optional)</label>
+              <input style={inputStyle} value={testForm.pdf_url} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://..." />
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button onClick={handleSaveTest} disabled={testSaving} style={{ ...btnPrimary, flex: 1 }}>{testSaving ? 'Saving...' : testEditId ? 'Update' : 'Save'}</button>
+                <button onClick={() => { setShowTestForm(false); setTestEditId(null); setTestForm({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' }) }} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
+              </div>
+            </div>
+          )}
+
+          {testLoading ? <p style={{ textAlign: 'center', color: '#94a3b8' }}>Loading...</p> : tests.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {tests.map(test => (
+                <div key={test.id} style={{ background: 'white', borderRadius: '12px', padding: '0.875rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.88rem' }}>{test.title}</p>
+                    <p style={{ fontSize: '0.7rem', color: '#64748b' }}>{test.mock_subjects?.name} • {test.total_questions} Q • {test.duration_minutes} min</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => { setTestForm({ title: test.title, duration_minutes: String(test.duration_minutes), total_questions: String(test.total_questions), subject_id: test.subject_id || '', pdf_url: test.pdf_url || '' }); setTestEditId(test.id); setShowTestForm(true) }} style={btnEdit}>Edit</button>
+                    <button onClick={() => handleDeleteTest(test.id)} style={btnDelete}>Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : <p style={{ textAlign: 'center', color: '#94a3b8', padding: '1rem' }}>Koi subject mock test nahi</p>}
+        </div>
+      )}
+    </div>
     </div>
   )
 }

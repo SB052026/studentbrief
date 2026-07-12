@@ -20,6 +20,7 @@ export default function SubjectTestsPage({ params }) {
         supabase.from('mock_tests')
           .select('*, mock_subsections(name, mock_sections(name, mock_topics(name)))')
           .eq('subject_id', subjectId)
+          .eq('test_type', 'subject')
           .order('created_at', { ascending: false }),
       ])
       setSubject(subjectData)

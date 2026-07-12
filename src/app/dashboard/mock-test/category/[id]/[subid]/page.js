@@ -19,7 +19,7 @@ export default function MockTestListPage({ params }) {
       const [{ data: cat }, { data: sub }, { data: testsData }] = await Promise.all([
         supabase.from('mock_categories').select('*').eq('id', id).single(),
         supabase.from('mock_subcategories').select('*').eq('id', subid).single(),
-        supabase.from('mock_tests').select('*').eq('mock_subcategory_id', subid).order('created_at', { ascending: false }),
+        supabase.from('mock_tests').select('*').eq('mock_subcategory_id', subid).eq('test_type', 'category').order('created_at', { ascending: false }),
       ])
       setCategory(cat)
       setSubcategory(sub)

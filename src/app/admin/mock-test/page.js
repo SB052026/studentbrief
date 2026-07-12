@@ -14,13 +14,13 @@ export default function AdminMockTestPage() {
   const [editId, setEditId] = useState(null)
   const [mockCategories, setMockCategories] = useState([])
   const [mockSubcategories, setMockSubcategories] = useState([])
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '' })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
   const [uploading, setUploading] = useState(false)
 
   async function fetchTests() {
     const supabase = createClient()
-    const { data } = await supabase.from('mock_tests').select('*').order('created_at', { ascending: false })
+    const { data } = await supabase.from('mock_tests').select('*').eq('test_type', 'category').order('created_at', { ascending: false })
     setTests(data || [])
     const { data: mcats } = await supabase.from('mock_categories').select('*').order('name')
     setMockCategories(mcats || [])
@@ -52,6 +52,7 @@ export default function AdminMockTestPage() {
       mock_category_id: testForm.mock_category_id || null,
       mock_subcategory_id: testForm.mock_subcategory_id || null,
       pdf_url: testForm.pdf_url || null,
+      test_type: 'category',
     }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
@@ -59,7 +60,7 @@ export default function AdminMockTestPage() {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category' })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
