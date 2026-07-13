@@ -12,7 +12,25 @@ export default function AdminOperatorsPage() {
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
   const [activeTab, setActiveTab] = useState('operators')
+  const [showPassChange, setShowPassChange] = useState(false)
+  const [newAdminUser, setNewAdminUser] = useState('')
+  const [newAdminPass, setNewAdminPass] = useState('')
+  const [newEmergencyCode, setNewEmergencyCode] = useState('')
+  const [adminMsg, setAdminMsg] = useState('')
   const [form, setForm] = useState({ name: '', username: '', password: '', role: 'content' })
+
+  async function handleAdminPassChange() {
+    if (!newAdminPass && !newAdminUser && !newEmergencyCode) return alert('Kuch to bharo!')
+    const supabase = createClient()
+    if (newAdminUser) await supabase.from('site_settings').upsert({ key: 'admin_username', value: newAdminUser }, { onConflict: 'key' })
+    if (newAdminPass) await supabase.from('site_settings').upsert({ key: 'admin_password', value: newAdminPass }, { onConflict: 'key' })
+    if (newEmergencyCode) await supabase.from('site_settings').upsert({ key: 'admin_emergency_code', value: newEmergencyCode }, { onConflict: 'key' })
+    setAdminMsg('✅ Admin credentials update ho gaye!')
+    setNewAdminPass('')
+    setNewAdminUser('')
+    setNewEmergencyCode('')
+    setTimeout(() => setAdminMsg(''), 3000)
+  }
 
   async function fetchAll() {
     const supabase = createClient()
@@ -112,6 +130,28 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
           </div>
         </div>
       )}
+
+      {/* Admin Credentials */}
+      <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem' }}>🔑 Admin Credentials</h2>
+          <button onClick={() => setShowPassChange(!showPassChange)} style={{ background: '#f1f5f9', color: '#64748b', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+            {showPassChange ? 'Close' : 'Change'}
+          </button>
+        </div>
+        {showPassChange && (
+          <div style={{ marginTop: '1rem' }}>
+            {adminMsg && <div style={{ background: '#dcfce7', color: '#166534', padding: '8px 12px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '0.75rem' }}>{adminMsg}</div>}
+            <label style={labelStyle}>👤 New Username</label>
+            <input style={inputStyle} value={newAdminUser} onChange={e => setNewAdminUser(e.target.value)} placeholder="New username" autoComplete="off" />
+            <label style={labelStyle}>🔑 New Password</label>
+            <input style={inputStyle} type="password" value={newAdminPass} onChange={e => setNewAdminPass(e.target.value)} placeholder="New password" />
+            <label style={labelStyle}>🚨 New Emergency Code</label>
+            <input style={inputStyle} value={newEmergencyCode} onChange={e => setNewEmergencyCode(e.target.value)} placeholder="New emergency code" />
+            <button onClick={handleAdminPassChange} style={{ ...btnPrimary, marginTop: '0.5rem' }}>Update Karo</button>
+          </div>
+        )}
+      </div>
 
       {activeTab === 'operators' && (
         loading ? <div style={emptyState}>Loading...</div> : operators.length > 0 ? (

@@ -60,7 +60,25 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: `
           if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-              navigator.serviceWorker.register('/sw.js');
+              navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                // Check for updates every 60 seconds
+                setInterval(function() { reg.update(); }, 60000);
+                
+                reg.addEventListener('updatefound', function() {
+                  var newWorker = reg.installing;
+                  newWorker.addEventListener('statechange', function() {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      // New update available - auto activate
+                      newWorker.postMessage('skipWaiting');
+                    }
+                  });
+                });
+
+                // Reload when new SW takes control
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                  window.location.reload();
+                });
+              });
             });
           }
         `}} />

@@ -114,9 +114,7 @@ function InstructionsContent() {
         </div>
       </div>
 
-      <div style={{ background: '#fef3c7', borderRadius: '12px', padding: '0.75rem 1rem', marginBottom: '1rem', fontSize: '0.78rem', color: '#92400e' }}>
-        📍 Test shuru karne par aapki location access ki jayegi — sirf analytics ke liye
-      </div>
+
 
       {locStatus && (
         <div style={{ background: '#dbeafe', color: '#1e40af', padding: '10px', borderRadius: '10px', marginBottom: '1rem', fontSize: '0.82rem', fontWeight: 600, textAlign: 'center' }}>

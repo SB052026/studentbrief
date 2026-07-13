@@ -106,7 +106,7 @@ export default function Navbar() {
 
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '32px', height: '32px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             🔍
           </button>
           <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
