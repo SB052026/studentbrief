@@ -64,7 +64,7 @@ export default function FeedbackPopup() {
       localStorage.setItem('sb_feedback_shown', Date.now().toString())
       setSubmitted(true)
       setTimeout(() => {
-        window.open('https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review', '_blank')
+        window.open('https://g.page/r/CQrx6_yARiIDEAI/review', '_blank')
         setShow(false)
       }, 1500)
     } else {

@@ -27,7 +27,7 @@ export default function AdminAnalyticsPage() {
     ])
     setActivities(acts || [])
     setPdfDownloads(pdfs || [])
-    setFeedbacks(feedbacks || [])
+    setFeedbacks(fbs || [])
 
     const locMap = {}
     acts?.forEach(a => {
