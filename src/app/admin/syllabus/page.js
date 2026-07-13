@@ -10,7 +10,7 @@ export default function AdminSyllabusPage() {
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [form, setForm] = useState({ title: '', exam_name: '', syllabus_link: '', description: '' })
+  const [form, setForm] = useState({ title: '', exam_name: '', syllabus_link: '', description: '', content: '' })
 
   async function fetchData() {
     const supabase = createClient()
@@ -22,7 +22,7 @@ export default function AdminSyllabusPage() {
   useEffect(() => { fetchData() }, [])
 
   function resetForm() {
-    setForm({ title: '', exam_name: '', syllabus_link: '', description: '' })
+    setForm({ title: '', exam_name: '', syllabus_link: '', description: '', content: '' })
     setEditId(null)
     setShowForm(false)
   }
@@ -31,7 +31,7 @@ export default function AdminSyllabusPage() {
     if (!form.title) return alert('Title zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    const data = { title: form.title, exam_name: form.exam_name || null, syllabus_link: form.syllabus_link || null, description: form.description || null }
+    const data = { title: form.title, exam_name: form.exam_name || null, syllabus_link: form.syllabus_link || null, description: form.description || null, content: form.content || null }
     if (editId) await supabase.from('syllabus').update(data).eq('id', editId)
     else await supabase.from('syllabus').insert(data)
     await fetchData()
@@ -46,7 +46,7 @@ export default function AdminSyllabusPage() {
   }
 
   function handleEdit(item) {
-    setForm({ title: item.title || '', exam_name: item.exam_name || '', syllabus_link: item.syllabus_link || '', description: item.description || '' })
+    setForm({ title: item.title || '', exam_name: item.exam_name || '', syllabus_link: item.syllabus_link || '', description: item.description || '', content: item.content || '' })
     setEditId(item.id)
     setShowForm(true)
   }
@@ -69,6 +69,18 @@ export default function AdminSyllabusPage() {
           <input style={inputStyle} value={form.syllabus_link} onChange={e => setForm(p => ({ ...p, syllabus_link: e.target.value }))} placeholder="https://..." />
           <label style={labelStyle}>Description</label>
           <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+          
+          <label style={labelStyle}>📄 Syllabus Content (Manual)</label>
+          <textarea style={{ ...inputStyle, height: '200px', resize: 'vertical' }} value={form.content} onChange={e => setForm(p => ({ ...p, content: e.target.value }))} placeholder="Syllabus content yahan likhein... ya .txt file upload karein" />
+          
+          <label style={labelStyle}>📁 .TXT File Upload (Optional)</label>
+          <input type="file" accept=".txt" style={{ ...inputStyle, padding: '8px' }} onChange={e => {
+            const file = e.target.files[0]
+            if (!file) return
+            const reader = new FileReader()
+            reader.onload = evt => setForm(p => ({ ...p, content: evt.target.result }))
+            reader.readAsText(file, 'UTF-8')
+          }} />
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
             <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, flex: 1 }}>{saving ? 'Saving...' : editId ? 'Update' : 'Save'}</button>
             <button onClick={resetForm} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>

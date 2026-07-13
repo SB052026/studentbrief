@@ -86,7 +86,8 @@ export default function AdminSettingsPage() {
             }} style={{ ...inputStyle, padding: '8px' }} />
             {settings.logo_url && <img src={settings.logo_url} alt="Logo" style={{ width: `${settings.logo_size || 38}px`, height: `${settings.logo_size || 38}px`, borderRadius: '8px', objectFit: 'cover', marginBottom: '0.6rem' }} />}
             <label style={labelStyle}>📐 Logo Size (px)</label>
-            <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} min="20" max="200" />
+            <input style={inputStyle} type="number" value={settings.logo_size || '38'} onChange={e => setSettings(p => ({ ...p, logo_size: e.target.value }))} placeholder="38" />
+            <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '-0.4rem', marginBottom: '0.6rem' }}>Recommended: 38-80px</p>
             <label style={labelStyle}>📲 App Download Link</label>
             <input style={inputStyle} value={settings.app_download_link || ''} onChange={e => setSettings(p => ({ ...p, app_download_link: e.target.value }))} placeholder="https://..." />
           </div>
