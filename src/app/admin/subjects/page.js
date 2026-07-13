@@ -17,6 +17,13 @@ export default function AdminSubjectsPage() {
   const [testSaving, setTestSaving] = useState(false)
   const [testEditId, setTestEditId] = useState(null)
   const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' })
+  const [selectedTest, setSelectedTest] = useState(null)
+  const [questions, setQuestions] = useState([])
+  const [qLoading, setQLoading] = useState(false)
+  const [showQForm, setShowQForm] = useState(false)
+  const [qSaving, setQSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
   const [activeTab, setActiveTab] = useState('subjects')
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -56,6 +63,91 @@ export default function AdminSubjectsPage() {
     if (!confirm('Delete karna chahte hain?')) return
     await createClient().from('mock_tests').delete().eq('id', id)
     await fetchTests()
+  }
+
+  async function fetchQuestions(testId) {
+    setQLoading(true)
+    const supabase = createClient()
+    const { data } = await supabase.from('mock_questions').select('*').eq('mock_test_id', testId).order('created_at')
+    setQuestions(data || [])
+    setQLoading(false)
+  }
+
+  async function uploadImage(file, field) {
+    if (!file) return
+    setUploading(true)
+    const supabase = createClient()
+    const fileName = `${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, '_')}`
+    const { error } = await supabase.storage.from('question-images').upload(fileName, file, { upsert: true })
+    if (!error) {
+      const { data } = supabase.storage.from('question-images').getPublicUrl(fileName)
+      setQForm(p => ({ ...p, [field]: data.publicUrl }))
+    }
+    setUploading(false)
+  }
+
+  async function handleSaveQuestion() {
+    if (!qForm.question && !qForm.question_image) return alert('Question ya image zaroori hai!')
+    setQSaving(true)
+    const supabase = createClient()
+    await supabase.from('mock_questions').insert({
+      mock_test_id: selectedTest.id,
+      question: qForm.question,
+      option_a: qForm.option_a,
+      option_b: qForm.option_b,
+      option_c: qForm.option_c,
+      option_d: qForm.option_d,
+      correct_option: qForm.correct_option,
+      explanation: qForm.explanation || null,
+      question_image: qForm.question_image || null,
+      option_a_image: qForm.option_a_image || null,
+      option_b_image: qForm.option_b_image || null,
+      option_c_image: qForm.option_c_image || null,
+      option_d_image: qForm.option_d_image || null,
+    })
+    await fetchQuestions(selectedTest.id)
+    setQForm({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
+    setShowQForm(false)
+    setQSaving(false)
+  }
+
+  async function handleDeleteQuestion(id) {
+    if (!confirm('Delete karna chahte hain?')) return
+    await createClient().from('mock_questions').delete().eq('id', id)
+    await fetchQuestions(selectedTest.id)
+  }
+
+  async function handleCSVUpload(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async (evt) => {
+      const text = evt.target.result
+      const lines = text.split('\n').filter(l => l.trim())
+      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''))
+      const supabase = createClient()
+      let count = 0
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''))
+        const row = {}
+        headers.forEach((h, idx) => { row[h] = values[idx] || '' })
+        if (!row.question) continue
+        await supabase.from('mock_questions').insert({
+          mock_test_id: selectedTest.id,
+          question: row.question,
+          option_a: row.option_a || '',
+          option_b: row.option_b || '',
+          option_c: row.option_c || '',
+          option_d: row.option_d || '',
+          correct_option: row.correct_option?.toUpperCase().trim() || 'A',
+          explanation: row.explanation || null,
+        })
+        count++
+      }
+      await fetchQuestions(selectedTest.id)
+      alert(`${count} questions upload ho gaye!`)
+    }
+    reader.readAsText(file, 'UTF-8')
   }
 
   async function fetchAll() {
@@ -220,6 +312,84 @@ export default function AdminSubjectsPage() {
           ))}
         </div>
       ) : <div style={emptyState}><p style={{ fontSize: '2rem' }}>📚</p><p>Koi data nahi</p></div>}
+    {/* Questions View */}
+    {selectedTest && (
+      <div style={{ marginTop: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div>
+            <button onClick={() => { setSelectedTest(null); setQuestions([]) }} style={{ background: 'none', border: 'none', color: '#1a3c8f', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif', fontSize: '0.85rem' }}>← Back</button>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1a3c8f', marginBottom: 0 }}>{selectedTest.title}</h2>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <label style={{ background: '#16a34a', color: 'white', border: 'none', padding: '8px 14px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+              📊 CSV Upload
+              <input type="file" accept=".csv" onChange={handleCSVUpload} style={{ display: 'none' }} />
+            </label>
+            <button onClick={() => setShowQForm(true)} style={{ background: '#f97316', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ Question</button>
+          </div>
+        </div>
+
+        {showQForm && (
+          <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
+            <h3 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '0.95rem' }}>Naya Question</h3>
+
+            <label style={labelStyle}>Question</label>
+            <textarea style={{ ...inputStyle, height: '70px', resize: 'vertical' }} value={qForm.question} onChange={e => setQForm(p => ({ ...p, question: e.target.value }))} placeholder="Question text (ya sirf image upload karo)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+              <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Question Image:</label>
+              <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], 'question_image')} style={{ fontSize: '0.7rem' }} />
+              {qForm.question_image && <img src={qForm.question_image} alt="Q" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+            </div>
+
+            {['a','b','c','d'].map(opt => (
+              <div key={opt}>
+                <label style={labelStyle}>Option {opt.toUpperCase()}</label>
+                <input style={inputStyle} value={qForm[`option_${opt}`]} onChange={e => setQForm(p => ({ ...p, [`option_${opt}`]: e.target.value }))} placeholder={`Option ${opt.toUpperCase()} text`} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.6rem' }}>
+                  <label style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>🖼️ Option {opt.toUpperCase()} Image:</label>
+                  <input type="file" accept="image/*" onChange={e => uploadImage(e.target.files[0], `option_${opt}_image`)} style={{ fontSize: '0.7rem' }} />
+                  {qForm[`option_${opt}_image`] && <img src={qForm[`option_${opt}_image`]} alt={opt} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />}
+                </div>
+              </div>
+            ))}
+
+            <label style={labelStyle}>Correct Option</label>
+            <select value={qForm.correct_option} onChange={e => setQForm(p => ({ ...p, correct_option: e.target.value }))} style={inputStyle}>
+              {['A','B','C','D'].map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+
+            <label style={labelStyle}>Explanation</label>
+            <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={qForm.explanation} onChange={e => setQForm(p => ({ ...p, explanation: e.target.value }))} />
+
+            {uploading && <p style={{ fontSize: '0.72rem', color: '#1a3c8f', fontWeight: 600, marginBottom: '0.5rem' }}>⏳ Image upload ho rahi hai...</p>}
+
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button onClick={handleSaveQuestion} disabled={qSaving || uploading} style={{ ...btnPrimary, flex: 1 }}>{qSaving ? 'Saving...' : 'Save'}</button>
+              <button onClick={() => { setShowQForm(false); setQForm({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' }) }} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
+            </div>
+          </div>
+        )}
+
+        <p style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '0.75rem' }}>Total: {questions.length} questions</p>
+        {qLoading ? <p style={{ textAlign: 'center', color: '#94a3b8' }}>Loading...</p> : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {questions.map((q, i) => (
+              <div key={q.id} style={{ background: 'white', borderRadius: '12px', padding: '0.875rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.82rem' }}>Q{i+1}. {q.question}</p>
+                    {q.question_image && <img src={q.question_image} alt="Q" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '6px', marginTop: '4px' }} />}
+                    <p style={{ fontSize: '0.7rem', color: '#16a34a', marginTop: '4px', fontWeight: 600 }}>✓ {q.correct_option}</p>
+                  </div>
+                  <button onClick={() => handleDeleteQuestion(q.id)} style={btnDelete}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
     {/* Subject Mock Tests Section */}
     <div style={{ marginTop: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -272,6 +442,7 @@ export default function AdminSubjectsPage() {
                     <p style={{ fontSize: '0.7rem', color: '#64748b' }}>{test.mock_subjects?.name} • {test.total_questions} Q • {test.duration_minutes} min</p>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => { setSelectedTest(test); fetchQuestions(test.id) }} style={{ background: '#ede9fe', color: '#5b21b6', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Questions</button>
                     <button onClick={() => { setTestForm({ title: test.title, duration_minutes: String(test.duration_minutes), total_questions: String(test.total_questions), subject_id: test.subject_id || '', pdf_url: test.pdf_url || '' }); setTestEditId(test.id); setShowTestForm(true) }} style={btnEdit}>Edit</button>
                     <button onClick={() => handleDeleteTest(test.id)} style={btnDelete}>Delete</button>
                   </div>
