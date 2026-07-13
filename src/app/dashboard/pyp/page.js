@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
+import PDFDownload from '@/components/PDFDownload'
 import Footer from '@/components/layout/Footer'
 import EmptyState from '@/components/ui/EmptyState'
 

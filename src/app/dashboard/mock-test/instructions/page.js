@@ -105,7 +105,7 @@ function InstructionsContent() {
       <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
         <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem' }}>📋 Instructions</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-          {instructions.split('\n').filter(l => l.trim()).map((line, i) => (
+          {instructions.replace(/\\n/g, '\n').split('\n').filter(l => l.trim()).map((line, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
               <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#dbeafe', color: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700, flexShrink: 0, marginTop: '1px' }}>{i + 1}</span>
               <p style={{ fontSize: '0.85rem', color: '#374151', lineHeight: 1.6 }}>{line}</p>

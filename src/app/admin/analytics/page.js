@@ -6,6 +6,7 @@ import { inputStyle, labelStyle, btnPrimary, pageTitle } from '@/lib/adminStyles
 
 export default function AdminAnalyticsPage() {
   const [activities, setActivities] = useState([])
+  const [pdfDownloads, setPdfDownloads] = useState([])
   const [locationStats, setLocationStats] = useState([])
   const [deviceStats, setDeviceStats] = useState([])
   const [loading, setLoading] = useState(true)
@@ -17,11 +18,13 @@ export default function AdminAnalyticsPage() {
   async function fetchData() {
     setLoading(true)
     const supabase = createClient()
-    const [{ data: acts }, { data: settings }] = await Promise.all([
+    const [{ data: acts }, { data: pdfs }, { data: settings }] = await Promise.all([
       supabase.from('user_activity').select('*').order('created_at', { ascending: false }).limit(50),
+      supabase.from('pdf_downloads').select('*').order('created_at', { ascending: false }).limit(50),
       supabase.from('site_settings').select('*').in('key', ['mock_instructions', 'pyp_instructions']),
     ])
     setActivities(acts || [])
+    setPdfDownloads(pdfs || [])
 
     const locMap = {}
     acts?.forEach(a => {
@@ -59,6 +62,7 @@ export default function AdminAnalyticsPage() {
     { key: 'realtime', label: '🔴 Realtime' },
     { key: 'locations', label: '📍 Locations' },
     { key: 'devices', label: '📱 Devices' },
+    { key: 'pdf', label: '📥 PDF Downloads' },
     { key: 'instructions', label: '📋 Instructions' },
   ]
 
@@ -136,6 +140,34 @@ export default function AdminAnalyticsPage() {
               <span style={{ background: '#dbeafe', color: '#1e40af', padding: '3px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>{count}</span>
             </div>
           ))}
+        </div>
+      )}
+
+      {activeTab === 'pdf' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', marginBottom: '0.5rem' }}>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <p style={{ fontSize: '1.6rem', fontWeight: 900, color: '#16a34a' }}>{pdfDownloads.length}</p>
+              <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Total Downloads</p>
+            </div>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <p style={{ fontSize: '1.6rem', fontWeight: 900, color: '#1a3c8f' }}>{[...new Set(pdfDownloads.map(d => d.pdf_type))].length}</p>
+              <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Types</p>
+            </div>
+          </div>
+          {pdfDownloads.map((dl, i) => (
+            <div key={i} style={{ background: 'white', borderRadius: '12px', padding: '0.875rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.82rem' }}>{dl.pdf_title}</p>
+                <span style={{ background: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{dl.pdf_type}</span>
+              </div>
+              {dl.category && <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📋 {dl.category}</p>}
+              <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {dl.location_name?.substring(0, 50) || 'N/A'}</p>
+              <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {dl.device || 'Unknown'}</p>
+              <p style={{ fontSize: '0.65rem', color: '#94a3b8' }}>🕐 {new Date(dl.created_at).toLocaleString('en-IN')}</p>
+            </div>
+          ))}
+          {pdfDownloads.length === 0 && <p style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>Koi download nahi hua abhi</p>}
         </div>
       )}
 

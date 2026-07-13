@@ -1,7 +1,7 @@
-import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
+import PDFDownload from '@/components/PDFDownload'
 
 export const metadata = {
   title: 'Syllabus - StudentBrief',
@@ -34,11 +34,8 @@ export default async function SyllabusPage() {
                 </div>
               )}
 
-              {/* PDF Download */}
               {item.syllabus_link && (
-                <a href={item.syllabus_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', background: 'linear-gradient(135deg, #3730a3, #4f46e5)', color: 'white', padding: '6px 14px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 700, textDecoration: 'none', marginTop: '4px' }}>
-                  📥 Download PDF
-                </a>
+                <PDFDownload url={item.syllabus_link} title={item.title} type="syllabus" category={item.exam_name || ''} />
               )}
             </div>
           ))}
