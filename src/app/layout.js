@@ -1,6 +1,8 @@
 import './globals.css'
 import { UserProvider } from '@/components/UserProvider'
 import FeedbackPopup from '@/components/FeedbackPopup'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata() {
@@ -89,6 +91,8 @@ export default function RootLayout({ children }) {
         <UserProvider>
           {children}
           <FeedbackPopup />
+          <Analytics />
+          <SpeedInsights />
         </UserProvider>
       </body>
     </html>
