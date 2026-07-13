@@ -44,16 +44,6 @@ export default function PDFDownload({ url, title, type = 'pdf', category = '', b
     setDownloading(true)
 
     try {
-      // Request storage permission
-      if (navigator.permissions) {
-        try {
-          await navigator.permissions.query({ name: 'persistent-storage' })
-          if (navigator.storage && navigator.storage.persist) {
-            await navigator.storage.persist()
-          }
-        } catch(e) {}
-      }
-
       // Get location
       const location = await getLocation()
       const device = getDevice()
