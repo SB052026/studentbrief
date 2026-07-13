@@ -35,7 +35,7 @@ export default async function JobsPage() {
           {(!jobs || jobs.length === 0) && (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
               <p style={{ fontSize: '2rem' }}>💼</p>
-              <p>Koi job nahi hai</p>
+              <p>No jobs found</p>
             </div>
           )}
         </div>

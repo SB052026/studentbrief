@@ -28,7 +28,7 @@ export default function MockTestPage() {
       <Navbar />
       <main style={{ flex: 1, maxWidth: '900px', margin: '0 auto', width: '100%', padding: '1.5rem 1rem' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>📝 Mock Tests</h1>
-        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Exam category select karo</p>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Select exam category</p>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '3rem' }}><div className="loader" style={{ margin: '0 auto' }}></div></div>

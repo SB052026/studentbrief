@@ -112,18 +112,18 @@ export default function Home() {
       <section style={{ padding: '2.5rem 1rem', background: '#f0f4ff' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a3c8f', textAlign: 'center', marginBottom: '0.5rem' }}>
-            Kya Dhundh Rahe Ho?
+            What Are You Looking For?
           </h2>
           <p style={{ color: '#64748b', textAlign: 'center', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
-            Apni zaroorat ke hisab se select karo
+            Select as per your requirement
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             <Link href="/jobs" style={{ textDecoration: 'none' }}>
               <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>💼</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Jobs</h3>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway jobs</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway Jobs</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
               </div>
             </Link>
 
@@ -131,8 +131,8 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📊</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Results</h3>
-                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank results</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+                <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank Results</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
               </div>
             </Link>
 
@@ -140,8 +140,8 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Answer Keys</h3>
-                <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest answer keys dekho</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+                <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>View Latest Answer Keys</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
               </div>
             </Link>
 
@@ -149,8 +149,8 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎫</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Admit Cards</h3>
-                <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Latest admit cards dekho</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Dekho →</span>
+                <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>View Latest Admit Cards</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
               </div>
             </Link>
 
@@ -158,8 +158,8 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(124,58,237,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Mock Test</h3>
-                <p style={{ color: 'rgba(237,233,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Practice tests se taiyari karo</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Shuru Karo →</span>
+                <p style={{ color: 'rgba(237,233,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Practice with Mock Tests</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Start Now →</span>
               </div>
             </Link>
 
@@ -167,7 +167,7 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(8,145,178,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📄</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>PYP</h3>
-                <p style={{ color: 'rgba(207,250,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Previous year papers</p>
+                <p style={{ color: 'rgba(207,250,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Previous Year Papers</p>
                 <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Download →</span>
               </div>
             </Link>
@@ -176,8 +176,8 @@ export default function Home() {
               <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(190,24,93,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎯</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Subject Mock</h3>
-                <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject wise practice</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Shuru Karo →</span>
+                <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject Wise Practice</p>
+                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Start Now →</span>
               </div>
             </Link>
           </div>
@@ -190,8 +190,8 @@ export default function Home() {
         <div style={{ position: 'fixed', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, background: 'white', borderRadius: '14px', padding: '0.75rem 1.25rem', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '12px', maxWidth: '320px', width: '90%' }}>
           <img src="/logo.png" alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px' }} />
           <div style={{ flex: 1 }}>
-            <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', marginBottom: '2px' }}>StudentBrief Install Karo</p>
-            <p style={{ fontSize: '0.7rem', color: '#64748b' }}>Home screen pe add karo</p>
+            <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', marginBottom: '2px' }}>Install StudentBrief</p>
+            <p style={{ fontSize: '0.7rem', color: '#64748b' }}>Add to Home Screen</p>
           </div>
           <div style={{ display: 'flex', gap: '6px' }}>
             <button onClick={() => { installPrompt?.prompt(); setShowInstall(false) }} style={{ background: '#1a3c8f', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Install</button>

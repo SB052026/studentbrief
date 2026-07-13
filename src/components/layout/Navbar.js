@@ -15,6 +15,22 @@ export default function Navbar() {
   const lastScrollRef = useRef(0)
 
   useEffect(() => {
+    // Google Translate init
+    const addScript = document.createElement('script')
+    addScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    addScript.async = true
+    document.body.appendChild(addScript)
+    window.googleTranslateElementInit = function() {
+      new window.google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'hi,en,ur,pa,bn,gu,mr,ta,te,kn,ml',
+        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false,
+      }, 'google_translate_element')
+    }
+  }, [])
+
+  useEffect(() => {
     async function fetchSiteSettings() {
       try {
         const cached = sessionStorage.getItem('sb_site_settings')
@@ -109,6 +125,12 @@ export default function Navbar() {
           <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '32px', height: '32px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             🔍
           </button>
+          <div style={{ position: 'relative' }}>
+            <button onClick={() => document.getElementById('google_translate_element').style.display = document.getElementById('google_translate_element').style.display === 'none' ? 'block' : 'none'} style={{ background: 'none', border: 'none', color: 'white', width: '32px', height: '32px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              🌐
+            </button>
+            <div id="google_translate_element" style={{ display: 'none', position: 'absolute', top: '38px', right: 0, background: 'white', borderRadius: '10px', padding: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 9999, minWidth: '180px' }}></div>
+          </div>
           <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {menuOpen ? '✕' : '☰'}
           </button>

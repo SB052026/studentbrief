@@ -77,8 +77,8 @@ export default function MockTestListPage({ params }) {
         ) : (
           <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
             <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</p>
-            <p style={{ fontWeight: 600 }}>Is exam ke liye abhi koi test nahi hai</p>
-            <p style={{ fontSize: '0.82rem', marginTop: '0.5rem' }}>Jald add kiye jayenge!</p>
+            <p style={{ fontWeight: 600 }}>No tests available for this exam yet</p>
+            <p style={{ fontSize: '0.82rem', marginTop: '0.5rem' }}>Coming soon!</p>
           </div>
         )}
       </main>

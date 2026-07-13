@@ -35,7 +35,7 @@ export default async function AnswerKeyPage() {
           {(!items || items.length === 0) && (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
               <p style={{ fontSize: '2rem' }}>📝</p>
-              <p>Koi answer key nahi hai</p>
+              <p>No answer keys found</p>
             </div>
           )}
         </div>

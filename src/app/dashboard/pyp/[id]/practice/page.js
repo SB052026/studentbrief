@@ -125,21 +125,21 @@ export default function PypPracticePage({ params }) {
               {score}/{questions.length}
             </div>
             <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>
-              {Math.round((score / questions.length) * 100)}% सही
+              {Math.round((score / questions.length) * 100)}% Correct
             </p>
           </div>
 
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', marginBottom: '1rem' }}>
-            <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem' }}>📊 उत्तर समीक्षा</h3>
+            <h3 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem', marginBottom: '1rem' }}>📊 Answer Review</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {questions.map((q, i) => (
                 <div key={q.id} style={{ padding: '0.75rem', background: answers[q.id] === q.correct_option ? '#dcfce7' : '#fee2e2', borderRadius: '10px', borderLeft: `4px solid ${answers[q.id] === q.correct_option ? '#22c55e' : '#ef4444'}` }}>
                   <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>{i + 1}. {q.question}</p>
                   <p style={{ fontSize: '0.75rem', color: '#475569', marginBottom: '4px' }}>
-                    आपका उत्तर: <span style={{ fontWeight: 700 }}>{getAnswerText(q, answers[q.id])}</span>
+                    Your Answer: <span style={{ fontWeight: 700 }}>{getAnswerText(q, answers[q.id])}</span>
                   </p>
                   <p style={{ fontSize: '0.75rem', color: '#16a34a', marginBottom: '4px' }}>
-                    सही उत्तर: <span style={{ fontWeight: 700 }}>{getCorrectText(q)}</span>
+                    Correct Answer: <span style={{ fontWeight: 700 }}>{getCorrectText(q)}</span>
                   </p>
                   {q.explanation && (
                     <p style={{ fontSize: '0.72rem', color: '#475569', marginTop: '6px', padding: '6px 8px', background: 'rgba(255,255,255,0.7)', borderRadius: '6px', lineHeight: 1.5 }}>
@@ -152,7 +152,7 @@ export default function PypPracticePage({ params }) {
           </div>
 
           <button onClick={() => router.push('/dashboard/pyp')} style={{ width: '100%', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', padding: '14px', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', fontSize: '0.95rem' }}>
-            वापस PYP पर जाओ
+            Back to PYP
           </button>
         </main>
         <Footer />

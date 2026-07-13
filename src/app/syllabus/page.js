@@ -43,7 +43,7 @@ export default async function SyllabusPage() {
           {(!items || items.length === 0) && (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
               <p style={{ fontSize: '2rem' }}>📚</p>
-              <p>Koi syllabus nahi hai</p>
+              <p>No syllabus found</p>
             </div>
           )}
         </div>

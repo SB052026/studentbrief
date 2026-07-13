@@ -123,7 +123,7 @@ function InstructionsContent() {
       )}
 
       <button onClick={handleStart} style={{ width: '100%', padding: '16px', borderRadius: '14px', background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', fontWeight: 800, fontSize: '1.05rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', boxShadow: '0 8px 25px rgba(249,115,22,0.4)' }}>
-        🚀 Test Shuru Karo
+        🚀 Start Test
       </button>
     </main>
   )

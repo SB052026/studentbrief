@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           <div style={{ textAlign: 'center', padding: '3rem' }}><div className="loader" style={{ margin: '0 auto' }}></div></div>
         ) : (
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-            <p style={{ color: '#475569', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{content || 'Privacy Policy jald update ki jayegi.'}</p>
+            <p style={{ color: '#475569', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{content || 'Privacy Policy will be updated soon.'}</p>
           </div>
         )}
       </main>

@@ -120,7 +120,7 @@ export default function PYPInstructionsPage({ params }) {
         )}
 
         <button onClick={handleStart} style={{ width: '100%', padding: '16px', borderRadius: '14px', background: 'linear-gradient(135deg, #0891b2, #06b6d4)', color: 'white', border: 'none', fontWeight: 800, fontSize: '1.05rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', boxShadow: '0 8px 25px rgba(8,145,178,0.4)' }}>
-          🚀 Paper Shuru Karo
+          🚀 Start Paper
         </button>
       </main>
       <Footer />
