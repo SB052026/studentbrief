@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /operator
+Disallow: /operator-login
+
+Sitemap: https://www.studentbrief.in/sitemap.xml

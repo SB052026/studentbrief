@@ -7,6 +7,7 @@ import { inputStyle, labelStyle, btnPrimary, pageTitle } from '@/lib/adminStyles
 export default function AdminAnalyticsPage() {
   const [activities, setActivities] = useState([])
   const [pdfDownloads, setPdfDownloads] = useState([])
+  const [feedbacks, setFeedbacks] = useState([])
   const [locationStats, setLocationStats] = useState([])
   const [deviceStats, setDeviceStats] = useState([])
   const [loading, setLoading] = useState(true)
@@ -21,10 +22,12 @@ export default function AdminAnalyticsPage() {
     const [{ data: acts }, { data: pdfs }, { data: settings }] = await Promise.all([
       supabase.from('user_activity').select('*').order('created_at', { ascending: false }).limit(50),
       supabase.from('pdf_downloads').select('*').order('created_at', { ascending: false }).limit(50),
+      supabase.from('feedback').select('*').order('created_at', { ascending: false }).limit(50),
       supabase.from('site_settings').select('*').in('key', ['mock_instructions', 'pyp_instructions']),
     ])
     setActivities(acts || [])
     setPdfDownloads(pdfs || [])
+    setFeedbacks(feedbacks || [])
 
     const locMap = {}
     acts?.forEach(a => {
@@ -64,6 +67,7 @@ export default function AdminAnalyticsPage() {
     { key: 'locations', label: '📍 Locations' },
     { key: 'devices', label: '📱 Devices' },
     { key: 'pdf', label: '📥 PDF Downloads' },
+    { key: 'feedback', label: '⭐ Feedback' },
     { key: 'instructions', label: '📋 Instructions' },
   ]
 
@@ -187,6 +191,40 @@ export default function AdminAnalyticsPage() {
             </div>
           ))}
           {pdfDownloads.length === 0 && <p style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>Koi download nahi hua abhi</p>}
+        </div>
+      )}
+
+      {activeTab === 'feedback' && (
+        <div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <p style={{ fontSize: '1.6rem', fontWeight: 900, color: '#f97316' }}>{feedbacks.length}</p>
+              <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Total</p>
+            </div>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <p style={{ fontSize: '1.6rem', fontWeight: 900, color: '#16a34a' }}>{feedbacks.filter(f => f.rating >= 4).length}</p>
+              <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Positive</p>
+            </div>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <p style={{ fontSize: '1.6rem', fontWeight: 900, color: '#1a3c8f' }}>
+                {feedbacks.length > 0 ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1) : 'N/A'}
+              </p>
+              <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Avg Rating</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {feedbacks.map((fb, i) => (
+              <div key={i} style={{ background: 'white', borderRadius: '12px', padding: '0.875rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <p style={{ fontSize: '1rem' }}>{'⭐'.repeat(fb.rating)}</p>
+                  <span style={{ fontSize: '0.65rem', color: '#94a3b8' }}>{new Date(fb.created_at).toLocaleString('en-IN')}</span>
+                </div>
+                {fb.comment && <p style={{ fontSize: '0.78rem', color: '#475569', marginBottom: '4px' }}>"{fb.comment}"</p>}
+                <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {fb.device} • 📄 {fb.page}</p>
+              </div>
+            ))}
+            {feedbacks.length === 0 && <p style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>Koi feedback nahi abhi</p>}
+          </div>
         </div>
       )}
 

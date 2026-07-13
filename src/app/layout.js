@@ -1,5 +1,6 @@
 import './globals.css'
 import { UserProvider } from '@/components/UserProvider'
+import FeedbackPopup from '@/components/FeedbackPopup'
 import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata() {
@@ -86,6 +87,7 @@ export default function RootLayout({ children }) {
       <body>
         <UserProvider>
           {children}
+          <FeedbackPopup />
         </UserProvider>
       </body>
     </html>
