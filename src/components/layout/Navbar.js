@@ -69,12 +69,14 @@ export default function Navbar() {
   }, [])
 
   async function handleSearch(query) {
-    setSearchQuery(query)
-    if (!query || query.length < 2) { setSearchResults([]); return }
+    // Sanitize input
+    const clean = query.replace(/[<>'"]/g, '').substring(0, 100)
+    setSearchQuery(clean)
+    if (!clean || clean.length < 2) { setSearchResults([]); return }
     setSearching(true)
     try {
       const supabase = createClient()
-      const { data } = await supabase.from('search_index').select('*').ilike('title', `%${query}%`).limit(10)
+      const { data } = await supabase.from('search_index').select('*').ilike('title', `%${clean}%`).limit(10)
       setSearchResults(data || [])
     } catch(e) {}
     setSearching(false)

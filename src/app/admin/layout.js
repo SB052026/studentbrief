@@ -11,10 +11,32 @@ export default function AdminLayout({ children }) {
 
   useEffect(() => {
     const auth = localStorage.getItem('sb_admin_auth')
+    const tokenStr = localStorage.getItem('sb_admin_token')
+    
     if (!auth) {
       window.location.replace('/admin-login')
       return
     }
+
+    // Check token expiry
+    try {
+      if (tokenStr) {
+        const tokenData = JSON.parse(tokenStr)
+        if (tokenData.expires && Date.now() > tokenData.expires) {
+          localStorage.removeItem('sb_admin_auth')
+          localStorage.removeItem('sb_admin_token')
+          localStorage.removeItem('sb_admin_time')
+          window.location.replace('/admin-login')
+          return
+        }
+      }
+    } catch(e) {
+      // Invalid token
+      localStorage.removeItem('sb_admin_auth')
+      window.location.replace('/admin-login')
+      return
+    }
+
     setIsAuth(true)
 
     // Auto logout after 10 min inactive
@@ -69,6 +91,7 @@ export default function AdminLayout({ children }) {
     localStorage.removeItem('sb_admin_auth')
     localStorage.removeItem('sb_admin_token')
     localStorage.removeItem('sb_admin_time')
+    sessionStorage.clear()
     window.location.replace('/admin-login')
   }
 

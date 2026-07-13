@@ -106,6 +106,7 @@ export default function OperatorLayout({ children }) {
     localStorage.removeItem('sb_operator_id')
     localStorage.removeItem('sb_operator_time')
     localStorage.removeItem('sb_operator_activity_id')
+    sessionStorage.clear()
     window.location.replace('/operator-login')
   }
 

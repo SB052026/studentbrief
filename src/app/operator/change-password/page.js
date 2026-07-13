@@ -27,16 +27,24 @@ export default function ChangePasswordPage() {
       .from('operators')
       .select('*')
       .eq('id', id)
-      .eq('password', oldPass)
       .single()
 
     if (!data) {
+      setError('Operator not found!')
+      setSaving(false)
+      return
+    }
+
+    const bcrypt = await import('bcryptjs')
+    const passwordMatch = await bcrypt.compare(oldPass, data.password)
+    if (!passwordMatch) {
       setError('Purana password galat hai!')
       setSaving(false)
       return
     }
 
-    await supabase.from('operators').update({ password: newPass }).eq('id', id)
+    const hashedNew = await bcrypt.hash(newPass, 10)
+    await supabase.from('operators').update({ password: hashedNew }).eq('id', id)
     setMsg('✅ Password successfully change ho gaya!')
     setOldPass('')
     setNewPass('')

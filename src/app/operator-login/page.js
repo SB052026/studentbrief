@@ -1,4 +1,5 @@
 'use client'
+// bcrypt compare via API
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -89,7 +90,9 @@ export default function OperatorLoginPage() {
       return
     }
 
-    if (op.password !== password) {
+    const bcrypt = await import('bcryptjs')
+    const passwordMatch = await bcrypt.compare(password, op.password)
+    if (!passwordMatch) {
       const newAttempts = (op.failed_attempts || 0) + 1
       const shouldBlock = newAttempts >= 5
 

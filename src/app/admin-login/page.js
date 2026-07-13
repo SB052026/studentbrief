@@ -88,10 +88,19 @@ export default function AdminLoginPage() {
     const adminUser = settingsObj.admin_username || 'Admin'
     const adminPass = settingsObj.admin_password || 'Admin@07'
 
-    if (userId === adminUser && password === adminPass) {
-      const token = btoa(`${Date.now()}-${Math.random().toString(36)}`)
+    const bcrypt = await import('bcryptjs')
+    const passwordMatch = await bcrypt.compare(password, adminPass)
+    if (userId === adminUser && passwordMatch) {
+      // Secure token with timestamp + random
+      const tokenData = {
+        auth: true,
+        time: Date.now(),
+        token: Array.from(crypto.getRandomValues(new Uint8Array(32)))
+          .map(b => b.toString(16).padStart(2, '0')).join(''),
+        expires: Date.now() + (8 * 60 * 60 * 1000) // 8 hours
+      }
       localStorage.setItem('sb_admin_auth', 'true')
-      localStorage.setItem('sb_admin_token', token)
+      localStorage.setItem('sb_admin_token', JSON.stringify(tokenData))
       localStorage.setItem('sb_admin_time', Date.now().toString())
       localStorage.removeItem(ATTEMPTS_KEY)
       localStorage.removeItem(LOCKOUT_KEY)

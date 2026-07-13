@@ -23,7 +23,11 @@ export default function AdminOperatorsPage() {
     if (!newAdminPass && !newAdminUser && !newEmergencyCode) return alert('Kuch to bharo!')
     const supabase = createClient()
     if (newAdminUser) await supabase.from('site_settings').upsert({ key: 'admin_username', value: newAdminUser }, { onConflict: 'key' })
-    if (newAdminPass) await supabase.from('site_settings').upsert({ key: 'admin_password', value: newAdminPass }, { onConflict: 'key' })
+    if (newAdminPass) {
+      const bcrypt = await import('bcryptjs')
+      const hashedAdminPass = await bcrypt.hash(newAdminPass, 10)
+      await supabase.from('site_settings').upsert({ key: 'admin_password', value: hashedAdminPass }, { onConflict: 'key' })
+    }
     if (newEmergencyCode) await supabase.from('site_settings').upsert({ key: 'admin_emergency_code', value: newEmergencyCode }, { onConflict: 'key' })
     setAdminMsg('✅ Admin credentials update ho gaye!')
     setNewAdminPass('')
@@ -55,8 +59,10 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
     if (!form.name || !form.username || !form.password) return alert('Saare fields zaroori hain!')
     setSaving(true)
     const supabase = createClient()
-    if (editId) await supabase.from('operators').update({ name: form.name, username: form.username, password: form.password, role: form.role }).eq('id', editId)
-    else await supabase.from('operators').insert({ name: form.name, username: form.username, password: form.password, role: form.role })
+    const bcrypt = await import('bcryptjs')
+    const hashedPassword = await bcrypt.hash(form.password, 10)
+    if (editId) await supabase.from('operators').update({ name: form.name, username: form.username, password: hashedPassword, role: form.role }).eq('id', editId)
+    else await supabase.from('operators').insert({ name: form.name, username: form.username, password: hashedPassword, role: form.role })
     await fetchAll()
     resetForm()
     setSaving(false)
@@ -117,7 +123,7 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
           <label style={labelStyle}>Username</label>
           <input style={inputStyle} value={form.username} onChange={e => setForm(p => ({ ...p, username: e.target.value }))} placeholder="Username" autoComplete="off" />
           <label style={labelStyle}>Password</label>
-          <input style={inputStyle} value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Password" />
+          <input style={inputStyle} type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Password" autoComplete="new-password" />
           <label style={labelStyle}>Role</label>
           <select value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))} style={inputStyle}>
             <option value="content">📋 Content (Jobs, Results, Answer Keys, Admit Cards, Syllabus)</option>
@@ -167,7 +173,7 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
                       {op.is_blocked && <span style={{ background: '#fee2e2', color: '#991b1b', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>⛔ Blocked</span>}
                       {op.failed_attempts > 0 && !op.is_blocked && <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>⚠️ {op.failed_attempts} attempts</span>}
                     </div>
-                    <p style={{ fontSize: '0.72rem', color: '#64748b' }}>👤 {op.username} • 🔑 {op.password}</p>
+                    <p style={{ fontSize: '0.72rem', color: '#64748b' }}>👤 {op.username} • 🔑 ••••••••</p>
                   </div>
                   <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', flexShrink: 0 }}>
                     <button onClick={() => handleEdit(op)} style={btnEdit}>Edit</button>
