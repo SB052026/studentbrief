@@ -194,7 +194,16 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
                   <div>
                     <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.82rem' }}>{act.operators?.name}</p>
                     <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {act.device}</p>
-                    <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {act.location_name?.substring(0, 50)}</p>
+                    {act.location_name && (
+                      <div>
+                        <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {act.location_name.split(',').slice(0,3).join(',')}</p>
+                        {act.location_lat && act.location_lng && (
+                          <a href={`https://www.google.com/maps?q=${act.location_lat},${act.location_lng}`} target="_blank" rel="noopener noreferrer" style={{ color: '#1a3c8f', fontWeight: 600, fontSize: '0.65rem' }}>
+                            🗺️ Map pe dekho
+                          </a>
+                        )}
+                      </div>
+                    )}
                     <p style={{ fontSize: '0.65rem', color: '#22c55e' }}>🟢 {new Date(act.login_time).toLocaleString('en-IN')}</p>
                   </div>
                   <button onClick={() => handleForceLogout(act.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', flexShrink: 0 }}>Force Logout</button>

@@ -29,7 +29,8 @@ export default function AdminAnalyticsPage() {
     const locMap = {}
     acts?.forEach(a => {
       if (!a.location_name) return
-      const city = a.location_name.split(',')[2]?.trim() || a.location_name.split(',')[0]?.trim()
+      const parts = a.location_name.split(',').map(p => p.trim())
+      const city = parts[2] || parts[1] || parts[0]
       locMap[city] = (locMap[city] || 0) + 1
     })
     setLocationStats(Object.entries(locMap).sort((a, b) => b[1] - a[1]).slice(0, 10))
@@ -103,7 +104,16 @@ export default function AdminAnalyticsPage() {
                   <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.82rem' }}>{act.test_title}</p>
                   <span style={{ background: act.test_type === 'mock' ? '#dbeafe' : '#cffafe', color: act.test_type === 'mock' ? '#1e40af' : '#0e7490', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{act.test_type?.toUpperCase()}</span>
                 </div>
-                <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {act.location_name?.substring(0, 50) || 'N/A'}</p>
+                {act.location_name && (
+                  <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '2px' }}>
+                    <p>📍 {act.location_name.split(',').slice(0,3).join(',')}</p>
+                    {act.location_lat && act.location_lng && (
+                      <a href={`https://www.google.com/maps?q=${act.location_lat},${act.location_lng}`} target="_blank" rel="noopener noreferrer" style={{ color: '#1a3c8f', fontWeight: 600, fontSize: '0.65rem' }}>
+                        🗺️ Map pe dekho ({act.location_lat?.toFixed(4)}, {act.location_lng?.toFixed(4)})
+                      </a>
+                    )}
+                  </div>
+                )}
                 <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {act.device || 'Unknown'}</p>
                 <p style={{ fontSize: '0.65rem', color: '#94a3b8' }}>🕐 {new Date(act.created_at).toLocaleString('en-IN')}</p>
               </div>
@@ -162,7 +172,16 @@ export default function AdminAnalyticsPage() {
                 <span style={{ background: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{dl.pdf_type}</span>
               </div>
               {dl.category && <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📋 {dl.category}</p>}
-              <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {dl.location_name?.substring(0, 50) || 'N/A'}</p>
+              {dl.location_name && (
+                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                  <p>📍 {dl.location_name.split(',').slice(0,3).join(',')}</p>
+                  {dl.location_lat && dl.location_lng && (
+                    <a href={`https://www.google.com/maps?q=${dl.location_lat},${dl.location_lng}`} target="_blank" rel="noopener noreferrer" style={{ color: '#1a3c8f', fontWeight: 600, fontSize: '0.65rem' }}>
+                      🗺️ Map pe dekho
+                    </a>
+                  )}
+                </div>
+              )}
               <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {dl.device || 'Unknown'}</p>
               <p style={{ fontSize: '0.65rem', color: '#94a3b8' }}>🕐 {new Date(dl.created_at).toLocaleString('en-IN')}</p>
             </div>

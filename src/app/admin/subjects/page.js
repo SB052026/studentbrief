@@ -177,26 +177,9 @@ export default function AdminSubjectsPage() {
     if (!form.name) return alert('Name zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    if (activeTab === 'subjects') {
-      const d = { name: form.name, icon: form.icon || '📚', color: form.color }
-      if (editId) await supabase.from('mock_subjects').update(d).eq('id', editId)
-      else await supabase.from('mock_subjects').insert(d)
-    } else if (activeTab === 'topics') {
-      if (!form.subject_id) return alert('Subject select karo!')
-      const d = { name: form.name, icon: form.icon || '📖', subject_id: form.subject_id }
-      if (editId) await supabase.from('mock_topics').update(d).eq('id', editId)
-      else await supabase.from('mock_topics').insert(d)
-    } else if (activeTab === 'sections') {
-      if (!form.topic_id) return alert('Topic select karo!')
-      const d = { name: form.name, icon: form.icon || '📝', topic_id: form.topic_id }
-      if (editId) await supabase.from('mock_sections').update(d).eq('id', editId)
-      else await supabase.from('mock_sections').insert(d)
-    } else {
-      if (!form.section_id) return alert('Section select karo!')
-      const d = { name: form.name, icon: form.icon || '📌', section_id: form.section_id }
-      if (editId) await supabase.from('mock_subsections').update(d).eq('id', editId)
-      else await supabase.from('mock_subsections').insert(d)
-    }
+    const d = { name: form.name, icon: form.icon || '📚', color: form.color }
+    if (editId) await supabase.from('mock_subjects').update(d).eq('id', editId)
+    else await supabase.from('mock_subjects').insert(d)
     await fetchAll()
     resetForm()
     setSaving(false)
@@ -216,13 +199,10 @@ export default function AdminSubjectsPage() {
 
   const tabs = [
     { key: 'subjects', label: '📚 Subjects' },
-    { key: 'topics', label: '📖 Topics' },
-    { key: 'sections', label: '📝 Sections' },
-    { key: 'subsections', label: '📌 Sub-sections' },
   ]
 
-  const tableMap = { subjects: 'mock_subjects', topics: 'mock_topics', sections: 'mock_sections', subsections: 'mock_subsections' }
-  const currentData = { subjects, topics, sections, subsections }[activeTab]
+  const tableMap = { subjects: 'mock_subjects' }
+  const currentData = subjects
 
   return (
     <div>
@@ -243,44 +223,14 @@ export default function AdminSubjectsPage() {
         <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem' }}>
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>{editId ? 'Edit' : 'Naya'}</h2>
 
-          {activeTab === 'topics' && (
-            <>
-              <label style={labelStyle}>Subject *</label>
-              <select value={form.subject_id} onChange={e => setForm(p => ({ ...p, subject_id: e.target.value }))} style={inputStyle}>
-                <option value="">Select</option>
-                {subjects.map(s => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
-              </select>
-            </>
-          )}
-          {activeTab === 'sections' && (
-            <>
-              <label style={labelStyle}>Topic *</label>
-              <select value={form.topic_id} onChange={e => setForm(p => ({ ...p, topic_id: e.target.value }))} style={inputStyle}>
-                <option value="">Select</option>
-                {topics.map(t => <option key={t.id} value={t.id}>{t.mock_subjects?.name} → {t.name}</option>)}
-              </select>
-            </>
-          )}
-          {activeTab === 'subsections' && (
-            <>
-              <label style={labelStyle}>Section *</label>
-              <select value={form.section_id} onChange={e => setForm(p => ({ ...p, section_id: e.target.value }))} style={inputStyle}>
-                <option value="">Select</option>
-                {sections.map(s => <option key={s.id} value={s.id}>{s.mock_topics?.name} → {s.name}</option>)}
-              </select>
-            </>
-          )}
+
 
           <label style={labelStyle}>Name *</label>
           <input style={inputStyle} value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Name likhein..." />
           <label style={labelStyle}>Icon (Emoji)</label>
           <input style={inputStyle} value={form.icon} onChange={e => setForm(p => ({ ...p, icon: e.target.value }))} placeholder="e.g. 📚" />
-          {activeTab === 'subjects' && (
-            <>
-              <label style={labelStyle}>Color</label>
-              <input style={{ ...inputStyle, padding: '6px', height: '44px' }} type="color" value={form.color} onChange={e => setForm(p => ({ ...p, color: e.target.value }))} />
-            </>
-          )}
+          <label style={labelStyle}>Color</label>
+          <input style={{ ...inputStyle, padding: '6px', height: '44px' }} type="color" value={form.color} onChange={e => setForm(p => ({ ...p, color: e.target.value }))} />
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, flex: 1 }}>{saving ? 'Saving...' : editId ? 'Update' : 'Save'}</button>
             <button onClick={resetForm} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
