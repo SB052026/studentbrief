@@ -66,10 +66,12 @@ export default async function JobDetailPage({ params }) {
 
         {/* Short Info Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.65rem', color: '#1e40af', marginBottom: '4px', fontWeight: 600 }}>👤 Age Limit</p>
-            <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{job.age_criteria?.[0]?.min_age || 'N/A'}-{job.age_criteria?.[0]?.max_age || 'N/A'} Yrs</p>
-          </div>
+          {job.age_criteria?.[0]?.min_age && (
+            <div style={{ background: '#dbeafe', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.65rem', color: '#1e40af', marginBottom: '4px', fontWeight: 600 }}>👤 Age Limit</p>
+              <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>{job.age_criteria?.[0]?.min_age}-{job.age_criteria?.[0]?.max_age} Yrs</p>
+            </div>
+          )}
           <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '0.875rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.65rem', color: '#166534', marginBottom: '4px', fontWeight: 600 }}>📅 Last Date</p>
             <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#ef4444' }}>{formatDate(job.last_date)}</p>

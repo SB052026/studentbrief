@@ -52,26 +52,17 @@ export default function FeedbackPopup() {
     setSaving(true)
 
     const supabase = createClient()
-    await supabase.from('feedback').insert({
+    const { error } = await supabase.from('feedback').insert({
       rating,
       comment: comment || null,
       page: window.location.pathname,
       device: getDevice(),
     })
+    if (error) console.error('Feedback error:', error)
 
-    // If 4-5 stars → redirect to Google Review
-    if (rating >= 4) {
-      localStorage.setItem('sb_feedback_shown', Date.now().toString())
-      setSubmitted(true)
-      setTimeout(() => {
-        window.open('https://g.page/r/CQrx6_yARiIDEAI/review', '_blank')
-        setShow(false)
-      }, 1500)
-    } else {
-      localStorage.setItem('sb_feedback_shown', Date.now().toString())
-      setSubmitted(true)
-      setTimeout(() => setShow(false), 2000)
-    }
+    localStorage.setItem('sb_feedback_shown', Date.now().toString())
+    setSubmitted(true)
+    setTimeout(() => setShow(false), 2500)
 
     setSaving(false)
   }
@@ -105,8 +96,13 @@ export default function FeedbackPopup() {
             {rating >= 4 ? '🎉' : '🙏'}
           </p>
           <p style={{ fontWeight: 700, color: '#1a3c8f', fontSize: '0.95rem' }}>
-            {rating >= 4 ? 'Thank you! Redirecting to Google Review...' : 'Thank you for your feedback!'}
+            Thank you for your feedback!
           </p>
+          {rating >= 4 && (
+            <a href="https://g.page/r/CQrx6_yARiIDEAI/review" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '0.5rem', background: '#1a3c8f', color: 'white', padding: '6px 14px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 700, textDecoration: 'none' }}>
+              ⭐ Leave Google Review
+            </a>
+          )}
         </div>
       ) : (
         <>
@@ -138,7 +134,7 @@ export default function FeedbackPopup() {
 
           {rating >= 4 && (
             <p style={{ fontSize: '0.75rem', color: '#16a34a', textAlign: 'center', marginBottom: '0.75rem', fontWeight: 600 }}>
-              🌟 Great! You'll be redirected to Google Review
+              🌟 Great! Please also leave a Google Review!
             </p>
           )}
 

@@ -6,10 +6,10 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
       { protocol: 'https', hostname: '*.supabase.co' },
     ],
     formats: ['image/webp'],
+    minimumCacheTTL: 86400,
   },
   async headers() {
     return [
@@ -29,7 +29,14 @@ const nextConfig = {
         source: '/sw.js',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' }],
       },
+      {
+        source: '/manifest.json',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }],
+      },
     ]
+  },
+  experimental: {
+    optimizeCss: true,
   },
 }
 
