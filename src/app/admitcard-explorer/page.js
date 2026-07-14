@@ -3,6 +3,19 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 
+export const metadata = {
+  title: 'Latest Admit Cards 2026 - Download Hall Ticket | StudentBrief',
+  description: 'Download Latest Admit Cards 2026 for SSC, Railway, Bank, Army & Police exams. Get direct admit card download links on StudentBrief.',
+  openGraph: {
+    title: 'Latest Admit Cards 2026 - Download Hall Ticket | StudentBrief',
+    description: 'Download Latest Admit Cards 2026 for SSC, Railway, Bank, Army & Police exams. Get direct admit card download links on StudentBrief.',
+    url: 'https://www.studentbrief.in',
+    siteName: 'StudentBrief',
+    images: [{ url: 'https://www.studentbrief.in/og-image.png' }],
+    type: 'website',
+  },
+}
+
 export default async function AdmitCardExplorerPage() {
   const supabase = await createClient()
   const { data: categories } = await supabase.from('admitcard_categories').select('*').order('name')

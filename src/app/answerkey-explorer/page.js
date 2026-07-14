@@ -3,6 +3,19 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 
+export const metadata = {
+  title: 'Latest Answer Keys 2026 - SSC, Railway, Bank | StudentBrief',
+  description: 'Download Latest Answer Keys 2026 for SSC, Railway, Bank, Army & Police exams. Check correct answers and raise objections on StudentBrief.',
+  openGraph: {
+    title: 'Latest Answer Keys 2026 - SSC, Railway, Bank | StudentBrief',
+    description: 'Download Latest Answer Keys 2026 for SSC, Railway, Bank, Army & Police exams. Check correct answers and raise objections on StudentBrief.',
+    url: 'https://www.studentbrief.in',
+    siteName: 'StudentBrief',
+    images: [{ url: 'https://www.studentbrief.in/og-image.png' }],
+    type: 'website',
+  },
+}
+
 export default async function AnswerKeyExplorerPage() {
   const supabase = await createClient()
   const { data: categories } = await supabase.from('answerkey_categories').select('*').order('name')

@@ -3,6 +3,19 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 
+export const metadata = {
+  title: 'Latest Exam Results 2026 - SSC, Railway, Bank | StudentBrief',
+  description: 'Check Latest Exam Results 2026 - SSC, Railway, Bank, Army, Police & more. Get direct result links and merit list on StudentBrief.',
+  openGraph: {
+    title: 'Latest Exam Results 2026 - SSC, Railway, Bank | StudentBrief',
+    description: 'Check Latest Exam Results 2026 - SSC, Railway, Bank, Army, Police & more. Get direct result links and merit list on StudentBrief.',
+    url: 'https://www.studentbrief.in',
+    siteName: 'StudentBrief',
+    images: [{ url: 'https://www.studentbrief.in/og-image.png' }],
+    type: 'website',
+  },
+}
+
 export default async function ResultsExplorerPage() {
   const supabase = await createClient()
   const { data: categories } = await supabase.from('result_categories').select('*').order('name')

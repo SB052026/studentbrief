@@ -4,8 +4,16 @@ import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
-  title: 'Latest Govt Jobs - StudentBrief',
-  description: 'Category wise Latest Govt Jobs on StudentBrief.in',
+  title: 'Latest Govt Jobs 2026 - Railway, SSC, Bank, Army | StudentBrief',
+  description: 'Find Latest Government Jobs 2026 - Railway, SSC, Bank, Army, Police & more. Get complete job details, eligibility, last date & apply link on StudentBrief.',
+  openGraph: {
+    title: 'Latest Govt Jobs 2026 - Railway, SSC, Bank, Army | StudentBrief',
+    description: 'Find Latest Government Jobs 2026 - Railway, SSC, Bank, Army, Police & more. Get complete job details, eligibility, last date & apply link on StudentBrief.',
+    url: 'https://www.studentbrief.in',
+    siteName: 'StudentBrief',
+    images: [{ url: 'https://www.studentbrief.in/og-image.png' }],
+    type: 'website',
+  },
 }
 
 export default async function JobsExplorerPage() {

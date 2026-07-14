@@ -1,8 +1,6 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
-export const metadata = { title: 'About Us - StudentBrief' }
-
 export default function AboutPage() {
   return (
     <div className="page-wrapper">

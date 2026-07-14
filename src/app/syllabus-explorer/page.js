@@ -4,8 +4,16 @@ import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
-  title: 'Syllabus Explorer - StudentBrief',
-  description: 'Exam wise Syllabus and Calendar on StudentBrief.in',
+  title: 'Exam Syllabus & Calendar 2026 - SSC, Railway, Bank | StudentBrief',
+  description: 'Get Complete Exam Syllabus & Calendar 2026 for SSC, Railway, Bank, Army & Police exams. Download syllabus PDF on StudentBrief.',
+  openGraph: {
+    title: 'Exam Syllabus & Calendar 2026 - SSC, Railway, Bank | StudentBrief',
+    description: 'Get Complete Exam Syllabus & Calendar 2026 for SSC, Railway, Bank, Army & Police exams. Download syllabus PDF on StudentBrief.',
+    url: 'https://www.studentbrief.in',
+    siteName: 'StudentBrief',
+    images: [{ url: 'https://www.studentbrief.in/og-image.png' }],
+    type: 'website',
+  },
 }
 
 export default async function SyllabusExplorerPage() {
