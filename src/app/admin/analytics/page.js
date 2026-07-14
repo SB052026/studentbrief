@@ -19,7 +19,7 @@ export default function AdminAnalyticsPage() {
   async function fetchData() {
     setLoading(true)
     const supabase = createClient()
-    const [{ data: acts }, { data: pdfs }, { data: settings }] = await Promise.all([
+    const [{ data: acts }, { data: pdfs }, { data: fbs }, { data: settings }] = await Promise.all([
       supabase.from('user_activity').select('*').order('created_at', { ascending: false }).limit(50),
       supabase.from('pdf_downloads').select('*').order('created_at', { ascending: false }).limit(50),
       supabase.from('feedback').select('*').order('created_at', { ascending: false }).limit(50),

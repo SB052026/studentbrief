@@ -56,6 +56,7 @@ export default function RootLayout({ children }) {
         <link rel="shortcut icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <meta name="theme-color" content="#1a3c8f" />
         <meta name="google-site-verification" content="TQe_MyZe7zp3Ipq3ybuzUO2avSP_N5fm-fvTxZW-gQM" />
         <meta name="mobile-web-app-capable" content="yes" />

@@ -117,67 +117,76 @@ export default function Home() {
           <p style={{ color: '#64748b', textAlign: 'center', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
             Select as per your requirement
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
-            <Link href="/jobs" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(26,60,143,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>💼</div>
+          <div className="home-cards-grid">
+            <Link href="/jobs-explorer" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)' }} className="home-card">
+                <div className="home-card-icon">💼</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Jobs</h3>
                 <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Govt, Bank, Railway Jobs</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
+                <span className="badge">View →</span>
               </div>
             </Link>
 
-            <Link href="/results" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(22,163,74,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📊</div>
+            <Link href="/results-explorer" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)' }} className="home-card">
+                <div className="home-card-icon">📊</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Latest Results</h3>
                 <p style={{ color: 'rgba(220,252,231,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>SSC, Railway, Bank Results</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
+                <span className="badge">View →</span>
               </div>
             </Link>
 
-            <Link href="/answerkey" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(219,39,119,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
+            <Link href="/answerkey-explorer" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #db2777, #ec4899)' }} className="home-card">
+                <div className="home-card-icon">📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Answer Keys</h3>
                 <p style={{ color: 'rgba(252,231,243,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>View Latest Answer Keys</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
+                <span className="badge">View →</span>
               </div>
             </Link>
 
-            <Link href="/admitcard" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(217,119,6,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎫</div>
+            <Link href="/admitcard-explorer" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)' }} className="home-card">
+                <div className="home-card-icon">🎫</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Admit Cards</h3>
                 <p style={{ color: 'rgba(254,243,199,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>View Latest Admit Cards</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>View →</span>
+                <span className="badge">View →</span>
               </div>
             </Link>
 
             <Link href="/dashboard/mock-test" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(124,58,237,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📝</div>
+              <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)' }} className="home-card">
+                <div className="home-card-icon">📝</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Mock Test</h3>
                 <p style={{ color: 'rgba(237,233,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Practice with Mock Tests</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Start Now →</span>
+                <span className="badge">Start Now →</span>
               </div>
             </Link>
 
             <Link href="/dashboard/pyp" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(8,145,178,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>📄</div>
+              <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)' }} className="home-card">
+                <div className="home-card-icon">📄</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>PYP</h3>
                 <p style={{ color: 'rgba(207,250,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Previous Year Papers</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Download →</span>
+                <span className="badge">Download →</span>
+              </div>
+            </Link>
+
+            <Link href="/syllabus-explorer" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg, #0f766e, #14b8a6)' }} className="home-card">
+                <div className="home-card-icon">📚</div>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Syllabus</h3>
+                <p style={{ color: 'rgba(204,251,241,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Exam wise syllabus</p>
+                <span className="badge">View →</span>
               </div>
             </Link>
 
             <Link href="/dashboard/subject-mock" style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)', borderRadius: '16px', padding: '1rem', boxShadow: '0 8px 30px rgba(190,24,93,0.3)', textAlign: 'center', height: '160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', margin: '0 auto 0.5rem' }}>🎯</div>
+              <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)' }} className="home-card">
+                <div className="home-card-icon">🎯</div>
                 <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Subject Mock</h3>
                 <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject Wise Practice</p>
-                <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', color: 'white', padding: '5px 12px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>Start Now →</span>
+                <span className="badge">Start Now →</span>
               </div>
             </Link>
           </div>

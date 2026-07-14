@@ -73,7 +73,7 @@ export default function AdminSyllabusPage() {
           <label style={labelStyle}>📄 Syllabus Content (Manual)</label>
           <textarea style={{ ...inputStyle, height: '200px', resize: 'vertical' }} value={form.content} onChange={e => setForm(p => ({ ...p, content: e.target.value }))} placeholder="Syllabus content yahan likhein... ya .txt file upload karein" />
           
-          <label style={labelStyle}>📁 .TXT File Upload (Optional)</label>
+          <label style={labelStyle}>📁 TXT File Upload (Optional - Content auto fill hoga)</label>
           <input type="file" accept=".txt" style={{ ...inputStyle, padding: '8px' }} onChange={e => {
             const file = e.target.files[0]
             if (!file) return

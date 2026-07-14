@@ -345,3 +345,146 @@ body {
     padding: 5px 12px !important;
   }
 }
+
+
+/* ================================
+   UNIVERSAL RESPONSIVE FIX
+================================ */
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  min-width: 320px;
+}
+
+* {
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Tables responsive */
+table {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  table {
+    display: table;
+  }
+}
+
+/* Grid responsive */
+@media (max-width: 480px) {
+  div[style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  div[style*="gridTemplateColumns: 'repeat(3, 1fr)'"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Admin sidebar desktop only */
+@media (min-width: 768px) {
+  .admin-sidebar {
+    display: flex !important;
+  }
+  .op-sidebar {
+    display: flex !important;
+  }
+}
+
+
+/* ================================
+   HOME PAGE CARDS RESPONSIVE
+================================ */
+.home-card {
+  border-radius: 16px;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  transition: transform 0.2s;
+}
+
+.home-card:active {
+  transform: scale(0.97);
+}
+
+.home-card-icon {
+  width: 15%;
+  height: auto;
+  aspect-ratio: 1;
+  min-width: 32px;
+  max-width: 52px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  margin: 0 auto 0.4rem;
+}
+
+.home-card h3 {
+  font-weight: 800;
+  color: white;
+  font-size: clamp(0.7rem, 3vw, 0.95rem) !important;
+  margin-bottom: 3px;
+}
+
+.home-card p {
+  color: rgba(255,255,255,0.8);
+  font-size: clamp(0.55rem, 2vw, 0.72rem) !important;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.home-card span.badge {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: clamp(0.55rem, 2vw, 0.7rem);
+  font-weight: 700;
+}
+
+.home-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+}
+
+@media (min-width: 600px) {
+  .home-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .home-cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
