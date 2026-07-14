@@ -7,29 +7,27 @@ export default function OperatorDashboard() {
   const [role, setRole] = useState('')
   const [name, setName] = useState('')
 
+  const [permissions, setPermissions] = useState([])
+
   useEffect(() => {
     setRole(localStorage.getItem('sb_operator_role') || '')
     setName(localStorage.getItem('sb_operator_name') || '')
+    const perms = localStorage.getItem('sb_operator_permissions')
+    setPermissions(perms ? JSON.parse(perms) : [])
   }, [])
 
-  const contentLinks = [
-    { href: '/operator/jobs', label: '💼 Jobs', desc: 'Job listings manage karo', color: '#dbeafe', text: '#1e40af' },
-    { href: '/operator/results', label: '📋 Results', desc: 'Results manage karo', color: '#dcfce7', text: '#166534' },
-    { href: '/operator/answerkeys', label: '📝 Answer Keys', desc: 'Answer keys manage karo', color: '#fce7f3', text: '#9d174d' },
-    { href: '/operator/admitcards', label: '🎫 Admit Cards', desc: 'Admit cards manage karo', color: '#fef3c7', text: '#92400e' },
-    { href: '/operator/syllabus', label: '📚 Syllabus', desc: 'Syllabus manage karo', color: '#e0e7ff', text: '#3730a3' },
-  ]
+  const allLinks = {
+    jobs: { href: '/operator/jobs', label: '💼 Jobs', desc: 'Manage job listings', color: '#dbeafe', text: '#1e40af' },
+    results: { href: '/operator/results', label: '📋 Results', desc: 'Manage results', color: '#dcfce7', text: '#166534' },
+    answerkeys: { href: '/operator/answerkeys', label: '📝 Answer Keys', desc: 'Manage answer keys', color: '#fce7f3', text: '#9d174d' },
+    admitcards: { href: '/operator/admitcards', label: '🎫 Admit Cards', desc: 'Manage admit cards', color: '#fef3c7', text: '#92400e' },
+    syllabus: { href: '/operator/syllabus', label: '📚 Syllabus', desc: 'Manage syllabus', color: '#e0e7ff', text: '#3730a3' },
+    mock: { href: '/operator/mock-test', label: '🧪 Mock Test', desc: 'Manage mock tests', color: '#ede9fe', text: '#5b21b6' },
+    subject_mock: { href: '/operator/subjects', label: '🎯 Subject Mock', desc: 'Manage subject mock', color: '#fce7f3', text: '#be185d' },
+    pyp: { href: '/operator/pyp', label: '📄 PYP Papers', desc: 'Manage PYP papers', color: '#cffafe', text: '#0e7490' },
+  }
 
-  const pypLinks = [
-    { href: '/operator/pyp', label: '📄 PYP Papers', desc: 'Previous year papers manage karo', color: '#cffafe', text: '#0e7490' },
-  ]
-
-  const mockLinks = [
-    { href: '/operator/mock-test', label: '🧪 Mock Test', desc: 'Mock tests manage karo', color: '#ede9fe', text: '#5b21b6' },
-    { href: '/operator/subjects', label: '🎯 Subject Mock', desc: 'Subject wise mock manage karo', color: '#fce7f3', text: '#be185d' },
-  ]
-
-  const links = role === 'content' ? contentLinks : role === 'pyp' ? pypLinks : mockLinks
+  const links = permissions.map(p => allLinks[p]).filter(Boolean)
 
   return (
     <div>

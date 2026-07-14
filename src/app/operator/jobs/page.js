@@ -3,6 +3,16 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
+async function checkPermission(perm) {
+  const { createClient } = await import('@/lib/supabase/client')
+  const supabase = createClient()
+  const id = localStorage.getItem('sb_operator_id')
+  if (!id) return false
+  const { data } = await supabase.from('operators').select('permissions, is_active, is_blocked').eq('id', id).single()
+  if (!data || !data.is_active || data.is_blocked) return false
+  return (data.permissions || []).includes(perm)
+}
+
 export default function AdminJobsPage() {
   const [jobs, setJobs] = useState([])
   const [categories, setCategories] = useState([])
@@ -33,7 +43,13 @@ export default function AdminJobsPage() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchData() }, [])
+  const [hasPermission, setHasPermission] = useState(true)
+
+  useEffect(() => {
+    checkPermission('jobs').then(allowed => {
+      if (!allowed) window.location.replace('/operator')
+      setHasPermission(allowed)
+    }); fetchData() }, [])
 
   function resetForm() {
     setForm({

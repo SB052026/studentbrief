@@ -8,6 +8,7 @@ export default function OperatorLayout({ children }) {
   const [isAuth, setIsAuth] = useState(false)
   const [role, setRole] = useState('')
   const [name, setName] = useState('')
+  const [permissions, setPermissions] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -26,6 +27,21 @@ export default function OperatorLayout({ children }) {
     setIsAuth(true)
     setRole(operatorRole || '')
     setName(operatorName || '')
+    // Fetch permissions from Supabase
+    const opId = localStorage.getItem('sb_operator_id')
+    const permsStored = localStorage.getItem('sb_operator_permissions')
+    if (permsStored) setPermissions(JSON.parse(permsStored))
+    if (opId) {
+      import('@/lib/supabase/client').then(({ createClient }) => {
+        const supabase = createClient()
+        supabase.from('operators').select('permissions').eq('id', opId).single().then(({ data }) => {
+          if (data) {
+            setPermissions(data.permissions || [])
+            localStorage.setItem('sb_operator_permissions', JSON.stringify(data.permissions || []))
+          }
+        })
+      })
+    }
 
     // Auto logout after 10 min inactive
     const INACTIVE_TIME = 10 * 60 * 1000

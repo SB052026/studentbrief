@@ -138,6 +138,7 @@ export default function OperatorLoginPage() {
     localStorage.setItem('sb_operator_id', op.id)
     localStorage.setItem('sb_operator_time', Date.now().toString())
     localStorage.setItem('sb_operator_activity_id', activity?.id || '')
+    localStorage.setItem('sb_operator_permissions', JSON.stringify(op.permissions || []))
 
     setLocStatus('')
     router.push('/operator')

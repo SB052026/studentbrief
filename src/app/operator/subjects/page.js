@@ -3,6 +3,16 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
+async function checkPermission(perm) {
+  const { createClient } = await import('@/lib/supabase/client')
+  const supabase = createClient()
+  const id = localStorage.getItem('sb_operator_id')
+  if (!id) return false
+  const { data } = await supabase.from('operators').select('permissions, is_active, is_blocked').eq('id', id).single()
+  if (!data || !data.is_active || data.is_blocked) return false
+  return (data.permissions || []).includes(perm)
+}
+
 export default function AdminSubjectsPage() {
   const [subjects, setSubjects] = useState([])
   const [topics, setTopics] = useState([])
@@ -30,7 +40,13 @@ export default function AdminSubjectsPage() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchAll() }, [])
+  const [hasPermission, setHasPermission] = useState(true)
+
+  useEffect(() => {
+    checkPermission('subject_mock').then(allowed => {
+      if (!allowed) window.location.replace('/operator')
+      setHasPermission(allowed)
+    }); fetchAll() }, [])
 
   function resetForm() {
     setForm({ name: '', icon: '', color: '#1a3c8f', subject_id: '', topic_id: '', section_id: '' })

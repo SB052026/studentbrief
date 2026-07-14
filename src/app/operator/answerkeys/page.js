@@ -3,6 +3,16 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
+async function checkPermission(perm) {
+  const { createClient } = await import('@/lib/supabase/client')
+  const supabase = createClient()
+  const id = localStorage.getItem('sb_operator_id')
+  if (!id) return false
+  const { data } = await supabase.from('operators').select('permissions, is_active, is_blocked').eq('id', id).single()
+  if (!data || !data.is_active || data.is_blocked) return false
+  return (data.permissions || []).includes(perm)
+}
+
 export default function AdminAnswerKeysPage() {
   const [items, setItems] = useState([])
   const [categories, setCategories] = useState([])
@@ -25,7 +35,13 @@ export default function AdminAnswerKeysPage() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchData() }, [])
+  const [hasPermission, setHasPermission] = useState(true)
+
+  useEffect(() => {
+    checkPermission('answerkeys').then(allowed => {
+      if (!allowed) window.location.replace('/operator')
+      setHasPermission(allowed)
+    }); fetchData() }, [])
 
   function resetForm() {
     setForm({ category_id: '', title: '', published_date: '', exam_date: '', objection_last_date: '', organization: '', post_name: '', answerkey_status: 'Released', answerkey_link: '' })

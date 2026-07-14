@@ -17,7 +17,18 @@ export default function AdminOperatorsPage() {
   const [newAdminPass, setNewAdminPass] = useState('')
   const [newEmergencyCode, setNewEmergencyCode] = useState('')
   const [adminMsg, setAdminMsg] = useState('')
-  const [form, setForm] = useState({ name: '', username: '', password: '', role: 'content' })
+  const [form, setForm] = useState({ name: '', username: '', password: '', role: 'content', permissions: [] })
+  
+  const allPermissions = [
+    { key: 'jobs', label: '💼 Jobs' },
+    { key: 'results', label: '📊 Results' },
+    { key: 'admitcards', label: '🎫 Admit Cards' },
+    { key: 'answerkeys', label: '📝 Answer Keys' },
+    { key: 'syllabus', label: '📚 Syllabus & Calendar' },
+    { key: 'mock', label: '🧪 Mock Test' },
+    { key: 'subject_mock', label: '🎯 Subject Mock Test' },
+    { key: 'pyp', label: '📄 PYP' },
+  ]
 
   async function handleAdminPassChange() {
     if (!newAdminPass && !newAdminUser && !newEmergencyCode) return alert('Kuch to bharo!')
@@ -61,8 +72,8 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
     const supabase = createClient()
     const bcrypt = await import('bcryptjs')
     const hashedPassword = await bcrypt.hash(form.password, 10)
-    if (editId) await supabase.from('operators').update({ name: form.name, username: form.username, password: hashedPassword, role: form.role }).eq('id', editId)
-    else await supabase.from('operators').insert({ name: form.name, username: form.username, password: hashedPassword, role: form.role })
+    if (editId) await supabase.from('operators').update({ name: form.name, username: form.username, password: hashedPassword, role: form.role, permissions: form.permissions }).eq('id', editId)
+    else await supabase.from('operators').insert({ name: form.name, username: form.username, password: hashedPassword, role: form.role, permissions: form.permissions })
     await fetchAll()
     resetForm()
     setSaving(false)
@@ -91,7 +102,7 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
   }
 
   function handleEdit(op) {
-    setForm({ name: op.name, username: op.username, password: op.password, role: op.role })
+    setForm({ name: op.name, username: op.username, password: '', role: op.role, permissions: op.permissions || [] })
     setEditId(op.id)
     setShowForm(true)
   }
@@ -126,10 +137,31 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
           <input style={inputStyle} type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Password" autoComplete="new-password" />
           <label style={labelStyle}>Role</label>
           <select value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))} style={inputStyle}>
-            <option value="content">📋 Content (Jobs, Results, Answer Keys, Admit Cards, Syllabus)</option>
-            <option value="pyp">📄 PYP (Previous Year Papers)</option>
-            <option value="mock">🧪 Mock Test (Mock Test + Subject Mock)</option>
+            <option value="content">📋 Content Operator</option>
+            <option value="pyp">📄 PYP Operator</option>
+            <option value="mock">🧪 Mock Test Operator</option>
           </select>
+
+          <label style={labelStyle}>🔐 Permissions (Multiple Select)</label>
+          <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', marginBottom: '0.6rem', border: '1.5px solid #e2e8f0' }}>
+            {allPermissions.map(perm => (
+              <label key={perm.key} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0', cursor: 'pointer', fontSize: '0.82rem', color: '#374151' }}>
+                <input
+                  type="checkbox"
+                  checked={form.permissions.includes(perm.key)}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      setForm(p => ({ ...p, permissions: [...p.permissions, perm.key] }))
+                    } else {
+                      setForm(p => ({ ...p, permissions: p.permissions.filter(x => x !== perm.key) }))
+                    }
+                  }}
+                  style={{ width: '16px', height: '16px', accentColor: '#1a3c8f' }}
+                />
+                {perm.label}
+              </label>
+            ))}
+          </div>
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={handleSave} disabled={saving} style={{ ...btnPrimary, flex: 1 }}>{saving ? 'Saving...' : editId ? 'Update' : 'Save'}</button>
             <button onClick={resetForm} style={{ ...btnSecondary, flex: 1 }}>Cancel</button>
@@ -174,6 +206,13 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
                       {op.failed_attempts > 0 && !op.is_blocked && <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>⚠️ {op.failed_attempts} attempts</span>}
                     </div>
                     <p style={{ fontSize: '0.72rem', color: '#64748b' }}>👤 {op.username} • 🔑 ••••••••</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '4px' }}>
+                      {(op.permissions || []).map(perm => (
+                        <span key={perm} style={{ background: '#dbeafe', color: '#1e40af', padding: '1px 6px', borderRadius: '9999px', fontSize: '0.62rem', fontWeight: 600 }}>
+                          {perm}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', flexShrink: 0 }}>
                     <button onClick={() => handleEdit(op)} style={btnEdit}>Edit</button>
