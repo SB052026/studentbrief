@@ -16,6 +16,8 @@ export default function MockTestExamPage({ params }) {
   const [timeLeft, setTimeLeft] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(0)
+  const [selectedCategory, setSelectedCategory] = useState('General')
+  const [testData, setTestData] = useState(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
@@ -124,8 +126,57 @@ export default function MockTestExamPage({ params }) {
           <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', borderRadius: '16px', padding: '1.5rem', marginBottom: '1rem', textAlign: 'center', boxShadow: '0 8px 25px rgba(26,60,143,0.3)' }}>
             <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.5rem' }}>🎉</span>
             <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem' }}>Test Complete!</h2>
-            <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{score}/{questions.length}</div>
-            <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{percentage}% सही</p>
+
+            {testData?.negative_marking > 0 ? (
+              <div style={{ marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>
+                  {(score - (wrongAnswers.length * testData.negative_marking)).toFixed(2)}/{questions.length}
+                </div>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.75rem' }}>
+                  Net Score (Negative: -{testData.negative_marking} x {wrongAnswers.length} = -{(wrongAnswers.length * testData.negative_marking).toFixed(2)})
+                </p>
+                <p style={{ color: 'rgba(191,219,254,0.6)', fontSize: '0.72rem' }}>Gross: {score}/{questions.length} ({percentage}%)</p>
+              </div>
+            ) : (
+              <div style={{ marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{score}/{questions.length}</div>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{percentage}% Correct</p>
+              </div>
+            )}
+
+            {testData?.cut_off && Object.keys(testData.cut_off).some(k => testData.cut_off[k]) && (
+              <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0.75rem', marginTop: '0.75rem' }}>
+                <p style={{ color: 'rgba(191,219,254,0.9)', fontSize: '0.72rem', fontWeight: 600, marginBottom: '8px' }}>🎯 Compare with Last Cut Off</p>
+                <select
+                  value={selectedCategory}
+                  onChange={e => setSelectedCategory(e.target.value)}
+                  style={{ width: '100%', padding: '6px 10px', borderRadius: '8px', border: 'none', fontSize: '0.78rem', fontWeight: 600, fontFamily: 'Poppins, sans-serif', marginBottom: '8px', outline: 'none' }}
+                >
+                  {Object.entries(testData.cut_off).filter(([, v]) => v).map(([cat, val]) => (
+                    <option key={cat} value={cat}>{cat} — Cut Off: {val}</option>
+                  ))}
+                </select>
+                {(() => {
+                  const netScore = testData.negative_marking > 0
+                    ? score - (wrongAnswers.length * testData.negative_marking)
+                    : score
+                  const cutOff = parseFloat(testData.cut_off[selectedCategory])
+                  const passed = netScore >= cutOff
+                  const diff = (cutOff - netScore).toFixed(2)
+                  return (
+                    <div style={{ background: passed ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)', borderRadius: '8px', padding: '8px 12px' }}>
+                      <p style={{ color: passed ? '#86efac' : '#fca5a5', fontWeight: 800, fontSize: '0.85rem' }}>
+                        {passed ? '✅ Cut Off Qualify!' : '❌ Cut Off Miss!'}
+                      </p>
+                      <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.7rem', marginTop: '2px' }}>
+                        Your Score: {netScore.toFixed(2)} | {selectedCategory} Cut Off: {cutOff}
+                        {!passed && ' | Need ' + diff + ' more marks'}
+                      </p>
+                    </div>
+                  )
+                })()}
+              </div>
+            )}
           </div>
 
           {/* Summary Cards */}
