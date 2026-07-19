@@ -163,30 +163,7 @@ export default function AdminMockTestPage() {
           <label style={labelStyle}>📄 PDF Link (Optional - Download ke liye)</label>
           <input style={inputStyle} value={testForm.pdf_url || ''} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://... (PDF link)" />
 
-              <label style={labelStyle}>➖ Negative Marking</label>
-              <select style={inputStyle} value={testForm.negative_marking} onChange={e => setTestForm(p => ({ ...p, negative_marking: e.target.value }))}>
-                <option value="0">No Negative Marking</option>
-                <option value="0.25">-0.25 per wrong answer</option>
-                <option value="0.33">-0.33 per wrong answer</option>
-                <option value="0.5">-0.5 per wrong answer</option>
-                <option value="1">-1 per wrong answer</option>
-              </select>
-
-              <label style={labelStyle}>🎯 Last Cut Off (Category Wise)</label>
-              <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1.5px solid #e2e8f0', marginBottom: '0.6rem' }}>
-                {['General', 'OBC', 'SC', 'ST', 'EWS'].map(cat => (
-                  <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#374151', width: '70px', flexShrink: 0 }}>{cat}:</label>
-                    <input
-                      style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
-                      type="number"
-                      value={testForm.cut_off[cat] || ''}
-                      onChange={e => setTestForm(p => ({ ...p, cut_off: { ...p.cut_off, [cat]: e.target.value } }))}
-                      placeholder={cat + ' cut off marks'}
-                    />
-                  </div>
-                ))}
-              </div>
+              
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <div>
@@ -214,6 +191,31 @@ export default function AdminMockTestPage() {
               </select>
             </>
           )}
+          <label style={labelStyle}>➖ Negative Marking</label>
+          <select style={inputStyle} value={testForm.negative_marking} onChange={e => setTestForm(p => ({ ...p, negative_marking: e.target.value }))}>
+            <option value="0">No Negative Marking</option>
+            <option value="0.25">-0.25 per wrong answer</option>
+            <option value="0.33">-0.33 per wrong answer</option>
+            <option value="0.5">-0.5 per wrong answer</option>
+            <option value="1">-1 per wrong answer</option>
+          </select>
+
+          <label style={labelStyle}>🎯 Last Cut Off (Category Wise)</label>
+          <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1.5px solid #e2e8f0', marginBottom: '0.6rem' }}>
+            {['General', 'OBC', 'SC', 'ST', 'EWS'].map(cat => (
+              <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#374151', width: '70px', flexShrink: 0 }}>{cat}:</label>
+                <input
+                  style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+                  type="number"
+                  value={testForm.cut_off[cat] || ''}
+                  onChange={e => setTestForm(p => ({ ...p, cut_off: { ...p.cut_off, [cat]: e.target.value } }))}
+                  placeholder={cat + ' cut off marks'}
+                />
+              </div>
+            ))}
+          </div>
+
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={handleSaveTest} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
               {saving ? 'Saving...' : 'Save Karo'}
