@@ -33,18 +33,20 @@ export default function MockTestExamPage({ params }) {
     if (!testId) return
     async function fetchTest() {
       const supabase = createClient()
-      const { data: testData } = await supabase
+      const { data: testInfo } = await supabase
         .from('mock_tests')
         .select('*')
         .eq('id', testId)
         .single()
+      const { data: td } = await supabase.from('mock_tests').select('negative_marking, cut_off').eq('id', testId).single()
+      setTestData(td)
       const { data: questionsData } = await supabase
         .from('mock_questions')
         .select('*')
         .eq('mock_test_id', testId)
-      if (testData) {
-        setTest(testData)
-        setTimeLeft(testData.duration_minutes * 60)
+      if (testInfo) {
+        setTest(testInfo)
+        setTimeLeft(testInfo.duration_minutes * 60)
         const shuffled = shuffleArray(questionsData || []).map(q => ({
           ...q,
           options: shuffleArray([
