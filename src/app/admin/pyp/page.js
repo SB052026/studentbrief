@@ -48,8 +48,13 @@ export default function AdminPYPPage() {
     setSaving(true)
     const supabase = createClient()
     const data = { exam_name: form.exam_name, year: form.year || null, pdf_url: form.pdf_url || null, description: form.description || null }
-    if (editId) await supabase.from('pyp').update(data).eq('id', editId)
-    else await supabase.from('pyp').insert(data)
+    if (editId) {
+      const { error } = await supabase.from('pyp').update(data).eq('id', editId)
+      if (error) { alert('Error: ' + error.message); setSaving(false); return }
+    } else {
+      const { error } = await supabase.from('pyp').insert(data)
+      if (error) { alert('Error: ' + error.message); setSaving(false); return }
+    }
     await fetchData()
     resetForm()
     setSaving(false)
