@@ -134,22 +134,10 @@ export default function MockTestExamPage({ params }) {
             <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.5rem' }}>🎉</span>
             <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem' }}>Test Complete!</h2>
 
-            {testData?.negative_marking > 0 ? (
-              <div style={{ marginBottom: '0.5rem' }}>
-                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>
-                  {(score - (wrongAnswers.length * testData.negative_marking)).toFixed(2)}/{questions.length}
-                </div>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.75rem' }}>
-                  Net Score (Negative: -{testData.negative_marking} x {wrongAnswers.length} = -{(wrongAnswers.length * testData.negative_marking).toFixed(2)})
-                </p>
-                <p style={{ color: 'rgba(191,219,254,0.6)', fontSize: '0.72rem' }}>Gross: {score}/{questions.length} ({percentage}%)</p>
-              </div>
-            ) : (
-              <div style={{ marginBottom: '0.5rem' }}>
-                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{obtainedMarks.toFixed(1)}/{totalMarks}</div>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{score}/{questions.length} Questions • {percentage}%</p>
-              </div>
-            )}
+            <div style={{ marginBottom: '0.5rem' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{score}/{questions.length}</div>
+              <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>✅ {Math.round(obtainedMarks)}/{totalMarks} Marks</p>
+            </div>
 
             {testData?.cut_off && Object.keys(testData.cut_off).some(k => testData.cut_off[k]) && (
               <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0.75rem', marginTop: '0.75rem' }}>
