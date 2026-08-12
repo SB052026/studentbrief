@@ -185,15 +185,15 @@ export default function PypPracticePage({ params }) {
                 return (
                   <div key={q.id} style={{ padding: '0.875rem', background: isSkipped ? '#fef3c7' : isCorrect ? '#dcfce7' : '#fee2e2', borderRadius: '10px', borderLeft: `4px solid ${isSkipped ? '#f59e0b' : isCorrect ? '#22c55e' : '#ef4444'}` }}>
                     <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b', marginBottom: '6px' }}>{i + 1}. {q.question}</p>
-                    {q.question_image && <img src={q.question_image} alt="Q" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain', borderRadius: '8px', marginBottom: '8px' }} />}
+                    {q.question_image && <img src={q.question_image} alt="Q" style={{ width: '100%', maxHeight: '100px', objectFit: 'contain', borderRadius: '8px', marginBottom: '8px' }} />}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.75rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', padding: '4px 8px', borderRadius: '6px' }}>
                         <span style={{ color: '#475569' }}>Your Answer: <strong>{getAnswerText(q, answers[q.id])}</strong></span>
-                        {answers[q.id] && q[`option_${answers[q.id].toLowerCase()}_image`] && <img src={q[`option_${answers[q.id].toLowerCase()}_image`]} alt="ans" style={{ width: '40px', height: '30px', objectFit: 'contain', borderRadius: '4px' }} />}
+                        {answers[q.id] && q[`option_${answers[q.id].toLowerCase()}_image`] && <img src={q[`option_${answers[q.id].toLowerCase()}_image`]} alt="ans" style={{ width: '32px', height: '24px', objectFit: 'contain', borderRadius: '4px' }} />}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#dcfce7', padding: '4px 8px', borderRadius: '6px' }}>
                         <span style={{ color: '#166534' }}>Correct: <strong>{getCorrectText(q)}</strong></span>
-                        {q[`option_${q.correct_option.toLowerCase()}_image`] && <img src={q[`option_${q.correct_option.toLowerCase()}_image`]} alt="correct" style={{ width: '40px', height: '30px', objectFit: 'contain', borderRadius: '4px' }} />}
+                        {q[`option_${q.correct_option.toLowerCase()}_image`] && <img src={q[`option_${q.correct_option.toLowerCase()}_image`]} alt="correct" style={{ width: '32px', height: '24px', objectFit: 'contain', borderRadius: '4px' }} />}
                       </div>
                       {q.explanation && (
                         <div style={{ background: 'rgba(255,255,255,0.8)', padding: '6px 8px', borderRadius: '6px', borderLeft: '3px solid #f97316' }}>
@@ -302,14 +302,14 @@ export default function PypPracticePage({ params }) {
                   {markedReview[currentQuestion.id] && <span style={{ background: '#ede9fe', color: '#7c3aed', padding: '3px 10px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 700 }}>🚩 Marked</span>}
                 </div>
                 <h2 style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '12px' }}>{currentQuestion.question}</h2>
-                {currentQuestion.question_image && <img src={currentQuestion.question_image} alt="Question" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain', borderRadius: '10px', marginBottom: '12px', background: '#f8fafc' }} />}
+                {currentQuestion.question_image && <img src={currentQuestion.question_image} alt="Question" style={{ width: '100%', maxHeight: '120px', objectFit: 'contain', borderRadius: '10px', marginBottom: '12px', background: '#f8fafc' }} />}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {currentQuestion.options.map((option) => (
                     <button key={option.key} onClick={() => handleAnswer(currentQuestion.id, option.key)} style={{ textAlign: 'left', padding: '12px 14px', borderRadius: '10px', border: `2px solid ${answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#e2e8f0'}`, background: answers[currentQuestion.id] === option.key ? '#dbeafe' : 'white', color: answers[currentQuestion.id] === option.key ? '#1e40af' : '#374151', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.15s' }}>
                       <span style={{ width: '26px', height: '26px', borderRadius: '50%', background: answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#f1f5f9', color: answers[currentQuestion.id] === option.key ? 'white' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0 }}>{option.key}</span>
                       <span style={{ flex: 1 }}>{option.value}</span>
-                      {option.img && <img src={option.img} alt={option.key} style={{ width: '50px', height: '40px', objectFit: 'contain', borderRadius: '6px' }} />}
+                      {option.img && <img src={option.img} alt={option.key} style={{ width: '36px', height: '28px', objectFit: 'contain', borderRadius: '4px' }} />}
                     </button>
                   ))}
                 </div>
