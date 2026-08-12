@@ -157,7 +157,8 @@ export default function Home() {
             <Link href="/dashboard/mock-test" style={{ textDecoration: 'none' }}>
               <div style={{ background: 'linear-gradient(135deg, #7c3aed, #9c5cf0)' }} className="home-card">
                 <div className="home-card-icon">📝</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Mock Test</h3>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '2px' }}>Mock Test</h3>
+                <span style={{ background: '#f97316', color: 'white', fontSize: '0.55rem', fontWeight: 800, padding: '2px 7px', borderRadius: '9999px', letterSpacing: '0.5px' }}>FREE</span>
                 <p style={{ color: 'rgba(237,233,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Practice with Mock Tests</p>
                 <span className="badge">Start Now →</span>
               </div>
@@ -166,7 +167,8 @@ export default function Home() {
             <Link href="/dashboard/pyp" style={{ textDecoration: 'none' }}>
               <div style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)' }} className="home-card">
                 <div className="home-card-icon">📄</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>PYP</h3>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '2px' }}>PYP</h3>
+                <span style={{ background: '#f97316', color: 'white', fontSize: '0.55rem', fontWeight: 800, padding: '2px 7px', borderRadius: '9999px', letterSpacing: '0.5px' }}>FREE</span>
                 <p style={{ color: 'rgba(207,250,254,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Previous Year Papers</p>
                 <span className="badge">Download →</span>
               </div>
@@ -184,7 +186,8 @@ export default function Home() {
             <Link href="/dashboard/subject-mock" style={{ textDecoration: 'none' }}>
               <div style={{ background: 'linear-gradient(135deg, #be185d, #ec4899)' }} className="home-card">
                 <div className="home-card-icon">🎯</div>
-                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '4px' }}>Subject Mock</h3>
+                <h3 style={{ fontWeight: 800, color: 'white', fontSize: '0.85rem', marginBottom: '2px' }}>Subject Mock</h3>
+                <span style={{ background: '#f97316', color: 'white', fontSize: '0.55rem', fontWeight: 800, padding: '2px 7px', borderRadius: '9999px', letterSpacing: '0.5px' }}>FREE</span>
                 <p style={{ color: 'rgba(251,207,232,0.8)', fontSize: '0.65rem', marginBottom: '0.6rem' }}>Subject Wise Practice</p>
                 <span className="badge">Start Now →</span>
               </div>
