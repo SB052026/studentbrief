@@ -16,7 +16,7 @@ export default function AdminSubjectsPage() {
   const [showTestForm, setShowTestForm] = useState(false)
   const [testSaving, setTestSaving] = useState(false)
   const [testEditId, setTestEditId] = useState(null)
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '' })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '', logo_url: '' })
   const [selectedTest, setSelectedTest] = useState(null)
   const [questions, setQuestions] = useState([])
   const [qLoading, setQLoading] = useState(false)
@@ -53,7 +53,7 @@ export default function AdminSubjectsPage() {
     if (testEditId) await supabase.from('mock_tests').update(data).eq('id', testEditId)
     else await supabase.from('mock_tests').insert(data)
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '', logo_url: '' })
     setTestEditId(null)
     setShowTestForm(false)
     setTestSaving(false)
@@ -376,6 +376,19 @@ export default function AdminSubjectsPage() {
               </div>
               <label style={labelStyle}>🏆 Total Marks</label>
               <input style={inputStyle} type="number" value={testForm.total_marks} onChange={e => setTestForm(p => ({ ...p, total_marks: e.target.value }))} placeholder="100" />
+              <label style={labelStyle}>🖼️ Test Logo (Optional)</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.6rem' }}>
+                <input type="file" accept="image/*" style={{ flex: 1, fontSize: '0.78rem' }}
+                  onChange={async e => {
+                    const file = e.target.files[0]; if (!file) return
+                    const supabase = createClient()
+                    const fileName = Date.now() + '-' + file.name.replace(/[^a-z0-9.]/gi, '_')
+                    const { error } = await supabase.storage.from('question-images').upload(fileName, file, { upsert: true })
+                    if (!error) { const { data } = supabase.storage.from('question-images').getPublicUrl(fileName); setTestForm(p => ({ ...p, logo_url: data.publicUrl })) }
+                  }}
+                />
+                {testForm.logo_url && <img src={testForm.logo_url} alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />}
+              </div>
               <label style={labelStyle}>📄 PDF Link (Optional)</label>
               <input style={inputStyle} value={testForm.pdf_url} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://..." />
               <div style={{ display: 'flex', gap: '0.75rem' }}>

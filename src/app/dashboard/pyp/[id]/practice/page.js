@@ -140,7 +140,7 @@ export default function PypPracticePage({ params }) {
     return (
       <div style={{ fontFamily: 'Poppins, sans-serif', background: '#f0f4ff', minHeight: '100vh' }}>
         <div style={{ background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {siteSettings.logo_url && <img src={siteSettings.logo_url} alt="Logo" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />}
+          {(paper?.logo_url || siteSettings.logo_url) && <img src={paper?.logo_url || siteSettings.logo_url} alt="Logo" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }} />}
           <span style={{ fontWeight: 900, color: 'white', fontSize: '1.1rem' }}>Student<span style={{ color: '#f97316' }}>Brief</span></span>
           <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', marginLeft: 'auto' }}>{paper?.exam_name}</span>
         </div>
@@ -288,8 +288,8 @@ export default function PypPracticePage({ params }) {
         <div style={{ flex: 1, padding: '16px', maxWidth: '800px', margin: '0 auto', width: '100%', position: 'relative' }}>
           {/* Watermark */}
           <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, opacity: 0.04, pointerEvents: 'none', userSelect: 'none' }}>
-            {siteSettings.logo_url
-              ? <img src={siteSettings.logo_url} alt="" style={{ width: '280px', height: '280px', objectFit: 'contain' }} />
+            {(paper?.logo_url || siteSettings.logo_url)
+              ? <img src={paper?.logo_url || siteSettings.logo_url} alt="" style={{ width: '280px', height: '280px', objectFit: 'contain' }} />
               : <div style={{ fontSize: '5rem', fontWeight: 900, color: '#1a3c8f', whiteSpace: 'nowrap' }}>StudentBrief</div>
             }
           </div>

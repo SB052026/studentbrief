@@ -14,7 +14,7 @@ export default function AdminPYPPage() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [form, setForm] = useState({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100' })
+  const [form, setForm] = useState({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100', logo_url: '' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
 
   async function fetchData() {
@@ -33,7 +33,7 @@ export default function AdminPYPPage() {
   useEffect(() => { fetchData() }, [])
 
   function resetForm() {
-    setForm({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100' })
+    setForm({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100', logo_url: '' })
     setEditId(null)
     setShowForm(false)
   }
@@ -47,7 +47,7 @@ export default function AdminPYPPage() {
     if (!form.exam_name) return alert('Exam name zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    const data = { exam_name: form.exam_name, year: form.year || null, pdf_url: form.pdf_url || null, description: form.description || null, total_marks: parseInt(form.total_marks) || 100 }
+    const data = { exam_name: form.exam_name, year: form.year || null, pdf_url: form.pdf_url || null, description: form.description || null, total_marks: parseInt(form.total_marks) || 100, logo_url: form.logo_url || null }
     if (editId) {
       const { error } = await supabase.from('pyp').update(data).eq('id', editId)
       if (error) { alert('Error: ' + error.message); setSaving(false); return }
@@ -67,7 +67,7 @@ export default function AdminPYPPage() {
   }
 
   function handleEdit(item) {
-    setForm({ exam_name: item.exam_name || '', year: item.year || '', pdf_url: item.pdf_url || '', description: item.description || '', total_marks: String(item.total_marks || 100) })
+    setForm({ exam_name: item.exam_name || '', year: item.year || '', pdf_url: item.pdf_url || '', description: item.description || '', total_marks: String(item.total_marks || 100), logo_url: item.logo_url || '' })
     setEditId(item.id)
     setShowForm(true)
   }
@@ -240,6 +240,19 @@ export default function AdminPYPPage() {
               <input style={inputStyle} value={form.exam_name} onChange={e => setForm(p => ({ ...p, exam_name: e.target.value }))} placeholder="e.g. SSC GD 2023" />
               <label style={labelStyle}>Year</label>
               <input style={inputStyle} value={form.year} onChange={e => setForm(p => ({ ...p, year: e.target.value }))} placeholder="e.g. 2023" />
+              <label style={labelStyle}>🖼️ Exam Logo (Optional)</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.6rem' }}>
+                <input type="file" accept="image/*" style={{ flex: 1, fontSize: '0.78rem' }}
+                  onChange={async e => {
+                    const file = e.target.files[0]; if (!file) return
+                    const supabase = createClient()
+                    const fileName = Date.now() + '-' + file.name.replace(/[^a-z0-9.]/gi, '_')
+                    const { error } = await supabase.storage.from('question-images').upload(fileName, file, { upsert: true })
+                    if (!error) { const { data } = supabase.storage.from('question-images').getPublicUrl(fileName); setForm(p => ({ ...p, logo_url: data.publicUrl })) }
+                  }}
+                />
+                {form.logo_url && <img src={form.logo_url} alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />}
+              </div>
               <label style={labelStyle}>PDF Link</label>
               <input style={inputStyle} value={form.pdf_url} onChange={e => setForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://..." />
               <label style={labelStyle}>🏆 Total Marks</label>

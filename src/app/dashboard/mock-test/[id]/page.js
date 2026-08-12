@@ -372,8 +372,8 @@ export default function MockTestExamPage({ params }) {
 
           {/* Watermark */}
           <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, opacity: 0.04, pointerEvents: 'none', userSelect: 'none' }}>
-            {siteSettings.logo_url
-              ? <img src={siteSettings.logo_url} alt="" style={{ width: '280px', height: '280px', objectFit: 'contain' }} />
+            {(test?.logo_url || siteSettings.logo_url)
+              ? <img src={test?.logo_url || siteSettings.logo_url} alt="" style={{ width: '280px', height: '280px', objectFit: 'contain' }} />
               : <div style={{ fontSize: '5rem', fontWeight: 900, color: '#1a3c8f', whiteSpace: 'nowrap' }}>StudentBrief</div>
             }
           </div>

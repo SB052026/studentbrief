@@ -14,7 +14,7 @@ export default function AdminMockTestPage() {
   const [editId, setEditId] = useState(null)
   const [mockCategories, setMockCategories] = useState([])
   const [mockSubcategories, setMockSubcategories] = useState([])
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' }, logo_url: '' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
   const [uploading, setUploading] = useState(false)
 
@@ -56,6 +56,7 @@ export default function AdminMockTestPage() {
       negative_marking: parseFloat(testForm.negative_marking) || 0,
       cut_off: testForm.cut_off || {},
       total_marks: parseInt(testForm.total_marks) || 100,
+      logo_url: testForm.logo_url || null,
     }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
@@ -63,7 +64,7 @@ export default function AdminMockTestPage() {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' }, logo_url: '' })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
@@ -161,6 +162,27 @@ export default function AdminMockTestPage() {
           <label style={labelStyle}>📝 Test Title *</label>
           <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC GD Full Test 1" />
           
+          <label style={labelStyle}>🖼️ Test Logo (Optional)</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.6rem' }}>
+            <input
+              type="file"
+              accept="image/*"
+              style={{ flex: 1, fontSize: '0.78rem' }}
+              onChange={async e => {
+                const file = e.target.files[0]
+                if (!file) return
+                const { createClient } = await import('@/lib/supabase/client')
+                const supabase = createClient()
+                const fileName = Date.now() + '-' + file.name.replace(/[^a-z0-9.]/gi, '_')
+                const { error } = await supabase.storage.from('question-images').upload(fileName, file, { upsert: true })
+                if (!error) {
+                  const { data } = supabase.storage.from('question-images').getPublicUrl(fileName)
+                  setTestForm(p => ({ ...p, logo_url: data.publicUrl }))
+                }
+              }}
+            />
+            {testForm.logo_url && <img src={testForm.logo_url} alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />}
+          </div>
           <label style={labelStyle}>📄 PDF Link (Optional - Download ke liye)</label>
           <input style={inputStyle} value={testForm.pdf_url || ''} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://... (PDF link)" />
 
