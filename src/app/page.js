@@ -1,4 +1,5 @@
 'use client'
+import { createClient } from '@/lib/supabase/client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -9,6 +10,25 @@ export default function Home() {
   const [pageLoading, setPageLoading] = useState(true)
   const [installPrompt, setInstallPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
+  const [articles, setArticles] = useState([])
+  const [slideIndex, setSlideIndex] = useState(0)
+
+  useEffect(() => {
+    async function fetchArticles() {
+      const supabase = createClient()
+      const { data } = await supabase.from('articles').select('*').eq('is_active', true).order('order_no')
+      setArticles(data || [])
+    }
+    fetchArticles()
+  }, [])
+
+  useEffect(() => {
+    if (articles.length <= 1) return
+    const timer = setInterval(() => {
+      setSlideIndex(prev => (prev + 1) % articles.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [articles])
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -211,6 +231,63 @@ export default function Home() {
           </div>
         </div>
       )}
+      {/* Article Slider Section */}
+      {articles.length > 0 && (
+        <section style={{ padding: '2rem 1rem', background: '#0f172a', overflow: 'hidden' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            {/* Section Title */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white', marginBottom: '2px' }}>Latest Updates</h2>
+                <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)' }}>News, Tips & Exam Updates</p>
+              </div>
+              {/* Dots */}
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {articles.map((_, i) => (
+                  <button key={i} onClick={() => setSlideIndex(i)} style={{ width: i === slideIndex ? '20px' : '8px', height: '8px', borderRadius: '9999px', border: 'none', cursor: 'pointer', background: i === slideIndex ? '#f97316' : 'rgba(255,255,255,0.3)', transition: 'all 0.3s ease', padding: 0 }} />
+                ))}
+              </div>
+            </div>
+
+            {/* Slider */}
+            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', transform: `translateX(-${slideIndex * 100}%)`, transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+                {articles.map((article, i) => (
+                  <div key={article.id} style={{ minWidth: '100%', position: 'relative', cursor: 'pointer' }} onClick={() => article.link && window.open(article.link, '_blank')}>
+                    {/* Image or Video */}
+                    {article.video_url ? (
+                      <video src={article.video_url} autoPlay muted loop playsInline style={{ width: '100%', height: '280px', objectFit: 'cover', display: 'block' }} />
+                    ) : article.image_url ? (
+                      <img src={article.image_url} alt={article.title} style={{ width: '100%', height: '280px', objectFit: 'cover', display: 'block' }} />
+                    ) : (
+                      <div style={{ width: '100%', height: '280px', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontSize: '3rem' }}>📰</span>
+                      </div>
+                    )}
+
+                    {/* Text Overlay - Bottom */}
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)', padding: '2rem 1.25rem 1.25rem' }}>
+                      {article.title && <h3 style={{ fontWeight: 800, color: 'white', fontSize: '1rem', marginBottom: '4px', lineHeight: 1.3 }}>{article.title}</h3>}
+                      {article.description && <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.description}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Left Arrow */}
+              <button onClick={() => setSlideIndex(prev => (prev - 1 + articles.length) % articles.length)} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.5)', border: 'none', color: 'white', width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', zIndex: 2 }}>
+                ‹
+              </button>
+
+              {/* Right Arrow */}
+              <button onClick={() => setSlideIndex(prev => (prev + 1) % articles.length)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.5)', border: 'none', color: 'white', width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', zIndex: 2 }}>
+                ›
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       <Footer />
     </div>
   )
