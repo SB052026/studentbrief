@@ -14,7 +14,7 @@ export default function AdminMockTestPage() {
   const [editId, setEditId] = useState(null)
   const [mockCategories, setMockCategories] = useState([])
   const [mockSubcategories, setMockSubcategories] = useState([])
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
   const [uploading, setUploading] = useState(false)
 
@@ -55,6 +55,7 @@ export default function AdminMockTestPage() {
       test_type: 'category',
       negative_marking: parseFloat(testForm.negative_marking) || 0,
       cut_off: testForm.cut_off || {},
+      total_marks: parseInt(testForm.total_marks) || 100,
     }
     if (editId) {
       await supabase.from('mock_tests').update(data).eq('id', editId)
@@ -62,7 +63,7 @@ export default function AdminMockTestPage() {
       await supabase.from('mock_tests').insert(data)
     }
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', mock_category_id: '', mock_subcategory_id: '', pdf_url: '', test_type: 'category', negative_marking: '0', cut_off: { General: '', OBC: '', SC: '', ST: '', EWS: '' } })
     setEditId(null)
     setShowTestForm(false)
     setSaving(false)
@@ -173,6 +174,10 @@ export default function AdminMockTestPage() {
             <div>
               <label style={labelStyle}>❓ Total Questions</label>
               <input style={inputStyle} type="number" value={testForm.total_questions} onChange={e => setTestForm(p => ({ ...p, total_questions: e.target.value }))} placeholder="10" />
+            </div>
+            <div>
+              <label style={labelStyle}>🏆 Total Marks</label>
+              <input style={inputStyle} type="number" value={testForm.total_marks} onChange={e => setTestForm(p => ({ ...p, total_marks: e.target.value }))} placeholder="100" />
             </div>
           </div>
 

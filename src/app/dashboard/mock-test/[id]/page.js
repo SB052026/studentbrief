@@ -118,6 +118,11 @@ export default function MockTestExamPage({ params }) {
     const wrongAnswers = questions.filter(q => answers[q.id] && answers[q.id] !== q.correct_option)
     const skipped = questions.filter(q => !answers[q.id])
     const percentage = Math.round((score / questions.length) * 100)
+    const marksPerQ = testData?.total_marks ? testData.total_marks / questions.length : 1
+    const obtainedMarks = testData?.negative_marking > 0
+      ? (score * marksPerQ) - (wrongAnswers.length * testData.negative_marking * marksPerQ)
+      : score * marksPerQ
+    const totalMarks = testData?.total_marks || questions.length
 
     return (
       <div className="page-wrapper">
@@ -141,8 +146,8 @@ export default function MockTestExamPage({ params }) {
               </div>
             ) : (
               <div style={{ marginBottom: '0.5rem' }}>
-                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{score}/{questions.length}</div>
-                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{percentage}% Correct</p>
+                <div style={{ fontSize: '3rem', fontWeight: 900, color: '#f97316' }}>{obtainedMarks.toFixed(1)}/{totalMarks}</div>
+                <p style={{ color: 'rgba(191,219,254,0.8)', fontSize: '0.85rem' }}>{score}/{questions.length} Questions • {percentage}%</p>
               </div>
             )}
 

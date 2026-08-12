@@ -14,7 +14,7 @@ export default function AdminPYPPage() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [form, setForm] = useState({ exam_name: '', year: '', pdf_url: '', description: '' })
+  const [form, setForm] = useState({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100' })
   const [qForm, setQForm] = useState({ question: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', explanation: '', question_image: '', option_a_image: '', option_b_image: '', option_c_image: '', option_d_image: '' })
 
   async function fetchData() {
@@ -33,7 +33,7 @@ export default function AdminPYPPage() {
   useEffect(() => { fetchData() }, [])
 
   function resetForm() {
-    setForm({ exam_name: '', year: '', pdf_url: '', description: '' })
+    setForm({ exam_name: '', year: '', pdf_url: '', description: '', total_marks: '100' })
     setEditId(null)
     setShowForm(false)
   }
@@ -47,7 +47,7 @@ export default function AdminPYPPage() {
     if (!form.exam_name) return alert('Exam name zaroori hai!')
     setSaving(true)
     const supabase = createClient()
-    const data = { exam_name: form.exam_name, year: form.year || null, pdf_url: form.pdf_url || null, description: form.description || null }
+    const data = { exam_name: form.exam_name, year: form.year || null, pdf_url: form.pdf_url || null, description: form.description || null, total_marks: parseInt(form.total_marks) || 100 }
     if (editId) {
       const { error } = await supabase.from('pyp').update(data).eq('id', editId)
       if (error) { alert('Error: ' + error.message); setSaving(false); return }
@@ -67,7 +67,7 @@ export default function AdminPYPPage() {
   }
 
   function handleEdit(item) {
-    setForm({ exam_name: item.exam_name || '', year: item.year || '', pdf_url: item.pdf_url || '', description: item.description || '' })
+    setForm({ exam_name: item.exam_name || '', year: item.year || '', pdf_url: item.pdf_url || '', description: item.description || '', total_marks: String(item.total_marks || 100) })
     setEditId(item.id)
     setShowForm(true)
   }
@@ -242,6 +242,8 @@ export default function AdminPYPPage() {
               <input style={inputStyle} value={form.year} onChange={e => setForm(p => ({ ...p, year: e.target.value }))} placeholder="e.g. 2023" />
               <label style={labelStyle}>PDF Link</label>
               <input style={inputStyle} value={form.pdf_url} onChange={e => setForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://..." />
+              <label style={labelStyle}>🏆 Total Marks</label>
+              <input style={inputStyle} type="number" value={form.total_marks} onChange={e => setForm(p => ({ ...p, total_marks: e.target.value }))} placeholder="100" />
               <label style={labelStyle}>Description</label>
               <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
               <div style={{ display: 'flex', gap: '0.75rem' }}>

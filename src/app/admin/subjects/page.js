@@ -16,7 +16,7 @@ export default function AdminSubjectsPage() {
   const [showTestForm, setShowTestForm] = useState(false)
   const [testSaving, setTestSaving] = useState(false)
   const [testEditId, setTestEditId] = useState(null)
-  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' })
+  const [testForm, setTestForm] = useState({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '' })
   const [selectedTest, setSelectedTest] = useState(null)
   const [questions, setQuestions] = useState([])
   const [qLoading, setQLoading] = useState(false)
@@ -53,7 +53,7 @@ export default function AdminSubjectsPage() {
     if (testEditId) await supabase.from('mock_tests').update(data).eq('id', testEditId)
     else await supabase.from('mock_tests').insert(data)
     await fetchTests()
-    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', subject_id: '', pdf_url: '' })
+    setTestForm({ title: '', duration_minutes: '30', total_questions: '10', total_marks: '100', subject_id: '', pdf_url: '' })
     setTestEditId(null)
     setShowTestForm(false)
     setTestSaving(false)
@@ -374,6 +374,8 @@ export default function AdminSubjectsPage() {
                   <input style={inputStyle} type="number" value={testForm.total_questions} onChange={e => setTestForm(p => ({ ...p, total_questions: e.target.value }))} />
                 </div>
               </div>
+              <label style={labelStyle}>🏆 Total Marks</label>
+              <input style={inputStyle} type="number" value={testForm.total_marks} onChange={e => setTestForm(p => ({ ...p, total_marks: e.target.value }))} placeholder="100" />
               <label style={labelStyle}>📄 PDF Link (Optional)</label>
               <input style={inputStyle} value={testForm.pdf_url} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://..." />
               <div style={{ display: 'flex', gap: '0.75rem' }}>
