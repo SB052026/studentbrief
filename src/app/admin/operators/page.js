@@ -33,18 +33,19 @@ export default function AdminOperatorsPage() {
   async function handleAdminPassChange() {
     if (!newAdminPass && !newAdminUser && !newEmergencyCode) return alert('Kuch to bharo!')
     const supabase = createClient()
-    if (newAdminUser) await supabase.from('site_settings').upsert({ key: 'admin_username', value: newAdminUser }, { onConflict: 'key' })
+    let updated = []
+    if (newAdminUser) { await supabase.from('site_settings').upsert({ key: 'admin_username', value: newAdminUser }, { onConflict: 'key' }); updated.push('Username') }
     if (newAdminPass) {
       const bcrypt = await import('bcryptjs')
       const hashedAdminPass = await bcrypt.hash(newAdminPass, 10)
-      await supabase.from('site_settings').upsert({ key: 'admin_password', value: hashedAdminPass }, { onConflict: 'key' })
+      await supabase.from('site_settings').upsert({ key: 'admin_password', value: hashedAdminPass }, { onConflict: 'key' }); updated.push('Password')
     }
-    if (newEmergencyCode) await supabase.from('site_settings').upsert({ key: 'admin_emergency_code', value: newEmergencyCode }, { onConflict: 'key' })
-    setAdminMsg('✅ Admin credentials update ho gaye!')
+    if (newEmergencyCode) { await supabase.from('site_settings').upsert({ key: 'admin_emergency_code', value: newEmergencyCode }, { onConflict: 'key' }); updated.push('Emergency Code') }
+    setAdminMsg('✅ Updated: ' + updated.join(', '))
     setNewAdminPass('')
     setNewAdminUser('')
     setNewEmergencyCode('')
-    setTimeout(() => setAdminMsg(''), 3000)
+    setTimeout(() => setAdminMsg(''), 4000)
   }
 
   async function fetchAll() {
