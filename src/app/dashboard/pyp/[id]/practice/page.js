@@ -302,7 +302,11 @@ export default function PypPracticePage({ params }) {
                   {markedReview[currentQuestion.id] && <span style={{ background: '#ede9fe', color: '#7c3aed', padding: '3px 10px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 700 }}>🚩 Marked</span>}
                 </div>
                 <h2 style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '12px' }}>{currentQuestion.question}</h2>
-                {currentQuestion.question_image && <img src={currentQuestion.question_image} alt="Question" style={{ width: '100%', maxHeight: '120px', objectFit: 'contain', borderRadius: '10px', marginBottom: '12px', background: '#f8fafc' }} />}
+                {currentQuestion.question_image && (
+                    <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '12px', marginBottom: '14px', display: 'flex', justifyContent: 'center', border: '1px solid #e2e8f0' }}>
+                      <img src={currentQuestion.question_image} alt="Question" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} />
+                    </div>
+                  )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {currentQuestion.options.map((option) => (

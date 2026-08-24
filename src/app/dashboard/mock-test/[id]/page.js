@@ -387,15 +387,24 @@ export default function MockTestExamPage({ params }) {
                   {markedReview[currentQuestion.id] && <span style={{ background: '#ede9fe', color: '#7c3aed', padding: '3px 10px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 700 }}>🚩 Marked</span>}
                 </div>
                 <h2 style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '12px' }}>{currentQuestion.question}</h2>
-                {currentQuestion.question_image && <img src={currentQuestion.question_image} alt="Question" style={{ width: '100%', maxHeight: '120px', objectFit: 'contain', borderRadius: '10px', marginBottom: '12px', background: '#f8fafc' }} />}
+                {currentQuestion.question_image && (
+                    <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '12px', marginBottom: '14px', display: 'flex', justifyContent: 'center', border: '1px solid #e2e8f0' }}>
+                      <img src={currentQuestion.question_image} alt="Question" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} />
+                    </div>
+                  )}
 
                 {/* Options */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {currentQuestion.options.map((option) => (
-                    <button key={option.key} onClick={() => handleAnswer(currentQuestion.id, option.key)} style={{ textAlign: 'left', padding: '12px 14px', borderRadius: '10px', border: `2px solid ${answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#e2e8f0'}`, background: answers[currentQuestion.id] === option.key ? '#dbeafe' : 'white', color: answers[currentQuestion.id] === option.key ? '#1e40af' : '#374151', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.15s' }}>
-                      <span style={{ width: '26px', height: '26px', borderRadius: '50%', background: answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#f1f5f9', color: answers[currentQuestion.id] === option.key ? 'white' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0 }}>{option.key}</span>
-                      <span style={{ flex: 1 }}>{option.value}</span>
-                      {option.img && <img src={option.img} alt={option.key} style={{ width: '36px', height: '28px', objectFit: 'contain', borderRadius: '4px' }} />}
+                    <button key={option.key} onClick={() => handleAnswer(currentQuestion.id, option.key)} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: '10px', border: `2px solid ${answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#e2e8f0'}`, background: answers[currentQuestion.id] === option.key ? '#dbeafe' : 'white', color: answers[currentQuestion.id] === option.key ? '#1e40af' : '#374151', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.15s', width: '100%' }}>
+                      <span style={{ width: '28px', height: '28px', borderRadius: '50%', background: answers[currentQuestion.id] === option.key ? '#1a3c8f' : '#f1f5f9', color: answers[currentQuestion.id] === option.key ? 'white' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0 }}>{option.key}</span>
+                      {option.img ? (
+                        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', padding: '4px 0' }}>
+                          <img src={option.img} alt={option.key} style={{ maxWidth: '100%', maxHeight: '80px', objectFit: 'contain' }} />
+                        </div>
+                      ) : (
+                        <span style={{ flex: 1 }}>{option.value}</span>
+                      )}
                     </button>
                   ))}
                 </div>
