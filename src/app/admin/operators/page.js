@@ -13,6 +13,8 @@ export default function AdminOperatorsPage() {
   const [editId, setEditId] = useState(null)
   const [activeTab, setActiveTab] = useState('operators')
   const [showPassChange, setShowPassChange] = useState(false)
+  const [loginHistory, setLoginHistory] = useState([])
+  const [showHistory, setShowHistory] = useState(false)
   const [newAdminUser, setNewAdminUser] = useState('')
   const [newAdminPass, setNewAdminPass] = useState('')
   const [newEmergencyCode, setNewEmergencyCode] = useState('')
@@ -29,6 +31,13 @@ export default function AdminOperatorsPage() {
     { key: 'subject_mock', label: '🎯 Subject Mock Test' },
     { key: 'pyp', label: '📄 PYP' },
   ]
+
+  async function fetchLoginHistory() {
+    const supabase = createClient()
+    const { data } = await supabase.from('admin_login_history').select('*').order('created_at', { ascending: false }).limit(20)
+    setLoginHistory(data || [])
+    setShowHistory(true)
+  }
 
   async function handleAdminPassChange() {
     if (!newAdminPass && !newAdminUser && !newEmergencyCode) return alert('Kuch to bharo!')
@@ -188,6 +197,40 @@ const [{ data: ops }, { data: acts }] = await Promise.all([
             <label style={labelStyle}>🚨 New Emergency Code</label>
             <input style={inputStyle} value={newEmergencyCode} onChange={e => setNewEmergencyCode(e.target.value)} placeholder="New emergency code" />
             <button onClick={handleAdminPassChange} style={{ ...btnPrimary, marginTop: '0.5rem' }}>Update Karo</button>
+          </div>
+        )}
+      </div>
+
+      {/* Admin Login History */}
+      <div style={{ background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ fontWeight: 800, color: '#1a3c8f', fontSize: '0.95rem' }}>📋 Admin Login History</h2>
+          <button onClick={fetchLoginHistory} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+            {showHistory ? 'Refresh' : 'View History'}
+          </button>
+        </div>
+        {showHistory && (
+          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {loginHistory.length === 0 ? (
+              <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.82rem' }}>Koi history nahi</p>
+            ) : loginHistory.map((h, i) => (
+              <div key={i} style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', borderLeft: '3px solid #1a3c8f' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.82rem' }}>👤 {h.username}</span>
+                  <span style={{ background: h.status === 'success' ? '#dcfce7' : '#fee2e2', color: h.status === 'success' ? '#166534' : '#991b1b', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700 }}>{h.status === 'success' ? '✅ Success' : '❌ Failed'}</span>
+                </div>
+                <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📱 {h.device}</p>
+                {h.location_name && (
+                  <div>
+                    <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {h.location_name.split(',').slice(0,3).join(',')}</p>
+                    {h.location_lat && h.location_lng && (
+                      <a href={'https://www.google.com/maps?q=' + h.location_lat + ',' + h.location_lng} target="_blank" rel="noopener noreferrer" style={{ color: '#1a3c8f', fontWeight: 600, fontSize: '0.65rem' }}>🗺️ Map pe dekho</a>
+                    )}
+                  </div>
+                )}
+                <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '2px' }}>🕐 {new Date(h.created_at).toLocaleString('en-IN')}</p>
+              </div>
+            ))}
           </div>
         )}
       </div>

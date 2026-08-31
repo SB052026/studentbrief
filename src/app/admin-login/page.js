@@ -97,13 +97,38 @@ export default function AdminLoginPage() {
         time: Date.now(),
         token: Array.from(crypto.getRandomValues(new Uint8Array(32)))
           .map(b => b.toString(16).padStart(2, '0')).join(''),
-        expires: Date.now() + (8 * 60 * 60 * 1000) // 8 hours
+        expires: Date.now() + (8 * 60 * 60 * 1000)
       }
       localStorage.setItem('sb_admin_auth', 'true')
       localStorage.setItem('sb_admin_token', JSON.stringify(tokenData))
       localStorage.setItem('sb_admin_time', Date.now().toString())
       localStorage.removeItem(ATTEMPTS_KEY)
       localStorage.removeItem(LOCKOUT_KEY)
+
+      // Track login location in background
+      try {
+        const device = /Android/i.test(navigator.userAgent) ? 'Android' : /iPhone|iPad/i.test(navigator.userAgent) ? 'iOS' : /Windows/i.test(navigator.userAgent) ? 'Windows' : 'Unknown'
+        const logEntry = { username: userId, device, status: 'success' }
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(async pos => {
+            try {
+              const res = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude + '&format=json')
+              const geo = await res.json()
+              logEntry.location_name = geo.display_name
+              logEntry.location_lat = pos.coords.latitude
+              logEntry.location_lng = pos.coords.longitude
+            } catch(e) {}
+            await supabase.from('admin_login_history').insert(logEntry)
+          }, async () => {
+            await supabase.from('admin_login_history').insert(logEntry)
+          }, { timeout: 5000 })
+        } else {
+          await supabase.from('admin_login_history').insert(logEntry)
+        }
+        // Auto delete old entries
+        await supabase.from('admin_login_history').delete().lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+      } catch(e) {}
+
       router.push('/admin')
     } else {
       const newAttempts = attempts + 1
