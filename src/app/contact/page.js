@@ -113,19 +113,30 @@ export default function ContactPage() {
     setError('')
     setSaving(true)
 
-    // Get location
-    const location = await getLocation()
-
     const supabase = createClient()
-    const { error } = await supabase.from('contact_submissions').insert({
+    
+    // Submit immediately without waiting for location
+    const { error, data: submitData } = await supabase.from('contact_submissions').insert({
       name: form.name,
       mobile: form.mobile,
       email: form.email || null,
       message: form.message,
-      location_name: location?.name || null,
-      location_lat: location?.lat || null,
-      location_lng: location?.lng || null,
-    })
+    }).select().single()
+
+    // Get location in background after submit
+    if (!error && submitData?.id && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async pos => {
+        try {
+          const res = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude + '&format=json')
+          const geo = await res.json()
+          await supabase.from('contact_submissions').update({
+            location_name: geo.display_name,
+            location_lat: pos.coords.latitude,
+            location_lng: pos.coords.longitude,
+          }).eq('id', submitData.id)
+        } catch(e) {}
+      }, () => {}, { timeout: 5000, maximumAge: 300000 })
+    }
     if (error) { setError('Error: ' + error.message); setSaving(false); return }
     setSubmitted(true)
     setSaving(false)
