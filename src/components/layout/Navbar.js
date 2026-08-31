@@ -14,8 +14,54 @@ export default function Navbar() {
   const [siteSettings, setSiteSettings] = useState({ logo_url: '', logo_size: '38', slogan: 'Every Student Deserves to Excel' })
   const lastScrollRef = useRef(0)
 
+  const [showLangMenu, setShowLangMenu] = useState(false)
+
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'hi', label: 'हिंदी' },
+    { code: 'ur', label: 'اردو' },
+    { code: 'pa', label: 'ਪੰਜਾਬੀ' },
+    { code: 'bn', label: 'বাংলা' },
+    { code: 'gu', label: 'ગુજરાતી' },
+    { code: 'mr', label: 'मराठी' },
+    { code: 'ta', label: 'தமிழ்' },
+    { code: 'te', label: 'తెలుగు' },
+  ]
+
+  function changeLanguage(langCode) {
+    setShowLangMenu(false)
+    if (langCode === 'en') {
+      // Reset to English
+      const iframe = document.querySelector('.goog-te-banner-frame')
+      if (iframe) {
+        const innerDoc = iframe.contentDocument || iframe.contentWindow.document
+        const restoreBtn = innerDoc.querySelector('.goog-te-banner-frame')
+        if (restoreBtn) restoreBtn.click()
+      }
+      const select = document.querySelector('.goog-te-combo')
+      if (select) {
+        select.value = 'en'
+        select.dispatchEvent(new Event('change'))
+      }
+      // Cookie method
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname
+      window.location.reload()
+      return
+    }
+    const select = document.querySelector('.goog-te-combo')
+    if (select) {
+      select.value = langCode
+      select.dispatchEvent(new Event('change'))
+    } else {
+      document.cookie = 'googtrans=/en/' + langCode
+      document.cookie = 'googtrans=/en/' + langCode + '; domain=.' + window.location.hostname
+      window.location.reload()
+    }
+  }
+
   useEffect(() => {
-    // Google Translate init
+    // Load Google Translate silently
     const addScript = document.createElement('script')
     addScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     addScript.async = true
@@ -24,10 +70,17 @@ export default function Navbar() {
       new window.google.translate.TranslateElement({
         pageLanguage: 'en',
         includedLanguages: 'hi,en,ur,pa,bn,gu,mr,ta,te,kn,ml',
-        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
         autoDisplay: false,
       }, 'google_translate_element')
     }
+    // Hide Google Translate toolbar
+    const style = document.createElement('style')
+    style.innerHTML = `
+      .goog-te-banner-frame, .goog-te-gadget, #google_translate_element, .skiptranslate { display: none !important; }
+      body { top: 0 !important; }
+      .goog-te-menu-value span { display: none; }
+    `
+    document.head.appendChild(style)
   }, [])
 
   useEffect(() => {
@@ -128,10 +181,25 @@ export default function Navbar() {
             🔍
           </button>
           <div style={{ position: 'relative' }}>
-            <button onClick={() => document.getElementById('google_translate_element').style.display = document.getElementById('google_translate_element').style.display === 'none' ? 'block' : 'none'} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <button onClick={() => setShowLangMenu(!showLangMenu)} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               🌐
             </button>
-            <div id="google_translate_element" style={{ display: 'none', position: 'absolute', top: '38px', right: 0, background: 'white', borderRadius: '10px', padding: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 9999, minWidth: '180px' }}></div>
+            {showLangMenu && (
+              <>
+                <div onClick={() => setShowLangMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 9998 }} />
+                <div style={{ position: 'absolute', top: '44px', right: 0, background: 'white', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', zIndex: 9999, minWidth: '150px', overflow: 'hidden' }}>
+                  {languages.map(lang => (
+                    <button key={lang.code} onClick={() => changeLanguage(lang.code)} style={{ display: 'block', width: '100%', padding: '10px 16px', border: 'none', background: 'none', textAlign: 'left', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, color: '#374151', fontFamily: 'Poppins, sans-serif' }}
+                      onMouseOver={e => e.target.style.background='#f1f5f9'}
+                      onMouseOut={e => e.target.style.background='none'}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            <div id="google_translate_element" style={{ display: 'none' }}></div>
           </div>
           <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '40px', height: '40px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {menuOpen ? '✕' : '☰'}
