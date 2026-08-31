@@ -38,9 +38,19 @@ export default function ContactPage() {
         } catch(e) {}
       }
 
-      // Check Google user
+      // Check Google user - check session and hash
       const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+      
+      // Check URL hash for OAuth tokens
+      const hash = window.location.hash
+      if (hash && hash.includes('access_token')) {
+        // Wait for session to be set
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      }
+      
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
+      
       if (user) {
         setGoogleUser(user)
         setForm(p => ({
