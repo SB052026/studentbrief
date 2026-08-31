@@ -43,6 +43,14 @@ export default function AdminContactsPage() {
                   </div>
                   {sub.email && <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '4px' }}>📧 {sub.email}</p>}
                   <p style={{ fontSize: '0.82rem', color: '#374151', lineHeight: 1.5, background: '#f8fafc', padding: '8px 10px', borderRadius: '8px', marginTop: '6px' }}>💬 {sub.message}</p>
+                  {sub.location_name && (
+                    <div style={{ marginTop: '4px' }}>
+                      <p style={{ fontSize: '0.7rem', color: '#64748b' }}>📍 {sub.location_name.split(',').slice(0,3).join(',')}</p>
+                      {sub.location_lat && sub.location_lng && (
+                        <a href={`https://www.google.com/maps?q=${sub.location_lat},${sub.location_lng}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.65rem', color: '#1a3c8f', fontWeight: 700 }}>🗺️ Map pe dekho</a>
+                      )}
+                    </div>
+                  )}
                   <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '6px' }}>🕐 {new Date(sub.created_at).toLocaleString('en-IN')}</p>
                 </div>
                 <button onClick={() => handleDelete(sub.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', flexShrink: 0 }}>Delete</button>
