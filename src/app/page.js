@@ -220,7 +220,7 @@ export default function Home() {
 
       {showInstall && (
         <div style={{ position: 'fixed', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, background: 'white', borderRadius: '14px', padding: '0.75rem 1.25rem', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '12px', maxWidth: '320px', width: '90%' }}>
-          <img src="/logo.png" alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px' }} />
+          <img loading="lazy" decoding="async" src="/logo.png" alt="logo" style={{ width: '40px', height: '40px', borderRadius: '8px' }} />
           <div style={{ flex: 1 }}>
             <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', marginBottom: '2px' }}>Install StudentBrief</p>
             <p style={{ fontSize: '0.7rem', color: '#64748b' }}>Add to Home Screen</p>
@@ -268,7 +268,7 @@ export default function Home() {
                       {article.video_url ? (
                         <video src={article.video_url} autoPlay muted loop playsInline className="article-img" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }} />
                       ) : article.image_url ? (
-                        <img src={article.image_url} alt={article.title} className="article-img" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }} />
+                        <img loading="lazy" decoding="async" src={article.image_url} alt={article.title} className="article-img" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }} />
                       ) : (
                         <div className="article-img" style={{ width: '100%', height: '220px', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <span style={{ fontSize: '3rem' }}>📰</span>

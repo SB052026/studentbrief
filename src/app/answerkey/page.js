@@ -12,7 +12,7 @@ export default async function AnswerKeyPage() {
   const supabase = await createClient()
   const { data: items } = await supabase
     .from('answerkeys')
-    .select('*, answerkey_categories(name, slug)')
+    .select('id, title, exam_date, answerkey_categories(name, slug)')
     .order('created_at', { ascending: false })
 
   return (

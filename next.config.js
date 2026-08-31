@@ -4,13 +4,19 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: false,
   outputFileTracingRoot: __dirname,
+  
+  // Image optimization
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.supabase.co' },
     ],
-    formats: ['image/webp'],
-    minimumCacheTTL: 86400,
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 604800, // 7 days cache
+    deviceSizes: [240, 320, 480, 640, 750, 828, 1080],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
+
+  // Headers for caching & security
   async headers() {
     return [
       {
@@ -24,6 +30,7 @@ const nextConfig = {
           { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
         ],
       },
+      // Static assets long cache
       {
         source: '/favicon.png',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
@@ -44,11 +51,18 @@ const nextConfig = {
         source: '/manifest.json',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }],
       },
+      // API routes no cache
+      {
+        source: '/api/(.*)',
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      },
     ]
   },
+
   experimental: {
     optimizeCss: true,
   },
+
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },

@@ -12,7 +12,7 @@ export default async function AdmitCardPage() {
   const supabase = await createClient()
   const { data: items } = await supabase
     .from('admitcards')
-    .select('*, admitcard_categories(name, slug)')
+    .select('id, title, exam_date, admitcard_categories(name, slug)')
     .order('created_at', { ascending: false })
 
   return (

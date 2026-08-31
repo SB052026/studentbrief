@@ -12,7 +12,7 @@ export default async function JobsPage() {
   const supabase = await createClient()
   const { data: jobs } = await supabase
     .from('jobs')
-    .select('*, job_categories(name, slug)')
+    .select('id, title, last_date, job_categories(name, slug)')
     .order('created_at', { ascending: false })
 
   return (

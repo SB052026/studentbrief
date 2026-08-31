@@ -109,7 +109,7 @@ export default function Navbar() {
 
   return (
     <nav style={{ background: 'rgba(26,60,143,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.1)', position: 'sticky', top: 0, zIndex: 50 }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '60px' }}>
 
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none' }}>
@@ -124,7 +124,7 @@ export default function Navbar() {
 
         {/* Right Side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '32px', height: '32px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '44px', height: '44px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             🔍
           </button>
           <div style={{ position: 'relative' }}>
@@ -133,7 +133,7 @@ export default function Navbar() {
             </button>
             <div id="google_translate_element" style={{ display: 'none', position: 'absolute', top: '38px', right: 0, background: 'white', borderRadius: '10px', padding: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 9999, minWidth: '180px' }}></div>
           </div>
-          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '44px', height: '44px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {menuOpen ? '✕' : '☰'}
           </button>
         </div>
@@ -179,7 +179,7 @@ export default function Navbar() {
       {/* Quick Links */}
       {showQuickLinks && (
         <div style={{ background: 'white', borderBottom: '1px solid #e2e8f0', padding: '0.4rem 0.75rem', display: 'flex', gap: '0.5rem', overflowX: 'auto', overflowY: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-          <Link href="/jobs" style={{ flex: 1, textAlign: 'center', background: '#dbeafe', color: '#1e40af', padding: '6px 4px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'block' }}>💼 Jobs</Link>
+          <Link href="/jobs" style={{ flex: 1, textAlign: 'center', background: '#dbeafe', color: '#1e40af', padding: '8px 6px', borderRadius: '9999px', fontSize: '0.72rem', minHeight: '36px', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'block' }}>💼 Jobs</Link>
           <Link href="/results" style={{ flex: 1, textAlign: 'center', background: '#dcfce7', color: '#166534', padding: '6px 4px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'block' }}>📊 Results</Link>
           <Link href="/admitcard" style={{ flex: 1, textAlign: 'center', background: '#fef3c7', color: '#92400e', padding: '6px 4px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'block' }}>🎫 Admit Cards</Link>
           <Link href="/answerkey" style={{ flex: 1, textAlign: 'center', background: '#fce7f3', color: '#9d174d', padding: '6px 4px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'block' }}>📝 Answer Keys</Link>

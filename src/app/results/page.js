@@ -12,7 +12,7 @@ export default async function ResultsPage() {
   const supabase = await createClient()
   const { data: results } = await supabase
     .from('results')
-    .select('*, result_categories(name, slug)')
+    .select('id, title, result_date, result_status, result_categories(name, slug)')
     .order('created_at', { ascending: false })
 
   return (
