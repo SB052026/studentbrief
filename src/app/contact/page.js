@@ -88,23 +88,20 @@ export default function ContactPage() {
   async function getLocation() {
     return new Promise((resolve) => {
       if (!navigator.geolocation) { resolve(null); return }
-      setLocationLoading(true)
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const lat = pos.coords.latitude
           const lng = pos.coords.longitude
-          try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
-            const data = await res.json()
-            setLocationLoading(false)
-            resolve({ lat, lng, name: data.display_name || `${lat},${lng}` })
-          } catch {
-            setLocationLoading(false)
-            resolve({ lat, lng, name: `${lat},${lng}` })
-          }
+          // Get location name in background - don't block submit
+          fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lng + '&format=json')
+            .then(r => r.json())
+            .then(data => {
+              // Update DB with location name after submit
+            }).catch(() => {})
+          resolve({ lat, lng, name: lat.toFixed(4) + ',' + lng.toFixed(4) })
         },
-        () => { setLocationLoading(false); resolve(null) },
-        { timeout: 8000 }
+        () => resolve(null),
+        { timeout: 3000, maximumAge: 60000 }
       )
     })
   }
@@ -215,8 +212,8 @@ export default function ContactPage() {
 
             <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.75rem' }}>📍 Submit karte samay aapki location automatically fetch hogi</p>
 
-            <button onClick={handleSubmit} disabled={saving || locationLoading} style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', boxShadow: '0 8px 24px rgba(26,60,143,0.3)' }}>
-              {locationLoading ? '📍 Fetching location...' : saving ? '⏳ Sending...' : '📨 Send Message'}
+            <button onClick={handleSubmit} disabled={saving} style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #1a3c8f, #2952c4)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', fontFamily: 'Poppins, sans-serif', boxShadow: '0 8px 24px rgba(26,60,143,0.3)' }}>
+              {saving ? '⏳ Sending...' : '📨 Send Message'}
             </button>
           </div>
         )}

@@ -105,28 +105,35 @@ export default function AdminLoginPage() {
       localStorage.removeItem(ATTEMPTS_KEY)
       localStorage.removeItem(LOCKOUT_KEY)
 
-      // Track login location in background
+      // Track login - save immediately then update location
       try {
-        const device = /Android/i.test(navigator.userAgent) ? 'Android' : /iPhone|iPad/i.test(navigator.userAgent) ? 'iOS' : /Windows/i.test(navigator.userAgent) ? 'Windows' : 'Unknown'
-        const logEntry = { username: userId, device, status: 'success' }
-        if (navigator.geolocation) {
+        const device = /Android/i.test(navigator.userAgent) ? 'Android' : /iPhone|iPad/i.test(navigator.userAgent) ? 'iOS' : /Windows/i.test(navigator.userAgent) ? 'Windows' : /Mac/i.test(navigator.userAgent) ? 'MacOS' : 'Unknown'
+        
+        // Save login immediately
+        const { data: logData } = await supabase.from('admin_login_history').insert({
+          username: userId,
+          device,
+          status: 'success',
+          location_name: 'Fetching...',
+        }).select().single()
+
+        // Get location in background
+        if (navigator.geolocation && logData?.id) {
           navigator.geolocation.getCurrentPosition(async pos => {
             try {
               const res = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude + '&format=json')
               const geo = await res.json()
-              logEntry.location_name = geo.display_name
-              logEntry.location_lat = pos.coords.latitude
-              logEntry.location_lng = pos.coords.longitude
+              await supabase.from('admin_login_history').update({
+                location_name: geo.display_name,
+                location_lat: pos.coords.latitude,
+                location_lng: pos.coords.longitude,
+              }).eq('id', logData.id)
             } catch(e) {}
-            await supabase.from('admin_login_history').insert(logEntry)
-          }, async () => {
-            await supabase.from('admin_login_history').insert(logEntry)
-          }, { timeout: 5000 })
-        } else {
-          await supabase.from('admin_login_history').insert(logEntry)
+          }, () => {}, { timeout: 8000 })
         }
+
         // Auto delete old entries
-        await supabase.from('admin_login_history').delete().lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        supabase.from('admin_login_history').delete().lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
       } catch(e) {}
 
       router.push('/admin')
