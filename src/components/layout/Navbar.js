@@ -123,17 +123,17 @@ export default function Navbar() {
         </Link>
 
         {/* Right Side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '44px', height: '44px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+          <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             🔍
           </button>
           <div style={{ position: 'relative' }}>
-            <button onClick={() => document.getElementById('google_translate_element').style.display = document.getElementById('google_translate_element').style.display === 'none' ? 'block' : 'none'} style={{ background: 'none', border: 'none', color: 'white', width: '32px', height: '32px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={() => document.getElementById('google_translate_element').style.display = document.getElementById('google_translate_element').style.display === 'none' ? 'block' : 'none'} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               🌐
             </button>
             <div id="google_translate_element" style={{ display: 'none', position: 'absolute', top: '38px', right: 0, background: 'white', borderRadius: '10px', padding: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 9999, minWidth: '180px' }}></div>
           </div>
-          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '44px', height: '44px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '40px', height: '40px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {menuOpen ? '✕' : '☰'}
           </button>
         </div>
