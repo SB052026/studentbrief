@@ -38,20 +38,28 @@ export default function ContactPage() {
         } catch(e) {}
       }
 
-      // Check Google user - check session and hash
+      // Check Google user
       const supabase = createClient()
-      
-      // Check URL hash for OAuth tokens
-      const hash = window.location.hash
-      if (hash && hash.includes('access_token')) {
-        // Wait for session to be set
-        await new Promise(resolve => setTimeout(resolve, 1000))
-      }
-      
+
+      // Listen for auth state change
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          const user = session.user
+          setGoogleUser(user)
+          setForm(p => ({
+            ...p,
+            email: user.email || p.email || '',
+            name: p.name || user.user_metadata?.full_name || '',
+          }))
+          await supabase.auth.signOut()
+          subscription.unsubscribe()
+        }
+      })
+
+      // Also check existing session
       const { data: { session } } = await supabase.auth.getSession()
-      const user = session?.user
-      
-      if (user) {
+      if (session?.user) {
+        const user = session.user
         setGoogleUser(user)
         setForm(p => ({
           ...p,
@@ -59,7 +67,10 @@ export default function ContactPage() {
           name: p.name || user.user_metadata?.full_name || '',
         }))
         await supabase.auth.signOut()
+        subscription.unsubscribe()
       }
+      
+      return () => subscription.unsubscribe()
     }
     init()
   }, [])
