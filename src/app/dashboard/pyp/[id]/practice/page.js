@@ -235,13 +235,29 @@ export default function PypPracticePage({ params }) {
           <div style={{ background: timeLeft < 300 ? '#ef4444' : timeLeft < 600 ? '#f97316' : 'rgba(255,255,255,0.15)', color: 'white', padding: '5px 12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.2)', minWidth: '70px', textAlign: 'center' }}>
             ⏱ {formatTime(timeLeft)}
           </div>
-          <button onClick={() => setShowSidebar(!showSidebar)} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '34px', height: '34px', borderRadius: '8px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>☰</button>
+          <button onClick={() => setShowSidebar(!showSidebar)} className="mobile-menu-btn-pyp" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '34px', height: '34px', borderRadius: '8px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>☰</button>
         </div>
       </div>
 
       <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
         {/* SIDEBAR */}
-        <div style={{ width: showSidebar ? '260px' : '0', minWidth: showSidebar ? '260px' : '0', background: 'white', boxShadow: '2px 0 8px rgba(0,0,0,0.1)', overflow: 'hidden', transition: 'all 0.3s ease', position: 'fixed', top: '52px', left: 0, bottom: 0, zIndex: 99, overflowY: 'auto' }}>
+        <style>{`
+          @media (min-width: 768px) {
+            .desktop-sidebar-pyp { display: block !important; }
+            .mobile-menu-btn-pyp { display: none !important; }
+            .mobile-overlay-pyp { display: none !important; }
+          }
+          @media (max-width: 767px) {
+            .desktop-sidebar-pyp {
+              position: fixed !important;
+              top: 52px !important;
+              left: 0 !important;
+              bottom: 0 !important;
+              z-index: 99 !important;
+            }
+          }
+        `}</style>
+        <div className="desktop-sidebar-pyp" style={{ width: '260px', minWidth: '260px', background: 'white', boxShadow: '2px 0 8px rgba(0,0,0,0.1)', overflowY: 'auto', position: 'sticky', top: '52px', height: 'calc(100vh - 52px)', display: showSidebar ? 'block' : 'none' }}>
           <div style={{ padding: '16px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', marginBottom: '16px' }}>
               <div style={{ background: '#dcfce7', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
@@ -282,7 +298,7 @@ export default function PypPracticePage({ params }) {
           </div>
         </div>
 
-        {showSidebar && <div onClick={() => setShowSidebar(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 98, top: '52px' }} />}
+        {showSidebar && <div onClick={() => setShowSidebar(false)} className="mobile-overlay-pyp" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 98, top: '52px' }} />}
 
         {/* MAIN QUESTION AREA */}
         <div style={{ flex: 1, padding: '16px', maxWidth: '800px', margin: '0 auto', width: '100%', position: 'relative' }}>

@@ -278,28 +278,42 @@ export default function MockTestExamPage({ params }) {
           <div style={{ background: timeLeft < 300 ? '#ef4444' : timeLeft < 600 ? '#f97316' : 'rgba(255,255,255,0.15)', color: 'white', padding: '5px 12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.2)', minWidth: '70px', textAlign: 'center' }}>
             ⏱ {formatTime(timeLeft)}
           </div>
-          <button onClick={() => setShowSidebar(!showSidebar)} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '34px', height: '34px', borderRadius: '8px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>☰</button>
+          <button onClick={() => setShowSidebar(!showSidebar)} className="mobile-menu-btn" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', width: '34px', height: '34px', borderRadius: '8px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>☰</button>
         </div>
       </div>
 
       {/* MAIN LAYOUT */}
       <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
 
-        {/* SIDEBAR - Question Panel */}
+        {/* SIDEBAR - Desktop always visible, Mobile toggle */}
         <div style={{
-          width: showSidebar ? '260px' : '0',
-          minWidth: showSidebar ? '260px' : '0',
+          width: '260px',
+          minWidth: '260px',
           background: 'white',
           boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
-          overflow: 'hidden',
-          transition: 'all 0.3s ease',
-          position: 'fixed',
-          top: '52px',
-          left: 0,
-          bottom: 0,
-          zIndex: 99,
           overflowY: 'auto',
-        }}>
+          position: 'sticky',
+          top: '52px',
+          height: 'calc(100vh - 52px)',
+          display: showSidebar ? 'block' : 'none',
+        }} className="desktop-sidebar">
+        <style>{`
+          @media (min-width: 768px) {
+            .desktop-sidebar { display: block !important; }
+            .mobile-menu-btn { display: none !important; }
+            .mobile-overlay { display: none !important; }
+          }
+          @media (max-width: 767px) {
+            .desktop-sidebar { 
+              display: ${showSidebar ? 'block' : 'none'} !important;
+              position: fixed !important;
+              top: 52px !important;
+              left: 0 !important;
+              bottom: 0 !important;
+              z-index: 99 !important;
+            }
+          }
+        `}</style>
           <div style={{ padding: '16px' }}>
             {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', marginBottom: '16px' }}>
@@ -365,7 +379,7 @@ export default function MockTestExamPage({ params }) {
         </div>
 
         {/* Overlay for sidebar */}
-        {showSidebar && <div onClick={() => setShowSidebar(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 98, top: '52px' }} />}
+        {showSidebar && <div onClick={() => setShowSidebar(false)} className="mobile-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 98, top: '52px' }} />}
 
         {/* MAIN QUESTION AREA */}
         <div style={{ flex: 1, padding: '16px', maxWidth: '800px', margin: '0 auto', width: '100%', position: 'relative' }}>
