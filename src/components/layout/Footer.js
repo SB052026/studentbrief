@@ -53,6 +53,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li><Link href="/about" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>About Us</Link></li>
               <li><Link href="/contact" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Contact Us</Link></li>
+              <li><Link href="/careers" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Careers</Link></li>
               <li><Link href="/privacy" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Privacy Policy</Link></li>
               <li><Link href="/terms" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Terms & Conditions</Link></li>
               <li><Link href="/refund" style={{ color: 'rgba(191,219,254,0.7)', fontSize: '0.8rem', textDecoration: 'none' }}>Refund Policy</Link></li>
