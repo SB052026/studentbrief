@@ -85,6 +85,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/analytics', label: '📊 Analytics' },
     { href: '/admin/operators', label: '👥 Operators' },
     { href: '/admin/contacts', label: '📞 Contacts' },
+    { href: '/admin/faqs', label: '❓ FAQs' },
     { href: '/admin/articles', label: '📰 Articles' },
     { href: '/admin/settings', label: '⚙️ Settings' },
   ]
