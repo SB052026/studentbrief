@@ -114,16 +114,23 @@ export default function ContactPage() {
     setSaving(true)
     try {
       const supabase = createClient()
-      const { error } = await supabase.from('contact_submissions').insert({
+      // Add timeout - max 8 seconds
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+      const insertPromise = supabase.from('contact_submissions').insert({
         name: form.name,
         mobile: form.mobile,
         email: form.email || null,
         message: form.message,
       })
+      const { error } = await Promise.race([insertPromise, timeoutPromise])
       if (error) { setError('Error: ' + error.message); setSaving(false); return }
       setSubmitted(true)
     } catch(e) {
-      setError('Something went wrong. Try again!')
+      if (e.message === 'timeout') {
+        setError('Network slow hai — dobara try karo!')
+      } else {
+        setError('Something went wrong. Try again!')
+      }
     }
     setSaving(false)
   }
