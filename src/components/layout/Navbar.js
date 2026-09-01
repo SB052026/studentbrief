@@ -162,21 +162,19 @@ export default function Navbar() {
 
   return (
     <nav style={{ background: 'rgba(26,60,143,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.1)', position: 'sticky', top: 0, zIndex: 50 }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '60px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', boxSizing: 'border-box' }}>
 
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src={siteSettings.logo_url || '/logo.png'} alt="StudentBrief" style={{ borderRadius: '8px', objectFit: 'cover', display: 'block', width: `${siteSettings.logo_size || 38}px`, height: `${siteSettings.logo_size || 38}px` }} />
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-              <span style={{ fontSize: '1.3rem', fontWeight: 900, color: 'white' }}>Student<span style={{ color: '#f97316' }}>Brief</span></span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(191,219,254,0.8)', fontWeight: 500 }}>{siteSettings.slogan || 'Every Student Deserves to Excel'}</span>
-            </div>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, overflow: 'hidden' }}>
+          <img src={siteSettings.logo_url || '/logo.png'} alt="StudentBrief" style={{ borderRadius: '8px', objectFit: 'cover', display: 'block', width: '36px', height: '36px', flexShrink: 0 }} />
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, overflow: 'hidden' }}>
+            <span style={{ fontSize: '1.05rem', fontWeight: 900, color: 'white', whiteSpace: 'nowrap' }}>Student<span style={{ color: '#f97316' }}>Brief</span></span>
+            <span style={{ fontSize: '0.5rem', color: 'rgba(191,219,254,0.85)', fontWeight: 500, whiteSpace: 'nowrap' }}>Every Student Deserves to Excel</span>
           </div>
         </Link>
 
         {/* Right Side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
           <button onClick={() => { setSearchOpen(prev => !prev); setSearchQuery(''); setSearchResults([]) }} style={{ background: 'none', border: 'none', color: 'white', width: '38px', height: '38px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             🔍
           </button>
