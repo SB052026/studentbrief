@@ -17,6 +17,17 @@ export default function ContactPage() {
   const [openFaq, setOpenFaq] = useState(null)
 
   useEffect(() => {
+    async function fetchFaqs() {
+      try {
+        const supabase = createClient()
+        const { data } = await supabase.from('faqs').select('*').eq('is_active', true).order('order_no')
+        setFaqs(data || [])
+      } catch(e) {}
+    }
+    fetchFaqs()
+  }, [])
+
+  useEffect(() => {
     async function init() {
       // Fetch settings
       try {
