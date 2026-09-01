@@ -223,8 +223,8 @@ export default function ContactPage() {
             </button>
           </div>
         )}
-        {/* FAQ Section */}
-        {faqs.length > 0 && (
+        {/* FAQ PLACEHOLDER */}
+        {false && (
           <div style={{ marginTop: '2rem' }}>
             <h2 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>❓ Frequently Asked Questions</h2>
             <p style={{ color: '#64748b', fontSize: '0.82rem', marginBottom: '1rem' }}>Click on question to see answer</p>
@@ -237,6 +237,28 @@ export default function ContactPage() {
                   >
                     <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.88rem', flex: 1 }}>{faq.question}</span>
                     <span style={{ fontSize: '1rem', color: '#1a3c8f', flexShrink: 0, transition: 'transform 0.3s', transform: openFaq === faq.id ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
+                  </button>
+                  {openFaq === faq.id && (
+                    <div style={{ padding: '0 1rem 1rem', borderTop: '1px solid #f1f5f9' }}>
+                      <p style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.7, marginTop: '0.75rem' }}>{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {/* FAQ Section */}
+        {faqs.length > 0 && (
+          <div style={{ marginTop: '2rem' }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#1a3c8f', marginBottom: '0.25rem' }}>❓ Frequently Asked Questions</h2>
+            <p style={{ color: '#64748b', fontSize: '0.82rem', marginBottom: '1rem' }}>Click on question to see answer</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {faqs.map(faq => (
+                <div key={faq.id} style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0' }}>
+                  <button onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)} style={{ width: '100%', padding: '1rem', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', fontFamily: 'Poppins, sans-serif' }}>
+                    <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.88rem', flex: 1 }}>{faq.question}</span>
+                    <span style={{ fontSize: '1rem', color: '#1a3c8f', flexShrink: 0, transform: openFaq === faq.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s', display: 'inline-block' }}>▾</span>
                   </button>
                   {openFaq === faq.id && (
                     <div style={{ padding: '0 1rem 1rem', borderTop: '1px solid #f1f5f9' }}>
