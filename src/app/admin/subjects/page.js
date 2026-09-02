@@ -117,6 +117,25 @@ export default function AdminSubjectsPage() {
     await fetchQuestions(selectedTest.id)
   }
 
+  function parseCSVLine(line) {
+    const result = []
+    let current = ''
+    let inQuotes = false
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i]
+      if (char === '"') {
+        inQuotes = !inQuotes
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim())
+        current = ''
+      } else {
+        current += char
+      }
+    }
+    result.push(current.trim())
+    return result
+  }
+
   async function handleCSVUpload(e) {
     const file = e.target.files[0]
     if (!file) return
@@ -124,11 +143,11 @@ export default function AdminSubjectsPage() {
     reader.onload = async (evt) => {
       const text = evt.target.result
       const lines = text.split('\n').filter(l => l.trim())
-      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''))
+      const headers = parseCSVLine(lines[0]).map(h => h.replace(/"/g, '').trim())
       const supabase = createClient()
       let count = 0
       for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''))
+        const values = parseCSVLine(lines[i]).map(v => v.replace(/"/g, '').trim())
         const row = {}
         headers.forEach((h, idx) => { row[h] = values[idx] || '' })
         if (!row.question) continue
