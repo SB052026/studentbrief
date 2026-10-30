@@ -23,10 +23,10 @@ export default async function JobsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           {jobs?.map(job => (
             <Link key={job.id} href={`/jobs/${job.job_categories?.slug}/${job.id}`} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'white', borderRadius: '10px', padding: '0.75rem 1rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: '3px solid #1a3c8f', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ background: '#dbeafe', color: '#1e40af', padding: '1px 6px', borderRadius: '9999px', fontSize: '0.62rem', fontWeight: 700 }}>{job.job_categories?.name}</span>
-                  <p style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.85rem', marginTop: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{job.title}</p>
+              <div style={{ background: 'white', borderRadius: '10px', padding: '0.75rem 1rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: '3px solid #1a3c8f', display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, overflow: 'hidden' }}>
+                <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                  <span style={{ background: '#dbeafe', color: '#1e40af', padding: '1px 6px', borderRadius: '9999px', fontSize: '0.62rem', fontWeight: 700, display: 'inline-block', maxWidth: '100%' }}>{job.job_categories?.name}</span>
+                  <p style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.85rem', marginTop: '3px', lineHeight: 1.4, overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'normal' }}>{job.title}</p>
                 </div>
                 <span style={{ color: '#94a3b8', flexShrink: 0 }}>→</span>
               </div>
