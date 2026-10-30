@@ -6,6 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 body {
@@ -143,8 +144,88 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 /* ================================
-   MOBILE SPACING FIX
+   GLOBAL CARD TEXT FIX
+================================ */
+.home-card,
+.card,
+[class*="card"],
+section a > div,
+section > div > div,
+.category-box,
+.category-card,
+.category-item,
+[data-category-card],
+.item-card {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.home-card h3,
+.home-card p,
+.category-card h3,
+.category-card p,
+.category-box h3,
+.category-box p,
+.category-item h3,
+.category-item p,
+section a h3,
+section a p,
+section a span,
+.card-title,
+.card-text,
+.category-name,
+.category-description,
+.item-title,
+.item-description {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.home-card h3,
+.category-card h3,
+.category-box h3,
+.card-title,
+.item-title {
+  font-size: clamp(0.7rem, 2vw, 0.95rem);
+}
+
+.home-card p,
+.category-card p,
+.category-box p,
+.card-text,
+.item-description {
+  font-size: clamp(0.58rem, 1.7vw, 0.75rem);
+}
+
+.home-card,
+.category-box,
+.category-card,
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.home-card > *,
+.category-card > *,
+.category-box > *,
+.item-card > * {
+  max-width: 100%;
+}
+
+/* ================================
+    MOBILE SPACING FIX
 ================================ */
 @media (max-width: 768px) {
   section {
@@ -346,7 +427,6 @@ body {
   }
 }
 
-
 /* ================================
    UNIVERSAL RESPONSIVE FIX
 ================================ */
@@ -411,7 +491,6 @@ table {
     display: flex !important;
   }
 }
-
 
 /* ================================
    HOME PAGE CARDS RESPONSIVE
@@ -522,16 +601,13 @@ button, a, input, select, textarea {
     font-size: 0.7rem !important;
   }
 
-  /* Navbar smaller */
   nav { height: auto !important; }
 
-  /* Bigger tap areas */
   button {
     min-height: 44px !important;
     padding: 10px !important;
   }
 
-  /* Readable text */
   p { font-size: 0.82rem !important; line-height: 1.5 !important; }
   h1 { font-size: 1.1rem !important; }
   h2 { font-size: 1rem !important; }
@@ -548,12 +624,10 @@ button, a, input, select, textarea {
 
 /* Low data mode */
 @media (max-width: 480px) {
-  /* Remove heavy shadows on mobile */
   .home-card {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
   }
 
-  /* Faster transitions */
   * { transition-duration: 0.1s !important; }
 }
 
