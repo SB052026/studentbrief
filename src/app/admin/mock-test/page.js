@@ -110,14 +110,28 @@ export default function AdminMockTestPage() {
     await fetchQuestions(selectedTest.id)
   }
 
-  function parseCSVLine(line) {
+  function normalizeCSVHeader(value) {
+    return String(value || '')
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .replace(/[\s-]+/g, '_')
+      .toLowerCase()
+  }
+
+  function parseCSVLine(line = '') {
     const result = []
     let current = ''
     let inQuotes = false
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i]
       if (char === '"') {
-        inQuotes = !inQuotes
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"'
+          i++
+        } else {
+          inQuotes = !inQuotes
+        }
       } else if (char === ',' && !inQuotes) {
         result.push(current.trim())
         current = ''
@@ -125,40 +139,78 @@ export default function AdminMockTestPage() {
         current += char
       }
     }
+
     result.push(current.trim())
     return result
+  }
+
+  function getCSVValue(row, keys) {
+    for (const key of keys) {
+      if (row[key] !== undefined && row[key] !== null) {
+        return String(row[key]).trim()
+      }
+    }
+    return ''
   }
 
   async function handleCSVUpload(e, testId) {
     const file = e.target.files[0]
     if (!file) return
+
     const reader = new FileReader()
     reader.onload = async (evt) => {
-      const text = evt.target.result
-      const lines = text.split('\n').filter(l => l.trim())
-      const headers = parseCSVLine(lines[0]).map(h => h.replace(/"/g, '').trim())
+      const text = String(evt.target.result || '')
+      const lines = text.replace(/\r\n/g, '\n').split('\n').filter(line => line.trim())
+
+      if (!lines.length) {
+        alert('CSV file empty hai!')
+        return
+      }
+
+      const rawHeaders = parseCSVLine(lines[0])
       const supabase = createClient()
       let count = 0
+
       for (let i = 1; i < lines.length; i++) {
-        const values = parseCSVLine(lines[i]).map(v => v.replace(/"/g, '').trim())
+        const values = parseCSVLine(lines[i])
         const row = {}
-        headers.forEach((h, idx) => { row[h] = values[idx] || '' })
-        if (!row.question || !row.option_a || !row.option_b || !row.option_c || !row.option_d || !row.correct_option) continue
+
+        rawHeaders.forEach((header, idx) => {
+          const key = normalizeCSVHeader(header)
+          if (!key) return
+          row[key] = (values[idx] ?? '').replace(/\r/g, '').trim()
+        })
+
+        const question = getCSVValue(row, ['question'])
+        const optionA = getCSVValue(row, ['option_a', 'optiona'])
+        const optionB = getCSVValue(row, ['option_b', 'optionb'])
+        const optionC = getCSVValue(row, ['option_c', 'optionc'])
+        const optionD = getCSVValue(row, ['option_d', 'optiond'])
+        const correctOption = getCSVValue(row, ['correct_option', 'correctoption']).toUpperCase().trim()
+
+        if (!question || !optionA || !optionB || !optionC || !optionD || !correctOption) continue
+
         await supabase.from('mock_questions').insert({
           mock_test_id: testId,
-          question: row.question,
-          option_a: row.option_a,
-          option_b: row.option_b,
-          option_c: row.option_c,
-          option_d: row.option_d,
-          correct_option: row.correct_option.toString().toUpperCase().trim(),
-          explanation: row.explanation || null,
+          question,
+          option_a: optionA,
+          option_b: optionB,
+          option_c: optionC,
+          option_d: optionD,
+          correct_option: correctOption,
+          explanation: getCSVValue(row, ['explanation']) || null,
         })
         count++
       }
+
       await fetchQuestions(testId)
-      alert(count + ' questions upload ho gaye!')
+      if (count === 0) {
+        alert('CSV headers ya data match nahi kar raha. Please use: question, option_a, option_b, option_c, option_d, correct_option, explanation')
+      } else {
+        alert(count + ' questions upload ho gaye!')
+      }
     }
+
     reader.readAsText(file, 'UTF-8')
   }
 
@@ -169,7 +221,7 @@ export default function AdminMockTestPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1a3c8f' }}>🧪 Mock Tests</h1>
-        <button onClick={() => setShowTestForm(true)} style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+        <button onClick={() => setShowTestForm(true)} style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
           + New Test
         </button>
       </div>
@@ -177,10 +229,10 @@ export default function AdminMockTestPage() {
       {showTestForm && (
         <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: '1.5rem' }}>
           <h2 style={{ fontWeight: 800, color: '#1a3c8f', marginBottom: '1rem', fontSize: '1rem' }}>Naya Mock Test</h2>
-          
+
           <label style={labelStyle}>📝 Test Title *</label>
           <input style={inputStyle} value={testForm.title} onChange={e => setTestForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. SSC GD Full Test 1" />
-          
+
           <label style={labelStyle}>🖼️ Test Logo (Optional)</label>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.6rem' }}>
             <input
@@ -205,8 +257,6 @@ export default function AdminMockTestPage() {
           <label style={labelStyle}>📄 PDF Link (Optional - Download ke liye)</label>
           <input style={inputStyle} value={testForm.pdf_url || ''} onChange={e => setTestForm(p => ({ ...p, pdf_url: e.target.value }))} placeholder="https://... (PDF link)" />
 
-              
-          
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <div>
               <label style={labelStyle}>⏱️ Duration (minutes)</label>
@@ -223,7 +273,7 @@ export default function AdminMockTestPage() {
           </div>
 
           <label style={labelStyle}>📁 Category *</label>
-          <select style={inputStyle} value={testForm.mock_category_id} onChange={e => { setTestForm(p => ({ ...p, mock_category_id: e.target.value, mock_subcategory_id: '' })); if(e.target.value) fetchMockSubcategories(e.target.value) }}>
+          <select style={inputStyle} value={testForm.mock_category_id} onChange={e => { setTestForm(p => ({ ...p, mock_category_id: e.target.value, mock_subcategory_id: '' })); if(e.target.value){ fetchMockSubcategories(e.target.value) } else { setMockSubcategories([]) } }}>
             <option value="">Category Select Karo (Railway, SSC, Army...)</option>
             {mockCategories.map(c => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
           </select>
@@ -266,7 +316,9 @@ export default function AdminMockTestPage() {
             <button onClick={handleSaveTest} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
               {saving ? 'Saving...' : 'Save Karo'}
             </button>
-            <button onClick={() => setShowTestForm(false)} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Cancel</button>
+            <button onClick={() => setShowTestForm(false)} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+              Cancel
+            </button>
           </div>
         </div>
       )}
@@ -281,10 +333,12 @@ export default function AdminMockTestPage() {
                   <p style={{ fontSize: '0.72rem', color: '#64748b' }}>⏱️ {test.duration_minutes} min • 📝 {test.total_questions} questions</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button onClick={() => { setSelectedTest(test); fetchQuestions(test.id) }} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+                  <button onClick={() => { setSelectedTest(test); fetchQuestions(test.id) }} style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem' }}>
                     {selectedTest?.id === test.id ? 'Close' : 'Questions'}
                   </button>
-                  <button onClick={() => handleDeleteTest(test.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>Delete</button>
+                  <button onClick={() => handleDeleteTest(test.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '6px 10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem' }}>
+                    Delete
+                  </button>
                 </div>
               </div>
 
@@ -293,7 +347,9 @@ export default function AdminMockTestPage() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                     <p style={{ fontWeight: 700, color: '#1a3c8f', fontSize: '0.85rem' }}>Questions ({questions.length})</p>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => setShowQForm(!showQForm)} style={{ background: '#dcfce7', color: '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>+ Add Question</button>
+                      <button onClick={() => setShowQForm(!showQForm)} style={{ background: '#dcfce7', color: '#166534', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem' }}>
+                        {showQForm ? 'Hide Form' : 'Add Question'}
+                      </button>
                       <label style={{ background: '#dbeafe', color: '#1e40af', border: 'none', padding: '5px 10px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.72rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
                         📊 CSV Upload
                         <input type="file" accept=".csv" style={{ display: 'none' }} onChange={e => handleCSVUpload(e, test.id)} />
@@ -351,21 +407,25 @@ export default function AdminMockTestPage() {
                       </select>
                       <textarea style={{ ...inputStyle, height: '60px', resize: 'vertical' }} value={qForm.explanation} onChange={e => setQForm(p => ({ ...p, explanation: e.target.value }))} placeholder="Explanation (optional)" />
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button onClick={handleSaveQuestion} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif', fontSize: '0.82rem' }}>
+                        <button onClick={handleSaveQuestion} disabled={saving} style={{ flex: 1, background: '#1a3c8f', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
                           {saving ? 'Saving...' : 'Save Question'}
                         </button>
-                        <button onClick={() => setShowQForm(false)} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif', fontSize: '0.82rem' }}>Cancel</button>
+                        <button onClick={() => setShowQForm(false)} style={{ flex: 1, background: '#f1f5f9', color: '#64748b', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Poppins, sans-serif' }}>
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   )}
 
                   {questions.map((q, i) => (
-                    <div key={q.id} style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <div key={q.id} style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '0.82rem', fontWeight: 600, color: '#1e293b', marginBottom: '2px' }}>{i + 1}. {q.question}</p>
                         <p style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 700 }}>✅ Sahi: {q.correct_option}</p>
                       </div>
-                      <button onClick={() => handleDeleteQuestion(q.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '4px 8px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.65rem', fontWeight: 700, fontFamily: 'Poppins, sans-serif', flexShrink: 0 }}>Del</button>
+                      <button onClick={() => handleDeleteQuestion(q.id)} style={{ background: '#fee2e2', color: '#991b1b', border: 'none', padding: '4px 8px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.7rem' }}>
+                        Delete
+                      </button>
                     </div>
                   ))}
                 </div>
